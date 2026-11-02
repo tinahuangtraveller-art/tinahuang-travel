@@ -4,7 +4,7 @@
   "compatibility_date": "2026-11-01",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
-    "KEYSTATIC_GITHUB_CLIENT_ID": "Iv23liWX5ihOffUxlUE7",
+    "KEYSTATIC_GITHUB_CLIENT_ID": "Iv23liWX5ihOffUxIUE7",
     "PUBLIC_KEYSTATIC_GITHUB_APP_SLUG": "tinahuang-travel-keystatic-cms"
   },
   "kv_namespaces": [
