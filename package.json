@@ -11,7 +11,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "subset-fonts": "node scripts/subset-fonts.mjs"
+    "subset-fonts": "node scripts/subset-fonts.mjs",
+    "images": "node scripts/process-notion-images.mjs",
+    "migrate": "node scripts/migrate-notion-article.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.5",
