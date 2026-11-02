@@ -1,9 +1,19 @@
 import { config, fields, collection } from "@keystatic/core";
 
+const isProd = process.env.NODE_ENV === "production";
+
 export default config({
-  storage: {
-    kind: "local",
-  },
+  storage: isProd
+    ? {
+        kind: "github",
+        repo: {
+          owner: "tinahuangtraveller-art",
+          name: "tinahuang-travel",
+        },
+      }
+    : {
+        kind: "local",
+      },
   ui: {
     brand: { name: "黃踢那後台" },
   },
@@ -22,21 +32,19 @@ export default config({
             validation: { length: { min: 1, max: 100 } },
           },
           slug: {
-            label: "網址 slug（英文、kebab-case）",
-            description: "URL 的英文代碼，發布後盡量不要改",
+            label: "網址 slug（英文 kebab-case）",
           },
         }),
 
         excerpt: fields.text({
           label: "摘要",
-          description: "80 字以內，顯示在卡片與 SEO description",
+          description: "80 字內，顯示在卡片與 SEO description",
           multiline: true,
           validation: { length: { max: 100 } },
         }),
 
         cover: fields.image({
           label: "封面圖",
-          description: "顯示在文章頁最上方與列表卡片",
           directory: "public/images/covers",
           publicPath: "/images/covers/",
         }),
@@ -46,10 +54,7 @@ export default config({
           defaultValue: { kind: "today" },
         }),
 
-        updated: fields.date({
-          label: "更新日期",
-          description: "每次改大內容時更新",
-        }),
+        updated: fields.date({ label: "更新日期" }),
 
         country: fields.select({
           label: "國家",
@@ -60,20 +65,9 @@ export default config({
           defaultValue: "japan",
         }),
 
-        region: fields.text({
-          label: "地區（region）",
-          description: "例：kansai, kanto, yilan, miaoli",
-        }),
-
-        city: fields.text({
-          label: "城市",
-          description: "例：京都、宜蘭、苗栗",
-        }),
-
-        area: fields.text({
-          label: "細部地區",
-          description: "例：arashiyama、大湖",
-        }),
+        region: fields.text({ label: "地區（region）" }),
+        city: fields.text({ label: "城市" }),
+        area: fields.text({ label: "細部地區" }),
 
         type: fields.select({
           label: "文章類型",
@@ -89,8 +83,6 @@ export default config({
 
         status: fields.select({
           label: "內容狀態",
-          description:
-            "親身體驗 = 我真的去過；資料整理 = 沒去過只整理；商業合作 = 有合作方案",
           options: [
             { label: "🧳 親身體驗", value: "experienced" },
             { label: "📋 資料整理", value: "researched" },
@@ -99,25 +91,15 @@ export default config({
           defaultValue: "experienced",
         }),
 
-        tags: fields.array(
-          fields.text({ label: "標籤" }),
-          {
-            label: "標籤",
-            itemLabel: (props) => props.value,
-            description: "3 個最相關的中文標籤",
-          }
-        ),
+        tags: fields.array(fields.text({ label: "標籤" }), {
+          label: "標籤",
+          itemLabel: (p) => p.value,
+        }),
 
         locations: fields.array(
           fields.object({
-            id: fields.text({
-              label: "ID（英文 kebab-case）",
-              validation: { length: { min: 1 } },
-            }),
-            name: fields.text({
-              label: "地點名稱（中文）",
-              validation: { length: { min: 1 } },
-            }),
+            id: fields.text({ label: "ID (kebab-case)" }),
+            name: fields.text({ label: "地點名稱" }),
             gmaps: fields.url({ label: "Google Maps 連結" }),
             category: fields.select({
               label: "類型",
@@ -129,36 +111,26 @@ export default config({
               ],
               defaultValue: "attraction",
             }),
-            lat: fields.number({ label: "緯度 lat" }),
-            lng: fields.number({ label: "經度 lng" }),
+            lat: fields.number({ label: "lat" }),
+            lng: fields.number({ label: "lng" }),
           }),
           {
             label: "景點清單",
-            itemLabel: (props) => props.fields.name.value || "新景點",
-            description: "有 lat/lng 的景點會自動顯示在文章頂部的互動地圖",
+            itemLabel: (p) => p.fields.name.value || "新景點",
           }
         ),
 
-        affiliates: fields.array(
-          fields.text({ label: "聯盟 slug" }),
-          {
-            label: "聯盟商品 slug",
-            itemLabel: (props) => props.value,
-            description: "例：klook-sagano-romantic-train、agoda-kyoto-hotel-xxx",
-          }
-        ),
+        affiliates: fields.array(fields.text({ label: "聯盟 slug" }), {
+          label: "聯盟商品 slug",
+          itemLabel: (p) => p.value,
+        }),
 
         stay: fields.conditional(
-          fields.checkbox({
-            label: "這是住宿類文章（stay）",
-            defaultValue: false,
-          }),
+          fields.checkbox({ label: "是住宿文章 (stay)" }),
           {
             true: fields.object({
               shortName: fields.text({ label: "住宿簡稱" }),
-              checkInDate: fields.text({
-                label: "入住月份（YYYY-MM）",
-              }),
+              checkInDate: fields.text({ label: "入住月份 YYYY-MM" }),
               rooms: fields.text({ label: "房型描述" }),
               priceRange: fields.select({
                 label: "價位",
@@ -176,19 +148,13 @@ export default config({
         ),
 
         deal: fields.conditional(
-          fields.checkbox({
-            label: "有商業合作優惠（deal）",
-            defaultValue: false,
-          }),
+          fields.checkbox({ label: "有商業合作優惠 (deal)" }),
           {
             true: fields.object({
-              active: fields.checkbox({
-                label: "優惠進行中",
-                defaultValue: true,
-              }),
-              label: fields.text({ label: "標籤（例：粉絲專屬）" }),
-              discount: fields.text({ label: "折扣描述（例：現省 30%）" }),
-              code: fields.text({ label: "折扣碼（選填）" }),
+              active: fields.checkbox({ label: "進行中", defaultValue: true }),
+              label: fields.text({ label: "標籤 (ex: 粉絲專屬)" }),
+              discount: fields.text({ label: "折扣描述" }),
+              code: fields.text({ label: "折扣碼" }),
               validUntil: fields.date({ label: "到期日" }),
               bookingUrl: fields.url({ label: "訂房連結" }),
             }),
@@ -196,16 +162,11 @@ export default config({
           }
         ),
 
-        draft: fields.checkbox({
-          label: "草稿（勾選後不會顯示在網站）",
-          defaultValue: false,
-        }),
+        draft: fields.checkbox({ label: "草稿（不會顯示在網站）" }),
 
         content: fields.markdoc({
           label: "文章內文",
           extension: "md",
-          description:
-            "Notion-like 編輯器。禁用詞請見 docs/custom-gpt/banned-words.md",
         }),
       },
     }),
