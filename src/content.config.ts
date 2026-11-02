@@ -1,0 +1,64 @@
+import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
+
+const articles = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/articles" }),
+  schema: z.object({
+    title: z.string(),
+    excerpt: z.string().max(80),
+    cover: z.string().optional(),
+    date: z.coerce.date(),
+    updated: z.coerce.date().optional(),
+
+    country: z.enum(["japan", "taiwan"]),
+    region: z.string().optional(),
+    city: z.string().optional(),
+    area: z.string().optional(),
+
+    type: z.enum(["guide", "stay", "food", "tips", "transport"]),
+    status: z.enum(["experienced", "researched", "sponsored"]),
+
+    tags: z.array(z.string()).default([]),
+
+    locations: z
+      .array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+          gmaps: z.string().optional(),
+          category: z
+            .enum(["attraction", "food", "stay", "transport"])
+            .optional(),
+          lat: z.number().optional(),
+          lng: z.number().optional(),
+        })
+      )
+      .default([]),
+
+    affiliates: z.array(z.string()).default([]),
+
+    stay: z
+      .object({
+        shortName: z.string(),
+        checkInDate: z.string(),
+        rooms: z.string().optional(),
+        priceRange: z.enum(["$", "$$", "$$$", "$$$$"]).optional(),
+      })
+      .optional(),
+
+    deal: z
+      .object({
+        active: z.boolean(),
+        label: z.string(),
+        discount: z.string(),
+        code: z.string().optional(),
+        validUntil: z.coerce.date(),
+        bookingUrl: z.string(),
+      })
+      .optional(),
+
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { articles };

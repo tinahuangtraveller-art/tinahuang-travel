@@ -1,0 +1,71 @@
+---
+import ContentTypeBadge from "./ContentTypeBadge.astro";
+import BrushUnderline from "./decorations/BrushUnderline.astro";
+
+interface Props {
+  title: string;
+  cover?: string;
+  date: Date;
+  updated?: Date;
+  city?: string;
+  area?: string;
+  country: "japan" | "taiwan";
+  status: "experienced" | "researched" | "sponsored";
+  readingTime?: number;
+}
+
+const {
+  title,
+  cover,
+  date,
+  updated,
+  city,
+  area,
+  country,
+  status,
+  readingTime,
+} = Astro.props;
+
+const countryLabel = country === "japan" ? "日本" : "台灣";
+const locationParts = [countryLabel, city, area].filter(Boolean);
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString("zh-TW", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+---
+
+<header class="pb-6">
+  {
+    cover && (
+      <div class="relative aspect-[16/9] overflow-hidden rounded-2xl bg-paper-soft md:aspect-[21/9]">
+        <img
+          src={cover}
+          alt={title}
+          class="h-full w-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+    )
+  }
+
+  <div class="mt-6 flex flex-wrap items-center gap-2 text-xs text-ink-500">
+    {locationParts.length > 0 && <span>📍 {locationParts.join(" · ")}</span>}
+    <ContentTypeBadge status={status} size="sm" />
+  </div>
+
+  <h1 class="mt-4 font-display text-3xl leading-tight text-brand-brown md:text-5xl">
+    {title}
+  </h1>
+  <BrushUnderline class="mt-2 max-w-xs" />
+
+  <p class="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-500">
+    <span>{fmt(date)} 發布</span>
+    {updated && updated > date && <span>· 更新於 {fmt(updated)}</span>}
+    {readingTime && <span>· 約 {readingTime} 分鐘閱讀</span>}
+  </p>
+</header>

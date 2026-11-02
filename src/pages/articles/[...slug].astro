@@ -1,0 +1,115 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import ArticleHero from "../../components/ArticleHero.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import AuthorCard from "../../components/AuthorCard.astro";
+import AfterArticleCTA from "../../components/AfterArticleCTA.astro";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("articles", ({ data }) => !data.draft);
+  return articles.map((article) => ({
+    params: { slug: article.id.replace(/\.md$/, "") },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { data } = article;
+const { Content } = await render(article);
+
+const wordCount = article.body?.length ?? 0;
+const readingTime = Math.max(1, Math.round(wordCount / 400));
+
+const all = await getCollection("articles", ({ data }) => !data.draft);
+const related = all
+  .filter((a) => a.id !== article.id)
+  .filter((a) => a.data.city === data.city || a.data.country === data.country)
+  .sort((a, b) => +b.data.date - +a.data.date)
+  .slice(0, 4);
+---
+
+<Layout title={data.title} description={data.excerpt}>
+  <article class="mx-auto max-w-6xl px-4 pt-8 pb-16 md:pt-12">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12">
+      <div class="min-w-0">
+        <ArticleHero
+          title={data.title}
+          cover={data.cover}
+          date={data.date}
+          updated={data.updated}
+          city={data.city}
+          area={data.area}
+          country={data.country}
+          status={data.status}
+          readingTime={readingTime}
+        />
+
+        <div class="prose max-w-none">
+          <Content />
+        </div>
+
+        <AfterArticleCTA country={data.country} />
+
+        {
+          related.length > 0 && (
+            <section class="mt-16">
+              <h2 class="font-display text-2xl text-brand-brown">
+                📖 繼續看{data.city || (data.country === "japan" ? "日本" : "台灣")}
+              </h2>
+              <div class="mt-5 grid gap-5 sm:grid-cols-2">
+                {related.map((a) => (
+                  <ArticleCard
+                    title={a.data.title}
+                    slug={a.id.replace(/\.md$/, "")}
+                    cover={a.data.cover}
+                    excerpt={a.data.excerpt}
+                    city={a.data.city}
+                    country={a.data.country}
+                    status={a.data.status}
+                    date={a.data.date.toISOString()}
+                  />
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        <p class="mt-10 text-[11px] leading-relaxed text-ink-500">
+          ✱ 本站部分連結為聯盟連結，不影響你的購買價格。使用這些連結支持創作者繼續分享。
+        </p>
+      </div>
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-6 space-y-5">
+          <AuthorCard variant="compact" />
+
+          {
+            related.length > 0 && (
+              <section class="rounded-2xl border border-border-soft bg-brand-cream p-5">
+                <h3 class="text-sm font-medium text-ink-500">📖 延伸閱讀</h3>
+                <ul class="mt-3 space-y-3">
+                  {related.slice(0, 3).map((a) => (
+                    <li>
+                      <a
+                        href={`/articles/${a.id.replace(/\.md$/, "")}`}
+                        class="group block"
+                      >
+                        <p class="line-clamp-2 text-sm leading-snug text-brand-brown group-hover:text-brand-orange">
+                          {a.data.title}
+                        </p>
+                        <p class="mt-0.5 text-[11px] text-ink-500">
+                          {a.data.city && `📍 ${a.data.city}`}
+                        </p>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+        </div>
+      </aside>
+    </div>
+  </article>
+</Layout>
