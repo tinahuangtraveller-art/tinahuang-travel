@@ -26,18 +26,22 @@ locations:
 affiliates: []
 
 stay:
-  shortName: 四季山宿
-  checkInDate: 2026-10
-  rooms: 6–30 人包棟（含寵物房、親子房）
-  priceRange: $$
+  discriminant: true
+  value:
+    shortName: 四季山宿
+    checkInDate: 2026-10
+    rooms: 6–30 人包棟（含寵物房、親子房）
+    priceRange: $$
 
 deal:
-  active: true
-  label: 粉絲專屬
-  discount: 現省 30%
-  code: TINA168
-  validUntil: 2026-12-31
-  bookingUrl: https://booking.lakeze.com/season
+  discriminant: true
+  value:
+    active: true
+    label: 粉絲專屬
+    discount: 現省 30%
+    code: TINA168
+    validUntil: 2026-12-31
+    bookingUrl: https://booking.lakeze.com/season
 ---
 
 **6–30 人包棟｜遼闊山景｜一樓親子房、寵物房**

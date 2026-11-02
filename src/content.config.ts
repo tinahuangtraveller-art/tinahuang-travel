@@ -39,21 +39,31 @@ const articles = defineCollection({
 
     stay: z
       .object({
-        shortName: z.string(),
-        checkInDate: z.string(),
-        rooms: z.string().optional(),
-        priceRange: z.enum(["$", "$$", "$$$", "$$$$"]).optional(),
+        discriminant: z.boolean(),
+        value: z
+          .object({
+            shortName: z.string(),
+            checkInDate: z.string(),
+            rooms: z.string().optional(),
+            priceRange: z.enum(["$", "$$", "$$$", "$$$$"]).optional(),
+          })
+          .nullable(),
       })
       .optional(),
 
     deal: z
       .object({
-        active: z.boolean(),
-        label: z.string(),
-        discount: z.string(),
-        code: z.string().optional(),
-        validUntil: z.coerce.date(),
-        bookingUrl: z.string(),
+        discriminant: z.boolean(),
+        value: z
+          .object({
+            active: z.boolean(),
+            label: z.string(),
+            discount: z.string(),
+            code: z.string().optional(),
+            validUntil: z.coerce.date(),
+            bookingUrl: z.string(),
+          })
+          .nullable(),
       })
       .optional(),
 

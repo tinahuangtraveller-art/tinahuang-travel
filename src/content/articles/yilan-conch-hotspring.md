@@ -26,17 +26,22 @@ locations:
 affiliates: []
 
 stay:
-  shortName: 村卻國際溫泉酒店
-  checkInDate: 2026-10
-  rooms: 星隅客房 (18 坪，雙面落地窗 + 房內雙湯池)
-  priceRange: $$$
+  discriminant: true
+  value:
+    shortName: 村卻國際溫泉酒店
+    checkInDate: 2026-10
+    rooms: 星隅客房 (18 坪，雙面落地窗 + 房內雙湯池)
+    priceRange: $$$
 
 deal:
-  active: true
-  label: 粉絲限定升等
-  discount: 一泊一食 NT$6,400 起（含星隅客房升等）
-  validUntil: 2027-01-31
-  bookingUrl: https://tlathena.ec-hotel.net/webhotel-v4/0761/rmProjects/0245/lucky
+  discriminant: true
+  value:
+    active: true
+    label: 粉絲限定升等
+    discount: 一泊一食 NT$6,400 起（含星隅客房升等）
+    code: ""
+    validUntil: 2027-01-31
+    bookingUrl: https://tlathena.ec-hotel.net/webhotel-v4/0761/rmProjects/0245/lucky
 ---
 
 > ♨️ **黃踢那粉絲限定住房方案**｜平日限量升等 18 坪星隅客房
