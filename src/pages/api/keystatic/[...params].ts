@@ -1,11 +1,12 @@
 import type { APIRoute } from "astro";
+// @ts-expect-error - cloudflare:workers is a runtime-only module
+import { env } from "cloudflare:workers";
 import { makeGenericAPIRouteHandler } from "@keystatic/core/api/generic";
 import config from "../../../../keystatic.config";
 
 export const prerender = false;
 
 export const ALL: APIRoute = async (context) => {
-  const env = (context.locals as any)?.runtime?.env ?? {};
   const handler = makeGenericAPIRouteHandler(
     {
       config,
