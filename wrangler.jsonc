@@ -11,7 +11,7 @@
   "kv_namespaces": [
     {
       "binding": "SESSION",
-      "id": "REPLACE_WITH_KV_ID_FROM_CLOUDFLARE"
+      "id": "1a0d993b16d647ceb8cd10b7dd0647ec"
     }
   ],
   "observability": {
