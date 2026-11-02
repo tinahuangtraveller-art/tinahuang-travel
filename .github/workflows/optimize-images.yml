@@ -1,0 +1,48 @@
+name: Optimize uploaded images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "public/images/**/*.jpg"
+      - "public/images/**/*.jpeg"
+      - "public/images/**/*.png"
+      - "public/images/**/*.JPG"
+      - "public/images/**/*.JPEG"
+      - "public/images/**/*.PNG"
+  workflow_dispatch:
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Use a token with write access so the bot can push back
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install sharp
+        run: npm install sharp --no-save
+
+      - name: Optimize images + update markdown refs
+        run: node scripts/optimize-images-ci.mjs
+
+      - name: Commit optimized files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "chore(images): auto-optimize uploaded images [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi

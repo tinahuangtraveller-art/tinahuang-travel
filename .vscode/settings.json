@@ -1,0 +1,11 @@
+{
+  "markdown.editor.drop.copyIntoWorkspace": "always",
+  "markdown.editor.filePaste.copyIntoWorkspace": "always",
+  "markdown.copyFiles.destination": {
+    "src/content/articles/*.md": "/public/images/${documentBaseName}/${fileName}"
+  },
+  "markdown.copyFiles.overwriteBehavior": "nameIncrementally",
+  "files.associations": {
+    "*.astro": "astro"
+  }
+}
