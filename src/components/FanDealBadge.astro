@@ -1,0 +1,51 @@
+---
+import type { Deal } from "../data/stays";
+
+interface Props {
+  deal: Deal;
+  size?: "sm" | "md";
+}
+
+const { deal, size = "md" } = Astro.props;
+
+const padding = size === "sm" ? "px-2.5 py-1" : "px-3 py-1.5";
+const text = size === "sm" ? "text-[11px]" : "text-xs";
+
+const until = new Date(deal.validUntil);
+const now = new Date();
+const daysLeft = Math.max(
+  0,
+  Math.ceil((until.getTime() - now.getTime()) / 86400000)
+);
+const expiresText =
+  daysLeft <= 7
+    ? `剩 ${daysLeft} 天`
+    : until
+        .toLocaleDateString("zh-TW", {
+          year: "numeric",
+          month: "numeric",
+          day: "numeric",
+        })
+        .replace(/\//g, "/");
+---
+
+<span
+  class={`inline-flex items-center gap-1.5 rounded-full border border-brand-orange/40 bg-brand-orange/10 ${padding} ${text} font-medium text-brand-brown`}
+>
+  <span aria-hidden="true">🎁</span>
+  <span>{deal.label}</span>
+  <span class="text-ink-500">·</span>
+  <span>{deal.discount}</span>
+  {
+    deal.code && (
+      <>
+        <span class="text-ink-500">·</span>
+        <code class="rounded bg-brand-brown px-1.5 py-0.5 text-[10px] font-mono text-brand-cream">
+          {deal.code}
+        </code>
+      </>
+    )
+  }
+  <span class="text-ink-500">·</span>
+  <span class="text-ink-500">{daysLeft <= 7 ? "⏳" : ""}{expiresText}</span>
+</span>

@@ -1,0 +1,128 @@
+---
+import type { Stay } from "../data/stays";
+import FanDealBadge from "./FanDealBadge.astro";
+
+interface Props {
+  stay: Stay;
+  layout?: "card" | "row";
+}
+
+const { stay, layout = "card" } = Astro.props;
+const hasDeal =
+  stay.deal?.active && new Date(stay.deal.validUntil) >= new Date();
+---
+
+{
+  layout === "card" && (
+    <article class="group flex flex-col overflow-hidden rounded-2xl border border-border-soft bg-brand-cream transition hover:border-brand-brown/30">
+      <a
+        href={stay.articleUrl}
+        class="relative block aspect-[4/3] bg-paper-soft"
+        aria-label={`查看 ${stay.name} 完整心得`}
+      >
+        {stay.cover ? (
+          <img
+            src={stay.cover}
+            alt={stay.name}
+            class="h-full w-full object-cover transition group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        ) : (
+          <div class="flex h-full items-center justify-center text-sm text-ink-500">
+            🏨 {stay.name}
+          </div>
+        )}
+        <span class="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-brand-cream/95 px-2.5 py-1 text-[11px] font-medium text-brand-brown shadow-sm">
+          🧳 黃踢那實住
+        </span>
+      </a>
+
+      <div class="flex flex-1 flex-col gap-3 p-4">
+        <div>
+          <h3 class="text-base font-medium text-brand-brown">{stay.name}</h3>
+          <p class="mt-0.5 text-xs text-ink-500">
+            {stay.location} · {stay.checkInDate.replace("-", "/")} 入住
+          </p>
+        </div>
+
+        <p class="line-clamp-2 text-sm leading-relaxed text-ink-700">
+          {stay.summary}
+        </p>
+
+        {hasDeal && stay.deal && <FanDealBadge deal={stay.deal} size="sm" />}
+
+        <div class="mt-auto flex items-center gap-2 pt-2">
+          <a
+            href={stay.articleUrl}
+            class="text-sm font-medium text-brand-brown underline-offset-4 hover:underline"
+          >
+            看完整心得 →
+          </a>
+          {hasDeal && stay.deal && (
+            <a
+              href={stay.deal.bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              class="ml-auto inline-flex items-center rounded-full bg-brand-orange px-3 py-1.5 text-xs font-medium text-brand-brown transition hover:brightness-95"
+            >
+              前往訂房
+            </a>
+          )}
+        </div>
+
+        {hasDeal && (
+          <p class="pt-1 text-[10px] leading-tight text-ink-500">
+            ✱ 本卡包含商業合作連結，不影響你的購買價格
+          </p>
+        )}
+      </div>
+    </article>
+  )
+}
+
+{
+  layout === "row" && (
+    <article class="flex gap-4 rounded-xl border border-border-soft bg-brand-cream p-3">
+      <a
+        href={stay.articleUrl}
+        class="relative aspect-square w-20 flex-none overflow-hidden rounded-lg bg-paper-soft sm:w-24"
+      >
+        {stay.cover ? (
+          <img
+            src={stay.cover}
+            alt={stay.name}
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div class="flex h-full items-center justify-center text-xs text-ink-500">
+            🏨
+          </div>
+        )}
+      </a>
+      <div class="min-w-0 flex-1">
+        <div class="flex items-center gap-2">
+          <h3 class="truncate text-sm font-medium text-brand-brown">{stay.name}</h3>
+          <span class="text-[10px] text-ink-500">實住</span>
+        </div>
+        <p class="text-[11px] text-ink-500">{stay.location}</p>
+        {hasDeal && stay.deal && (
+          <div class="mt-1.5">
+            <FanDealBadge deal={stay.deal} size="sm" />
+          </div>
+        )}
+        <a
+          href={stay.articleUrl}
+          class="mt-2 inline-block text-xs text-brand-brown underline-offset-2 hover:underline"
+        >
+          看心得 →
+        </a>
+        {hasDeal && (
+          <p class="mt-1 text-[10px] leading-tight text-ink-500">
+            ✱ 含商業合作連結
+          </p>
+        )}
+      </div>
+    </article>
+  )
+}

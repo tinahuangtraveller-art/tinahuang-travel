@@ -1,0 +1,25 @@
+{
+  "name": "tinahuang-travel",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "跟著黃踢那出發吧！— 日本、台灣真實旅行體驗分享",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "subset-fonts": "node scripts/subset-fonts.mjs"
+  },
+  "dependencies": {
+    "@fontsource/noto-sans-tc": "^5.3.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.4",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "subset-font": "^2.9.0"
+  }
+}

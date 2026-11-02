@@ -1,0 +1,46 @@
+---
+type ContentStatus = "experienced" | "researched" | "sponsored";
+
+interface Props {
+  status: ContentStatus;
+  size?: "sm" | "md";
+}
+
+const { status, size = "md" } = Astro.props;
+
+const config = {
+  experienced: {
+    icon: "🧳",
+    label: "親身體驗",
+    bg: "bg-brand-orange/15",
+    border: "border-brand-orange/40",
+    text: "text-brand-brown",
+  },
+  researched: {
+    icon: "📋",
+    label: "資料整理",
+    bg: "bg-brand-teal/10",
+    border: "border-brand-teal/30",
+    text: "text-brand-teal",
+  },
+  sponsored: {
+    icon: "🤝",
+    label: "商業合作",
+    bg: "bg-paper-soft",
+    border: "border-brand-brown/20",
+    text: "text-ink-700",
+  },
+} as const;
+
+const c = config[status];
+const padding = size === "sm" ? "px-2 py-0.5" : "px-2.5 py-1";
+const textSize = size === "sm" ? "text-[11px]" : "text-xs";
+---
+
+<span
+  class={`inline-flex items-center gap-1 rounded-full border ${c.bg} ${c.border} ${padding} ${textSize} font-medium ${c.text}`}
+  title={`內容類型：${c.label}`}
+>
+  <span aria-hidden="true">{c.icon}</span>
+  <span>{c.label}</span>
+</span>

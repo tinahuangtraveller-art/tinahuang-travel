@@ -1,0 +1,123 @@
+---
+import ContentTypeBadge from "./ContentTypeBadge.astro";
+
+interface Props {
+  title: string;
+  slug: string;
+  cover?: string;
+  excerpt: string;
+  city?: string;
+  country?: string;
+  status: "experienced" | "researched" | "sponsored";
+  date: string;
+  readingTime?: number;
+  layout?: "card" | "row";
+}
+
+const {
+  title,
+  slug,
+  cover,
+  excerpt,
+  city,
+  country,
+  status,
+  date,
+  readingTime,
+  layout = "card",
+} = Astro.props;
+
+const href = `/articles/${slug}`;
+const dateLabel = new Date(date).toLocaleDateString("zh-TW", {
+  year: "numeric",
+  month: "numeric",
+  day: "numeric",
+});
+
+const countryLabel = country === "japan" ? "日本" : country === "taiwan" ? "台灣" : "";
+const locationLabel = [countryLabel, city].filter(Boolean).join(" · ");
+---
+
+{
+  layout === "card" && (
+    <article class="group flex flex-col overflow-hidden rounded-2xl border border-border-soft bg-brand-cream transition hover:border-brand-brown/30">
+      <a
+        href={href}
+        class="relative block aspect-[16/10] bg-paper-soft"
+        aria-label={`閱讀：${title}`}
+      >
+        {cover ? (
+          <img
+            src={cover}
+            alt={title}
+            class="h-full w-full object-cover transition group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        ) : (
+          <div class="flex h-full items-center justify-center text-sm text-ink-500">
+            📷 無封面
+          </div>
+        )}
+      </a>
+
+      <div class="flex flex-1 flex-col gap-3 p-4">
+        <div class="flex flex-wrap items-center gap-2 text-xs text-ink-500">
+          {locationLabel && <span>📍 {locationLabel}</span>}
+          <ContentTypeBadge status={status} size="sm" />
+        </div>
+
+        <h3 class="text-base font-medium leading-snug text-brand-brown group-hover:text-brand-orange">
+          <a href={href}>{title}</a>
+        </h3>
+
+        <p class="line-clamp-2 text-sm leading-relaxed text-ink-700">{excerpt}</p>
+
+        <div class="mt-auto flex items-center gap-3 pt-2 text-[11px] text-ink-500">
+          <span>{dateLabel}</span>
+          {readingTime && (
+            <>
+              <span>·</span>
+              <span>{readingTime} 分鐘閱讀</span>
+            </>
+          )}
+        </div>
+      </div>
+    </article>
+  )
+}
+
+{
+  layout === "row" && (
+    <article class="flex gap-4 rounded-xl border border-border-soft bg-brand-cream p-3">
+      <a
+        href={href}
+        class="relative aspect-video w-28 flex-none overflow-hidden rounded-lg bg-paper-soft sm:w-32"
+      >
+        {cover ? (
+          <img
+            src={cover}
+            alt={title}
+            class="h-full w-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div class="flex h-full items-center justify-center text-xs text-ink-500">
+            📷
+          </div>
+        )}
+      </a>
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-center gap-1.5 text-[11px] text-ink-500">
+          {locationLabel && <span>📍 {locationLabel}</span>}
+          <ContentTypeBadge status={status} size="sm" />
+        </div>
+        <h3 class="mt-1 line-clamp-2 text-sm font-medium leading-snug text-brand-brown">
+          <a href={href} class="hover:text-brand-orange">
+            {title}
+          </a>
+        </h3>
+        <p class="mt-1 text-[11px] text-ink-500">{dateLabel}</p>
+      </div>
+    </article>
+  )
+}

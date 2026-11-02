@@ -1,0 +1,140 @@
+---
+import { site } from "../data/site";
+import Icons from "./icons/Icons.astro";
+
+interface Props {
+  variant?: "full" | "compact";
+  className?: string;
+}
+
+const { variant = "full", className = "" } = Astro.props;
+const { author, social } = site;
+---
+
+<aside
+  class={`author-card rounded-2xl border border-border-soft bg-brand-cream p-5 ${className}`}
+  aria-label="關於作者"
+>
+  <div class="flex items-start gap-4">
+    <img
+      src="/avatar.jpg"
+      alt="黃踢那的照片"
+      width="80"
+      height="80"
+      class="h-16 w-16 flex-none rounded-full object-cover ring-2 ring-brand-orange md:h-20 md:w-20"
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <div class="min-w-0 flex-1">
+      <p class="font-display text-2xl leading-none text-brand-brown">{author.name}</p>
+      <p class="mt-1 text-sm text-ink-500">{author.handle}</p>
+    </div>
+  </div>
+
+  {
+    variant === "full" && (
+      <>
+        <div class="mt-5 space-y-3 text-sm leading-relaxed text-ink-700">
+          <p class="text-base font-medium text-brand-brown">
+            {author.bio.hook}
+          </p>
+          <p>{author.bio.body}</p>
+          <ul class="space-y-1.5 text-[13px] text-ink-700">
+            <li class="flex gap-2">
+              <span aria-hidden="true">🇯🇵</span>
+              <span>
+                <span class="text-ink-500">現在：</span>{author.bio.now}
+              </span>
+            </li>
+            <li class="flex gap-2">
+              <span aria-hidden="true">🏨</span>
+              <span>
+                <span class="text-ink-500">內容：</span>{author.bio.content}
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="mt-5 grid grid-cols-2 gap-2">
+          <a
+            href={social.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-1.5 rounded-full bg-brand-orange px-3 py-2 text-sm font-medium text-brand-brown transition hover:brightness-95"
+            aria-label="追蹤黃踢那的 Instagram"
+          >
+            <Icons name="instagram" size={16} />
+            追蹤 IG
+          </a>
+          <a
+            href={social.lineCommunity}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-1.5 rounded-full bg-brand-teal px-3 py-2 text-sm font-medium text-brand-cream transition hover:brightness-95"
+            aria-label="加入黃踢那的 LINE 旅行社群"
+          >
+            <Icons name="line" size={16} />
+            LINE 社群
+          </a>
+        </div>
+
+        <div class="mt-4 space-y-1.5 border-t border-border-soft pt-4 text-[12px] text-ink-500">
+          <p>
+            <span aria-hidden="true">📩</span>{" "}
+            合作邀約：
+            <a
+              href={`mailto:${social.email}`}
+              class="underline underline-offset-2 hover:text-brand-brown"
+            >
+              {social.email}
+            </a>
+          </p>
+          <p>
+            <span aria-hidden="true">🎁</span>{" "}
+            粉絲專屬旅宿優惠？
+            <a
+              href={social.instagramDM}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline underline-offset-2 hover:text-brand-brown"
+            >
+              私訊 IG
+            </a>
+          </p>
+        </div>
+      </>
+    )
+  }
+
+  {
+    variant === "compact" && (
+      <>
+        <p class="mt-4 text-sm leading-relaxed text-ink-700">
+          <span class="font-medium text-brand-brown">2026 裸辭中</span>
+          ，給自己一年挑戰靠旅行與攝影養活自己。現在：{author.bio.now}。
+        </p>
+        <div class="mt-4 grid grid-cols-2 gap-2">
+          <a
+            href={social.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-1.5 rounded-full bg-brand-orange px-3 py-1.5 text-xs font-medium text-brand-brown transition hover:brightness-95"
+          >
+            <Icons name="instagram" size={14} />
+            追蹤 IG
+          </a>
+          <a
+            href={social.lineCommunity}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-1.5 rounded-full bg-brand-teal px-3 py-1.5 text-xs font-medium text-brand-cream transition hover:brightness-95"
+          >
+            <Icons name="line" size={14} />
+            LINE 社群
+          </a>
+        </div>
+      </>
+    )
+  }
+</aside>

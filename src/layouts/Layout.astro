@@ -1,0 +1,259 @@
+---
+import "../styles/global.css";
+import { site } from "../data/site";
+import Icons from "../components/icons/Icons.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.name, description = site.description } = Astro.props;
+
+const siteTitle = title === site.name ? title : `${title}｜${site.name}`;
+---
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{siteTitle}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:title" content={siteTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link
+      rel="preload"
+      href="/fonts/JasonHandwriting2-subset.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="preload" href="/avatar.jpg" as="image" fetchpriority="high" />
+    <link rel="preload" href="/logo.png" as="image" fetchpriority="high" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+  </head>
+
+  <body class="bg-brand-cream text-brand-brown">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-brand-brown focus:px-3 focus:py-2 focus:text-brand-cream"
+    >
+      跳到主要內容
+    </a>
+
+    <header class="relative border-b border-border-soft">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
+        <a
+          href="/"
+          class="flex items-center gap-2 transition-opacity hover:opacity-80"
+          aria-label="回首頁"
+        >
+          <img
+            src="/logo.png"
+            alt={site.name}
+            class="h-10 w-auto md:h-12"
+            width="200"
+            height="100"
+          />
+        </a>
+
+        <nav class="hidden items-center gap-6 text-sm md:flex" aria-label="主選單">
+          {site.nav.map((item) => (
+            <a href={item.href} class="hover:text-brand-orange">
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        <button
+          type="button"
+          id="menu-toggle"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-md text-brand-brown transition hover:bg-paper-soft md:hidden"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="開啟選單"
+        >
+          <Icons name="menu" size={24} class="menu-icon" />
+          <Icons name="close" size={24} class="close-icon hidden" />
+        </button>
+      </div>
+
+      <div
+        id="mobile-menu"
+        class="hidden border-t border-border-soft bg-brand-cream md:hidden"
+        hidden
+      >
+        <nav class="mx-auto max-w-6xl px-4 py-4" aria-label="手機選單">
+          <ul class="flex flex-col divide-y divide-border-soft">
+            {site.nav.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="block py-3 text-base text-brand-brown hover:text-brand-orange"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-4 grid grid-cols-2 gap-2">
+            <a
+              href={site.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-1.5 rounded-full bg-brand-orange px-3 py-2 text-sm font-medium text-brand-brown"
+            >
+              <Icons name="instagram" size={16} />
+              追蹤 IG
+            </a>
+            <a
+              href={site.social.lineCommunity}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center gap-1.5 rounded-full bg-brand-teal px-3 py-2 text-sm font-medium text-brand-cream"
+            >
+              <Icons name="line" size={16} />
+              LINE 社群
+            </a>
+          </div>
+
+          <div class="mt-4 border-t border-border-soft pt-4 text-[12px] text-ink-500">
+            <p>
+              合作邀約：
+              <a
+                href={`mailto:${site.social.email}`}
+                class="underline underline-offset-2 hover:text-brand-brown"
+              >
+                {site.social.email}
+              </a>
+            </p>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <a
+      href={site.social.instagram}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="追蹤黃踢那的 Instagram"
+      class="group fixed bottom-6 left-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-brand-orange text-brand-brown shadow-lg transition hover:scale-105 hover:brightness-95 md:bottom-8 md:left-8 md:h-14 md:w-14"
+      style="padding-bottom: env(safe-area-inset-bottom, 0px);"
+    >
+      <Icons name="instagram" size={26} class="md:hidden" />
+      <Icons name="instagram" size={28} class="hidden md:block" />
+      <span class="sr-only">追蹤 Instagram</span>
+    </a>
+
+    <footer class="mt-24 border-t border-border-soft bg-paper-soft">
+      <div class="mx-auto max-w-6xl px-4 py-10 text-sm text-ink-700">
+        <div class="grid gap-8 md:grid-cols-[1fr_auto] md:gap-16">
+          <div>
+            <p class="font-display text-xl text-brand-brown">{site.name}</p>
+            <p class="mt-1 text-xs text-ink-500">{site.tagline}</p>
+
+            <div class="mt-5 flex flex-wrap items-center gap-2">
+              <a
+                href={site.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border-soft text-ink-700 transition hover:border-brand-brown hover:text-brand-brown"
+              >
+                <Icons name="instagram" size={16} />
+              </a>
+              <a
+                href={site.social.threads}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Threads"
+                class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border-soft text-ink-700 transition hover:border-brand-brown hover:text-brand-brown"
+              >
+                <Icons name="threads" size={16} />
+              </a>
+              <a
+                href={site.social.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border-soft text-ink-700 transition hover:border-brand-brown hover:text-brand-brown"
+              >
+                <Icons name="facebook" size={16} />
+              </a>
+              <a
+                href={site.social.lineCommunity}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LINE 社群"
+                class="inline-flex h-9 items-center gap-1.5 rounded-full border border-border-soft px-3 text-xs text-ink-700 transition hover:border-brand-brown hover:text-brand-brown"
+              >
+                <Icons name="line" size={14} />
+                LINE 社群
+              </a>
+              <a
+                href={`mailto:${site.social.email}`}
+                aria-label="合作邀約信箱"
+                class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border-soft text-ink-700 transition hover:border-brand-brown hover:text-brand-brown"
+              >
+                <Icons name="mail" size={16} />
+              </a>
+            </div>
+          </div>
+
+          <nav class="flex flex-wrap gap-x-6 gap-y-2 text-xs" aria-label="頁尾選單">
+            <a href="/about" class="hover:text-brand-orange">關於黃踢那</a>
+            <a href="/disclosure" class="hover:text-brand-orange">聯盟揭露</a>
+            <a href={`mailto:${site.social.email}`} class="hover:text-brand-orange">
+              合作邀約
+            </a>
+          </nav>
+        </div>
+
+        <p class="mt-8 text-[11px] text-ink-500">
+          © {new Date().getFullYear()} {site.name} Tina's Travel &amp; Living.
+          本站部分連結為聯盟連結，不影響你的購買價格。
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.getElementById("menu-toggle");
+      const menu = document.getElementById("mobile-menu");
+      const menuIcon = toggle?.querySelector(".menu-icon");
+      const closeIcon = toggle?.querySelector(".close-icon");
+
+      if (toggle && menu) {
+        toggle.addEventListener("click", () => {
+          const isOpen = toggle.getAttribute("aria-expanded") === "true";
+          const next = !isOpen;
+          toggle.setAttribute("aria-expanded", String(next));
+          toggle.setAttribute("aria-label", next ? "關閉選單" : "開啟選單");
+          menu.toggleAttribute("hidden", !next);
+          menu.classList.toggle("hidden", !next);
+          menuIcon?.classList.toggle("hidden", next);
+          closeIcon?.classList.toggle("hidden", !next);
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+            toggle.click();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

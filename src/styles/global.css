@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Jason Handwriting 2";
+  src: url("/fonts/JasonHandwriting2-subset.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --color-brand-orange: #f2ab47;
+  --color-brand-cream: #fff8f0;
+  --color-brand-brown: #3d210f;
+  --color-brand-teal: #2c6378;
+
+  --color-ink-900: #3d210f;
+  --color-ink-700: #5a3a24;
+  --color-ink-500: #8a6a52;
+  --color-ink-300: #c9b8a8;
+
+  --color-paper: #fff8f0;
+  --color-paper-soft: #fdf2e4;
+  --color-border-soft: #ead9c3;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang TC",
+    "Microsoft JhengHei", "Noto Sans TC", "Hiragino Sans", "Heiti TC",
+    "Segoe UI", Arial, sans-serif;
+  --font-display: "Jason Handwriting 2", -apple-system, "PingFang TC",
+    "Microsoft JhengHei", sans-serif;
+}
+
+html {
+  background-color: var(--color-brand-cream);
+  color: var(--color-brand-brown);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+::selection {
+  background: var(--color-brand-orange);
+  color: var(--color-brand-brown);
+}
