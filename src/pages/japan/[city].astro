@@ -1,0 +1,70 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import StayCard from "../../components/StayCard.astro";
+import {
+  getArticlesByCountry,
+  slugOf,
+  groupByCity,
+} from "../../lib/articles";
+import { stays } from "../../data/stays";
+
+export async function getStaticPaths() {
+  const articles = await getArticlesByCountry("japan");
+  const byCity = groupByCity(articles);
+  const cities = Array.from(byCity.keys()).filter((c) => c !== "其他");
+  return cities.map((city) => ({
+    params: { city },
+    props: { city, articles: byCity.get(city) ?? [] },
+  }));
+}
+
+const { city, articles } = Astro.props;
+const cityStays = stays.filter(
+  (s) => s.country === "japan" && s.city === city
+);
+---
+
+<Layout title={`${city}｜日本`} description={`黃踢那在日本 ${city} 的旅行紀錄。`}>
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-16 md:pt-14">
+    <p class="text-xs tracking-widest text-ink-500 uppercase">
+      <a href="/japan" class="hover:text-brand-orange">Japan</a> ·
+    </p>
+    <h1 class="mt-2 text-3xl font-bold text-brand-brown md:text-4xl">
+      📍 {city}
+    </h1>
+    <p class="mt-4 max-w-2xl text-sm text-ink-700">
+      {city} 共 {articles.length} 篇攻略。
+    </p>
+
+    <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {articles.map((a) => (
+        <ArticleCard
+          title={a.data.title}
+          slug={slugOf(a)}
+          cover={a.data.cover}
+          excerpt={a.data.excerpt}
+          city={a.data.city}
+          country={a.data.country}
+          status={a.data.status}
+          date={a.data.date.toISOString()}
+        />
+      ))}
+    </div>
+
+    {
+      cityStays.length > 0 && (
+        <section class="mt-14 border-t border-border-soft pt-14">
+          <h2 class="text-xl font-bold text-brand-brown md:text-2xl">
+            住過的地方
+          </h2>
+          <div class="mt-6 grid gap-6 md:grid-cols-2">
+            {cityStays.map((s) => (
+              <StayCard stay={s} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </section>
+</Layout>

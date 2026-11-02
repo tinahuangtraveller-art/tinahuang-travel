@@ -1,59 +1,33 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import AuthorCard from "../components/AuthorCard.astro";
-import StayCard from "../components/StayCard.astro";
-import ContentTypeBadge from "../components/ContentTypeBadge.astro";
 import ArticleCard from "../components/ArticleCard.astro";
+import StayCard from "../components/StayCard.astro";
 import BrushUnderline from "../components/decorations/BrushUnderline.astro";
 import DashedDivider from "../components/decorations/DashedDivider.astro";
+import Icons from "../components/icons/Icons.astro";
+import {
+  getAllArticles,
+  slugOf,
+  countryLabel,
+} from "../lib/articles";
 import { stays, getActiveDeals } from "../data/stays";
+import { site } from "../data/site";
 
+const articles = await getAllArticles();
+const latestArticles = articles.slice(0, 6);
 const activeDeals = getActiveDeals();
-const demoEditorialStay = { ...stays[0], status: "experienced" as const, deal: undefined };
 
-const demoArticles = [
-  {
-    title: "嵐山小火車完整攻略｜訂票、座位、下車後怎麼走",
-    slug: "arashiyama-romantic-train",
-    excerpt:
-      "從京都市區搭 Haruka 到嵯峨嵐山站，實測小火車坐哪一側風景最好、下車後 15 分鐘能走到的地方。",
-    city: "京都",
-    country: "japan",
-    status: "experienced" as const,
-    date: "2026-03-15",
-    readingTime: 8,
-  },
-  {
-    title: "天橋立 10 個玩法｜原來京都可以這樣玩 EP3",
-    slug: "amanohashidate-10-ways",
-    excerpt:
-      "從登山吊椅、飛龍觀到海邊踩水、蟹肉飯，實際走訪整理，可依自己喜好挑著玩。",
-    city: "京都",
-    country: "japan",
-    status: "experienced" as const,
-    date: "2026-04-02",
-    readingTime: 12,
-  },
-  {
-    title: "日本免稅新制 2026/11/1｜先付後退完整攻略",
-    slug: "japan-tax-free-2026",
-    excerpt:
-      "2026/11/1 起日本免稅改成先付後退制。本文依官方公告整理，不是親身實測。",
-    city: "",
-    country: "japan",
-    status: "researched" as const,
-    date: "2026-10-28",
-    readingTime: 10,
-  },
-];
+const japanCount = articles.filter((a) => a.data.country === "japan").length;
+const taiwanCount = articles.filter((a) => a.data.country === "taiwan").length;
 ---
 
 <Layout>
-  <section class="mx-auto max-w-6xl px-4 pt-10 pb-16 md:pt-16 md:pb-24">
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-14 md:pt-16 md:pb-20">
     <div class="grid gap-10 md:grid-cols-[1fr_320px] md:gap-12">
       <div>
         <p class="text-sm tracking-widest text-brand-teal uppercase">
-          Phase 1 · 骨架驗收頁
+          Tina's Travel &amp; Living
         </p>
 
         <h1 class="mt-4 font-display text-5xl leading-tight md:text-7xl">
@@ -62,21 +36,22 @@ const demoArticles = [
         <BrushUnderline class="mt-2 max-w-md" />
 
         <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-700">
-          每次更新，都可能是你的下一趟旅行。這裡會慢慢累積我在日本、台灣的真實旅行體驗、自由行攻略、住宿心得與行前準備。
+          每次更新，都可能是你的下一趟旅行。日本、台灣的真實旅行體驗、
+          自由行攻略、住宿心得與行前準備。
         </p>
 
         <div class="mt-10 flex flex-wrap gap-3">
           <a
-            href="/japan"
+            href="/articles"
             class="rounded-full bg-brand-orange px-5 py-2.5 text-sm font-medium text-brand-brown shadow-sm transition hover:brightness-95"
           >
-            看日本攻略
+            看最新攻略
           </a>
           <a
-            href="/prepare"
+            href="/stays"
             class="rounded-full border border-brand-brown px-5 py-2.5 text-sm font-medium text-brand-brown transition hover:bg-brand-brown hover:text-brand-cream"
           >
-            行前準備
+            看住過的旅宿
           </a>
         </div>
       </div>
@@ -87,127 +62,177 @@ const demoArticles = [
     </div>
   </section>
 
+  {
+    latestArticles.length > 0 && (
+      <section class="border-t border-border-soft bg-paper-soft">
+        <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
+          <div class="flex items-end justify-between gap-4">
+            <div>
+              <p class="text-xs tracking-widest text-ink-500 uppercase">
+                Latest
+              </p>
+              <h2 class="mt-1 text-2xl font-bold text-brand-brown md:text-3xl">
+                最新攻略
+              </h2>
+            </div>
+            <a
+              href="/articles"
+              class="shrink-0 text-sm text-brand-brown underline-offset-4 hover:underline"
+            >
+              看全部 →
+            </a>
+          </div>
+
+          <div class="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {latestArticles.map((a) => (
+              <ArticleCard
+                title={a.data.title}
+                slug={slugOf(a)}
+                cover={a.data.cover}
+                excerpt={a.data.excerpt}
+                city={a.data.city}
+                country={a.data.country}
+                status={a.data.status}
+                date={a.data.date.toISOString()}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    stays.length > 0 && (
+      <section class="border-t border-border-soft">
+        <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
+          <div class="flex items-end justify-between gap-4">
+            <div>
+              <p class="text-xs tracking-widest text-ink-500 uppercase">
+                Stays
+              </p>
+              <h2 class="mt-1 text-2xl font-bold text-brand-brown md:text-3xl">
+                黃踢那住過的地方
+              </h2>
+              {activeDeals.length > 0 && (
+                <p class="mt-2 text-xs text-ink-500">
+                  目前有 {activeDeals.length} 個粉絲專屬優惠進行中
+                </p>
+              )}
+            </div>
+            <a
+              href="/stays"
+              class="shrink-0 text-sm text-brand-brown underline-offset-4 hover:underline"
+            >
+              看全部 →
+            </a>
+          </div>
+
+          <div class="mt-8 grid gap-6 md:grid-cols-2">
+            {stays.slice(0, 2).map((s) => (
+              <StayCard stay={s} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   <section class="border-t border-border-soft bg-paper-soft">
-    <div class="mx-auto max-w-6xl px-4 py-16">
-      <p class="text-xs tracking-widest text-ink-500 uppercase">
-        設計 token 驗收
-      </p>
-      <h2 class="mt-2 font-display text-3xl md:text-4xl">
-        確認品牌視覺是否正確
+    <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
+      <p class="text-xs tracking-widest text-ink-500 uppercase">Destinations</p>
+      <h2 class="mt-1 text-2xl font-bold text-brand-brown md:text-3xl">
+        依地區逛
       </h2>
 
-      <div class="mt-10 grid gap-6 md:grid-cols-2">
-        <article class="rounded-2xl border border-border-soft bg-brand-cream p-6">
-          <h3 class="text-sm font-medium text-ink-500">品牌色</h3>
-          <div class="mt-4 grid grid-cols-4 gap-3">
-            <div>
-              <div class="h-14 rounded-lg bg-brand-orange"></div>
-              <p class="mt-2 text-xs text-ink-500">Orange</p>
-              <p class="text-[11px] text-ink-500">#F2AB47</p>
-            </div>
-            <div>
-              <div class="h-14 rounded-lg bg-brand-cream border border-border-soft"></div>
-              <p class="mt-2 text-xs text-ink-500">Cream</p>
-              <p class="text-[11px] text-ink-500">#FFF8F0</p>
-            </div>
-            <div>
-              <div class="h-14 rounded-lg bg-brand-brown"></div>
-              <p class="mt-2 text-xs text-ink-500">Brown</p>
-              <p class="text-[11px] text-ink-500">#3D210F</p>
-            </div>
-            <div>
-              <div class="h-14 rounded-lg bg-brand-teal"></div>
-              <p class="mt-2 text-xs text-ink-500">Teal</p>
-              <p class="text-[11px] text-ink-500">#2C6378</p>
-            </div>
-          </div>
-        </article>
-
-        <article class="rounded-2xl border border-border-soft bg-brand-cream p-6">
-          <h3 class="text-sm font-medium text-ink-500">字體</h3>
-          <div class="mt-4 space-y-4">
-            <div>
-              <p class="text-[11px] text-ink-500">品牌展示字 · Jason Handwriting 2</p>
-              <p class="mt-1 font-display text-3xl">黃踢那的旅行世界</p>
-            </div>
-            <div>
-              <p class="text-[11px] text-ink-500">內文 · Noto Sans TC</p>
-              <p class="mt-1 text-base leading-relaxed">
-                坐小火車穿過嵐山的那段路，風從窗戶吹進來的時候，才真的覺得來到了京都。
-              </p>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <div class="mt-6 rounded-2xl border border-border-soft bg-brand-cream p-6">
-        <h3 class="text-sm font-medium text-ink-500">內容類型 badge</h3>
-        <p class="mt-1 text-xs text-ink-500">
-          每篇文章頂部會根據 frontmatter status 顯示
-        </p>
-        <div class="mt-4 flex flex-wrap gap-3">
-          <ContentTypeBadge status="experienced" />
-          <ContentTypeBadge status="researched" />
-          <ContentTypeBadge status="sponsored" />
-        </div>
-      </div>
-
-      <DashedDivider class="my-10" />
-
-      <div class="mt-6 rounded-2xl border border-border-soft bg-brand-cream p-6">
-        <h3 class="text-sm font-medium text-ink-500">📰 文章卡 Preview（Phase 3 列表要用）</h3>
-        <div class="mt-5 grid gap-6 md:grid-cols-3">
-          {demoArticles.map((a) => <ArticleCard {...a} />)}
-        </div>
-        <p class="mt-6 text-xs text-ink-500">row 樣式（sidebar 相關文章用）：</p>
-        <div class="mt-3 grid gap-3 md:grid-cols-2">
-          <ArticleCard {...demoArticles[0]} layout="row" />
-          <ArticleCard {...demoArticles[1]} layout="row" />
-        </div>
-      </div>
-
-      <div class="mt-6 rounded-2xl border border-border-soft bg-brand-cream p-6">
-        <h3 class="text-sm font-medium text-ink-500">🏨 旅宿卡片 Preview</h3>
-        <p class="mt-1 text-xs text-ink-500">
-          左：有粉絲優惠（商業合作）· 右：純實住心得（無合作）
-        </p>
-
-        <div class="mt-5 grid gap-6 md:grid-cols-2">
-          <StayCard stay={stays[0]} />
-          <StayCard stay={demoEditorialStay} />
-        </div>
-
-        <div class="mt-6">
-          <p class="text-xs text-ink-500">row 樣式（文章 sidebar 用）：</p>
-          <div class="mt-3 grid gap-3 md:grid-cols-2">
-            <StayCard stay={stays[0]} layout="row" />
-            <StayCard stay={stays[1]} layout="row" />
-          </div>
-        </div>
-
-        {activeDeals.length > 0 && (
-          <p class="mt-6 text-xs text-ink-500">
-            目前有 {activeDeals.length} 個 active 粉絲優惠
+      <div class="mt-8 grid gap-6 md:grid-cols-2">
+        <a
+          href="/japan"
+          class="group block rounded-2xl border border-border-soft bg-brand-cream p-6 transition hover:border-brand-brown/30"
+        >
+          <p class="text-xs text-ink-500">🇯🇵 Japan</p>
+          <h3 class="mt-2 text-xl font-bold text-brand-brown group-hover:text-brand-orange">
+            日本
+          </h3>
+          <p class="mt-2 text-sm text-ink-700">
+            {japanCount > 0
+              ? `${japanCount} 篇攻略，從京都到北海道`
+              : "更多攻略陸續上線中"}
           </p>
-        )}
-      </div>
+          <p class="mt-4 text-sm text-brand-brown underline-offset-4 group-hover:underline">
+            逛日本 →
+          </p>
+        </a>
 
-      <div class="mt-6 rounded-2xl border border-border-soft bg-brand-cream p-6">
-        <h3 class="text-sm font-medium text-ink-500">a11y 對比度檢查</h3>
-        <div class="mt-4 flex flex-wrap gap-3 text-sm">
-          <span class="rounded-md bg-brand-orange px-3 py-2 text-brand-brown">
-            Orange 底 + Brown 字
-          </span>
-          <span class="rounded-md bg-brand-brown px-3 py-2 text-brand-cream">
-            Brown 底 + Cream 字
-          </span>
-          <span class="rounded-md bg-brand-cream px-3 py-2 text-brand-brown border border-border-soft">
-            Cream 底 + Brown 字
-          </span>
-          <span class="rounded-md bg-brand-teal px-3 py-2 text-brand-cream">
-            Teal 底 + Cream 字
-          </span>
-        </div>
+        <a
+          href="/taiwan"
+          class="group block rounded-2xl border border-border-soft bg-brand-cream p-6 transition hover:border-brand-brown/30"
+        >
+          <p class="text-xs text-ink-500">🇹🇼 Taiwan</p>
+          <h3 class="mt-2 text-xl font-bold text-brand-brown group-hover:text-brand-orange">
+            台灣
+          </h3>
+          <p class="mt-2 text-sm text-ink-700">
+            {taiwanCount > 0
+              ? `${taiwanCount} 篇攻略，宜蘭、苗栗、更多縣市陸續補`
+              : "更多攻略陸續上線中"}
+          </p>
+          <p class="mt-4 text-sm text-brand-brown underline-offset-4 group-hover:underline">
+            逛台灣 →
+          </p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-border-soft">
+    <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
+      <p class="text-xs tracking-widest text-ink-500 uppercase">Prepare</p>
+      <h2 class="mt-1 text-2xl font-bold text-brand-brown md:text-3xl">
+        行前準備中心
+      </h2>
+      <p class="mt-3 max-w-2xl text-sm text-ink-700">
+        日本自由行必備的網路、交通、票券、退稅資訊整理。這一區會隨著實際使用慢慢補齊。
+      </p>
+      <a
+        href="/prepare"
+        class="mt-5 inline-block text-sm text-brand-brown underline-offset-4 hover:underline"
+      >
+        看行前準備 →
+      </a>
+    </div>
+  </section>
+
+  <section class="border-t border-border-soft bg-brand-brown text-brand-cream">
+    <div class="mx-auto max-w-4xl px-4 py-14 text-center md:py-20">
+      <p class="text-xs tracking-widest text-brand-orange uppercase">
+        Join
+      </p>
+      <h2 class="mt-2 font-display text-3xl md:text-5xl">
+        下一趟旅行，不要漏掉。
+      </h2>
+      <p class="mt-5 text-sm leading-relaxed text-brand-cream/80">
+        追 IG 看最新 Reels、加 LINE 社群拿旅宿優惠。
+      </p>
+      <div class="mt-7 flex flex-wrap justify-center gap-3">
+        <a
+          href={site.social.lineCommunity}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-brand-teal px-5 py-2.5 text-sm font-medium text-brand-cream transition hover:brightness-95"
+        >
+          <Icons name="line" size={18} />
+          加入 LINE 社群
+        </a>
+        <a
+          href={site.social.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-medium text-brand-brown transition hover:brightness-95"
+        >
+          <Icons name="instagram" size={18} />
+          追蹤 IG
+        </a>
       </div>
     </div>
   </section>

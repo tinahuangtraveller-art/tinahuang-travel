@@ -1,0 +1,56 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import { getAllArticles, slugOf } from "../lib/articles";
+
+const latest = (await getAllArticles()).slice(0, 3);
+---
+
+<Layout title="404｜找不到頁面" description="你要找的頁面不在這裡。">
+  <section class="mx-auto max-w-4xl px-4 pt-16 pb-20 text-center md:pt-24">
+    <p class="font-display text-6xl text-brand-orange md:text-8xl">404</p>
+    <h1 class="mt-6 text-2xl font-bold text-brand-brown md:text-3xl">
+      迷路了？沒關係
+    </h1>
+    <p class="mt-4 text-sm text-ink-700">
+      這個網址找不到頁面。可能是打錯、或是文章還沒上線。
+    </p>
+
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a
+        href="/"
+        class="rounded-full bg-brand-orange px-5 py-2.5 text-sm font-medium text-brand-brown transition hover:brightness-95"
+      >
+        回首頁
+      </a>
+      <a
+        href="/articles"
+        class="rounded-full border border-brand-brown px-5 py-2.5 text-sm font-medium text-brand-brown transition hover:bg-brand-brown hover:text-brand-cream"
+      >
+        看所有攻略
+      </a>
+    </div>
+
+    {
+      latest.length > 0 && (
+        <div class="mt-16 text-left">
+          <h2 class="text-base font-bold text-brand-brown">最新攻略</h2>
+          <div class="mt-5 grid gap-5 md:grid-cols-3">
+            {latest.map((a) => (
+              <ArticleCard
+                title={a.data.title}
+                slug={slugOf(a)}
+                cover={a.data.cover}
+                excerpt={a.data.excerpt}
+                city={a.data.city}
+                country={a.data.country}
+                status={a.data.status}
+                date={a.data.date.toISOString()}
+              />
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </section>
+</Layout>

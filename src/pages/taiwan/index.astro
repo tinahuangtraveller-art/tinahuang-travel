@@ -1,0 +1,92 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import StayCard from "../../components/StayCard.astro";
+import {
+  getArticlesByCountry,
+  slugOf,
+  groupByCity,
+} from "../../lib/articles";
+import { stays } from "../../data/stays";
+
+const articles = await getArticlesByCountry("taiwan");
+const byCity = groupByCity(articles);
+const cities = Array.from(byCity.keys()).filter((c) => c !== "其他");
+const taiwanStays = stays.filter((s) => s.country === "taiwan");
+---
+
+<Layout title="台灣旅遊攻略" description="黃踢那在台灣各地的旅宿、景點與日常旅行紀錄。">
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-14 md:pt-14">
+    <p class="text-xs tracking-widest text-ink-500 uppercase">Taiwan</p>
+    <h1 class="mt-2 text-3xl font-bold text-brand-brown md:text-4xl">
+      🇹🇼 台灣
+    </h1>
+    <p class="mt-4 max-w-2xl text-sm text-ink-700">
+      {articles.length > 0
+        ? `目前共 ${articles.length} 篇台灣攻略。`
+        : "台灣攻略陸續上線中。先看看住過的地方。"}
+    </p>
+
+    {
+      cities.length > 0 && (
+        <section class="mt-10">
+          <h2 class="text-xl font-bold text-brand-brown md:text-2xl">
+            依城市逛
+          </h2>
+          <div class="mt-5 flex flex-wrap gap-3">
+            {cities.map((city) => (
+              <a
+                href={`/taiwan/${encodeURIComponent(city)}`}
+                class="inline-flex items-center gap-2 rounded-full border border-border-soft bg-brand-cream px-4 py-2 text-sm text-brand-brown transition hover:border-brand-brown"
+              >
+                <span>📍 {city}</span>
+                <span class="text-xs text-ink-500">
+                  {byCity.get(city)?.length ?? 0}
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      articles.length > 0 && (
+        <section class="mt-14">
+          <h2 class="text-xl font-bold text-brand-brown md:text-2xl">
+            所有台灣攻略
+          </h2>
+          <div class="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {articles.map((a) => (
+              <ArticleCard
+                title={a.data.title}
+                slug={slugOf(a)}
+                cover={a.data.cover}
+                excerpt={a.data.excerpt}
+                city={a.data.city}
+                country={a.data.country}
+                status={a.data.status}
+                date={a.data.date.toISOString()}
+              />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      taiwanStays.length > 0 && (
+        <section class="mt-14 border-t border-border-soft pt-14">
+          <h2 class="text-xl font-bold text-brand-brown md:text-2xl">
+            台灣住過的地方
+          </h2>
+          <div class="mt-6 grid gap-6 md:grid-cols-2">
+            {taiwanStays.map((s) => (
+              <StayCard stay={s} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </section>
+</Layout>

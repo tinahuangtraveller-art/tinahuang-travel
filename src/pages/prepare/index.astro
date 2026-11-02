@@ -1,0 +1,96 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+const topics = [
+  {
+    emoji: "📶",
+    title: "日本 eSIM 怎麼選",
+    description: "Ubigi、Airalo、Holafly 等 eSIM 比較。",
+    status: "實測後上線",
+  },
+  {
+    emoji: "🚆",
+    title: "關西機場 → 京都 3 種方式",
+    description: "Haruka、利木津巴士、普通電車比較。",
+    status: "整理中",
+  },
+  {
+    emoji: "🎫",
+    title: "JR Pass 划不划算？",
+    description: "全國版、關西版、JR 關西廣域周遊券差別。",
+    status: "整理中",
+  },
+  {
+    emoji: "🏨",
+    title: "日本住宿區域選擇",
+    description: "京都、大阪、東京住哪一區最順。",
+    status: "整理中",
+  },
+  {
+    emoji: "💴",
+    title: "日本免稅新制 2026/11/1",
+    description: "先付後退制度詳解。",
+    status: "已上線",
+    href: "/articles/japan-tax-free-2026",
+  },
+  {
+    emoji: "📋",
+    title: "日本自由行行前清單",
+    description: "出發前 1 週要準備的事。",
+    status: "整理中",
+  },
+];
+---
+
+<Layout title="行前準備" description="日本自由行必備的網路、交通、票券、住宿區域、退稅資訊整理。">
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-16 md:pt-14">
+    <p class="text-xs tracking-widest text-ink-500 uppercase">Prepare</p>
+    <h1 class="mt-2 text-3xl font-bold text-brand-brown md:text-4xl">
+      🧳 行前準備中心
+    </h1>
+    <p class="mt-4 max-w-2xl text-sm text-ink-700">
+      日本自由行一定會用到的資訊整理，不用每次都 Google 一次。
+      這一區會隨實際旅行使用慢慢補齊，有實測過的會標「實測」。
+    </p>
+
+    <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        topics.map((t) => {
+          const isReady = t.status === "已上線";
+          const content = (
+            <div
+              class={`rounded-2xl border border-border-soft bg-brand-cream p-5 ${isReady ? "transition hover:border-brand-brown/30" : "opacity-70"}`}
+            >
+              <div class="text-3xl">{t.emoji}</div>
+              <h3 class="mt-3 text-base font-bold text-brand-brown">
+                {t.title}
+              </h3>
+              <p class="mt-2 text-sm text-ink-700">{t.description}</p>
+              <p class="mt-4 text-xs text-ink-500">{t.status}</p>
+            </div>
+          );
+          return t.href ? (
+            <a href={t.href} class="group block">
+              {content}
+            </a>
+          ) : (
+            content
+          );
+        })
+      }
+    </div>
+
+    <p class="mt-10 text-xs text-ink-500">
+      缺哪個主題？
+      <a
+        href="https://ig.me/m/tinahuang.traveller"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="underline underline-offset-2 hover:text-brand-brown"
+      >
+        私訊告訴我
+      </a>
+      ，我會優先整理。
+    </p>
+  </section>
+</Layout>

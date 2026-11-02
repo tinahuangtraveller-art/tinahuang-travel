@@ -1,0 +1,42 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ArticleCard from "../../components/ArticleCard.astro";
+import { getAllArticles, slugOf } from "../../lib/articles";
+
+const articles = await getAllArticles();
+---
+
+<Layout title="所有攻略" description="黃踢那所有的日本與台灣旅遊攻略、住宿心得、行前準備整理。">
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-16 md:pt-14">
+    <p class="text-xs tracking-widest text-ink-500 uppercase">Articles</p>
+    <h1 class="mt-2 text-3xl font-bold text-brand-brown md:text-4xl">
+      所有攻略
+    </h1>
+    <p class="mt-4 max-w-2xl text-sm text-ink-700">
+      目前共 {articles.length} 篇。按最新順序排列。
+    </p>
+
+    {
+      articles.length === 0 ? (
+        <p class="mt-16 text-center text-ink-500">
+          文章準備中，很快回來看
+        </p>
+      ) : (
+        <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {articles.map((a) => (
+            <ArticleCard
+              title={a.data.title}
+              slug={slugOf(a)}
+              cover={a.data.cover}
+              excerpt={a.data.excerpt}
+              city={a.data.city}
+              country={a.data.country}
+              status={a.data.status}
+              date={a.data.date.toISOString()}
+            />
+          ))}
+        </div>
+      )
+    }
+  </section>
+</Layout>
