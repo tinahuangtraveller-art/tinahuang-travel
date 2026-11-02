@@ -23,6 +23,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "sharp": "^0.35.5",
     "subset-font": "^2.9.0"
   }
 }
