@@ -1,0 +1,198 @@
+---
+title: 苗栗大湖｜四季山宿：黃踢那粉絲住房優惠 + 實住推薦
+excerpt: 6–30 人包棟、遼闊山景、一樓有親子房與寵物房的苗栗包棟民宿實住紀錄。
+cover: /images/miaoli-dahu-four-season/dscf5816.webp
+date: 2026-10-23
+updated: 2026-10-23
+
+country: taiwan
+region: miaoli
+city: 苗栗
+area: 大湖
+
+type: stay
+status: sponsored
+
+tags: [苗栗住宿, 包棟民宿, 四季山宿, 粉絲優惠]
+
+locations:
+  - id: four-season-dahu
+    name: 四季山宿
+    gmaps: https://maps.app.goo.gl/QYraPEr6J9JeqACb6
+    category: stay
+    lat: 24.4280
+    lng: 120.8700
+
+affiliates: []
+
+stay:
+  shortName: 四季山宿
+  checkInDate: 2026-10
+  rooms: 6–30 人包棟（含寵物房、親子房）
+  priceRange: $$
+
+deal:
+  active: true
+  label: 粉絲專屬
+  discount: 現省 30%
+  code: TINA168
+  validUntil: 2026-12-31
+  bookingUrl: https://booking.lakeze.com/season
+---
+
+**6–30 人包棟｜遼闊山景｜一樓親子房、寵物房**
+
+想找一間能和家人朋友一起看山、放空的苗栗包棟民宿？四季山宿不只有山景，還有讓我很難忘的在地人情味。往下看我的實住照片與心得。
+
+> 🎁 **黃踢那粉絲專屬住房方案｜🔥 現省 30%**
+>
+> 👉 [立即查看官方房價與可訂日期](https://booking.lakeze.com/season)
+>
+> **折扣碼：`TINA168`，現省 30%！**
+> **優惠日期**：～2026/12/31
+>
+> 訂房前請確認折扣碼成功套用；實際適用日期、房型與條件依民宿官方規定為準。
+
+---
+
+## ✨ 值得來的 6 個理由
+
+### ① 一走出門，就是遼闊的山景
+
+最讓我驚豔的，就是民宿門口這片開闊的山景。不用特別安排什麼行程，光是望著山，就很容易放慢腳步。
+
+![山景 1](/images/miaoli-dahu-four-season/dscf5816.webp)
+![山景 2](/images/miaoli-dahu-four-season/dscf5830.webp)
+![山景 3](/images/miaoli-dahu-four-season/dscf5838.webp)
+![山景 4](/images/miaoli-dahu-four-season/dscf5842.webp)
+
+### ② 房間有大扇窗，坐著就想發呆
+
+本來還想說：「這裡也太偏僻了吧！」沒想到真正住下來，就一直看著窗外發呆，真的超放鬆的。
+
+**前棟**
+
+![前棟 1](/images/miaoli-dahu-four-season/dscf5813.webp)
+![前棟 2](/images/miaoli-dahu-four-season/dscf5807.webp)
+![前棟 3](/images/miaoli-dahu-four-season/snipaste_2026-10-23_21-43-50.webp)
+![前棟 4](/images/miaoli-dahu-four-season/dscf5859.webp)
+![前棟 5](/images/miaoli-dahu-four-season/dscf5860.webp)
+
+**後棟**
+
+![後棟 1](/images/miaoli-dahu-four-season/dscf5867.webp)
+![後棟 2](/images/miaoli-dahu-four-season/dscf5871.webp)
+![後棟 3](/images/miaoli-dahu-four-season/dscf5866.webp)
+![後棟 4](/images/miaoli-dahu-four-season/dscf5869.webp)
+![後棟 5](/images/miaoli-dahu-four-season/2a9a9960.webp)
+![後棟 6](/images/miaoli-dahu-four-season/2a9a9961.webp)
+![後棟 7](/images/miaoli-dahu-four-season/snipaste_2026-10-23_23-16-14.webp)
+![後棟共用空間](/images/miaoli-dahu-four-season/snipaste_2026-10-23_23-15-44.webp)
+
+### ③ 民宿裡還有超美的天井（前棟）
+
+除了山景，民宿裡的天井也是我很喜歡的空間。記得抬頭看看，這裡真的很適合拍照。
+
+![天井 1](/images/miaoli-dahu-four-season/2a9a9891.webp)
+![天井 2](/images/miaoli-dahu-four-season/dscf5888.webp)
+![天井 3](/images/miaoli-dahu-four-season/dscf5849.webp)
+![天井 4](/images/miaoli-dahu-four-season/dscf5805.webp)
+![天井 5](/images/miaoli-dahu-four-season/dscf5878.webp)
+![天井 6](/images/miaoli-dahu-four-season/dscf5855.webp)
+
+### ④ 一樓有寵物房、親子房，安排很貼心 🐾
+
+這個設計我覺得很加分。四季山宿在一樓特別規劃了寵物房和親子房，帶毛孩或小朋友入住，不用一直上下樓梯，進出更方便。也能減少寵物與其他客人不必要的接觸，讓比較怕動物的旅客住得更自在。
+
+![一樓親子房](/images/miaoli-dahu-four-season/2a9a9980.webp)
+![一樓寵物房](/images/miaoli-dahu-four-season/2a9a9984.webp)
+
+> 📝 寵物入住規定、房型與相關費用，請事先向民宿確認。
+
+### ⑤ 老闆夫妻超熱情，讓住宿多了人情味
+
+原本只是來住民宿，沒想到老闆還載我們去登山口走走！老闆娘也帶我們去看草莓田，一路聊個不停，笑聲超有感染力。
+
+比起一般的住宿介紹，**這些互動才是這趟最讓我難忘的回憶**。
+
+### ⑥ 山裡的早晨，還有草莓的小驚喜
+
+隔天早上喝到了用自家草莓製作的草莓汁，還有豐盛的家常早餐。
+
+草莓是產季採收後冷凍保存的，所以即使不是採果季，也能喝到草莓的味道。
+
+![家常早餐](/images/miaoli-dahu-four-season/早餐.webp)
+![草莓果汁](/images/miaoli-dahu-four-season/草莓果汁.webp)
+
+> 📝 實際餐點及飲品供應，請以民宿安排為準。
+
+---
+
+## 🍁 四季來都有不同玩法
+
+四季山宿不只是住進山裡放空，不同季節來，還有不一樣的風景可以期待。
+
+### 🍓 冬天｜走訪老闆娘種的草莓田
+
+苗栗大湖的冬天，當然少不了草莓。老闆娘自己也有種草莓，冬天正逢草莓產季，來住宿還可以期待新鮮草莓的季節。
+
+這次去的時候不是產季，草莓田裡沒有草莓，但隔天早餐還是喝到了老闆娘用產季採收、冷凍保存的草莓做成的果汁。
+
+> 📝 新鮮草莓供應及草莓田參觀，請依產季與民宿實際安排為準。
+
+### ✨ 4 月｜山裡的螢火蟲季
+
+春天來大湖，還有機會遇見螢火蟲。如果喜歡夜晚的自然生態，可以留意每年 4 月前後的賞螢季節，白天欣賞山景，晚上再安排賞螢行程。
+
+> 📝 螢火蟲出沒受天氣與自然環境影響，賞螢地點及當季狀況建議事先確認。
+
+### 🍁 秋冬｜馬拉邦山的楓葉
+
+喜歡爬山、賞楓的朋友，可以把馬拉邦山排進行程。秋冬時節，馬拉邦山一帶有機會欣賞楓葉景色，搭配山裡的住宿，安排一趟慢慢走的旅行。
+
+> 📝 楓葉轉色時間每年不同，登山前也請先確認步道與登山口交通狀況。
+
+> 💛 **黃踢那的小提醒**：想安排哪個季節，就先確認當年的花果與生態狀況；不論何時來，記得把時間留給山景和慢下來的自己。
+
+---
+
+## 🌿 這間民宿適合誰？
+
+**很推薦給**：
+
+- 想揪朋友或家人一起包棟的人
+- 喜歡山景、安靜環境的人
+- 想找個地方聊天、放空、不趕行程的人
+
+**入住前先知道**：
+
+四季山宿位於苗栗大湖山區，**周邊不是熱鬧商圈**。如果你喜歡豐富的夜生活、隨時出門逛街，這裡可能不太適合。
+
+但如果你想要的，就是一段不用趕行程、可以好好相聚的時間，那這裡很值得考慮。
+
+---
+
+## 📍 民宿資訊
+
+| 項目 | 詳細資訊 |
+|---|---|
+| 民宿名稱 | 四季山宿 |
+| 所在地 | 苗栗縣大湖鄉 |
+| 住宿類型 | 包棟民宿 |
+| 詳細地址 | 364 台灣苗栗縣大湖鄉東興村 85-5 號 |
+| 包棟人數與房型 | 6–30 人包棟 |
+| 入住／退房時間 | 入住 15:00 後／退房 11:00 前 |
+| 停車資訊 | 小客車 2 位、機車 5 位，免費停車 |
+| 官方 LINE | [加入好友](https://line.me/R/ti/p/@042hkjma?oat__id=7282390) |
+
+---
+
+## 💛 黃踢那的入住心得
+
+這趟最意外的收穫，是發現自己其實很需要這種不用趕行程的旅行。白天看看山、晚上和朋友好好聊天，還能聽老闆夫妻分享在地生活。
+
+對我來說，這不只是住一晚，而是一段會想再回味的山中時光。
+
+**如果你也想揪朋友一起上山放空，四季山宿可以先收藏起來！**
+
+> 📝 **本頁為合作住房整理**；透過本頁專屬折扣碼完成訂房，我可能依合作方案獲得佣金。所有拍攝與心得都是我實際入住後的紀錄。

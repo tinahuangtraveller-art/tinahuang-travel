@@ -31,7 +31,7 @@ export const stays: Stay[] = [
     checkInDate: "2026-03",
     summary: "6–30 人包棟、山景遼闊，一樓有親子房與寵物房。回來最想念那片山景。",
     status: "sponsored",
-    articleUrl: "/taiwan/stays/four-season-dahu",
+    articleUrl: "/articles/miaoli-dahu-four-season",
     deal: {
       active: true,
       label: "粉絲專屬",
@@ -50,7 +50,7 @@ export const stays: Stay[] = [
     checkInDate: "2026-10",
     summary: "18 坪星隅客房房內有雙湯池，不用再跑大眾湯；頂樓可看蘭陽夜景。",
     status: "sponsored",
-    articleUrl: "/taiwan/stays/conch-yilan",
+    articleUrl: "/articles/yilan-conch-hotspring",
     deal: {
       active: true,
       label: "粉絲限定升等",

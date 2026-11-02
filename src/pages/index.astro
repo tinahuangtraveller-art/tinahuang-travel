@@ -15,7 +15,9 @@ import { stays, getActiveDeals } from "../data/stays";
 import { site } from "../data/site";
 
 const articles = await getAllArticles();
-const latestArticles = articles.slice(0, 6);
+const latestArticles = articles
+  .filter((a) => a.data.type !== "stay")
+  .slice(0, 6);
 const activeDeals = getActiveDeals();
 
 const japanCount = articles.filter((a) => a.data.country === "japan").length;
