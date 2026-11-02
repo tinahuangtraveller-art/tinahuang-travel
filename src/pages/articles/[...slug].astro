@@ -29,9 +29,21 @@ const related = all
   .filter((a) => a.data.city === data.city || a.data.country === data.country)
   .sort((a, b) => +b.data.date - +a.data.date)
   .slice(0, 4);
+
+const pageContext = {
+  content_type: data.type,
+  content_status: data.status,
+  content_country: data.country,
+  content_city: data.city ?? "",
+  content_region: data.region ?? "",
+};
 ---
 
-<Layout title={data.title} description={data.excerpt}>
+<Layout
+  title={data.title}
+  description={data.excerpt}
+  pageContext={pageContext}
+>
   <article class="mx-auto max-w-6xl px-4 pt-8 pb-16 md:pt-12">
     <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12">
       <div class="min-w-0">

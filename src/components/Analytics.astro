@@ -1,0 +1,43 @@
+---
+interface Props {
+  pageContext?: Record<string, string | number | boolean>;
+}
+
+const { pageContext } = Astro.props;
+const GA_ID = "G-QFXNTWMX06";
+---
+
+<script
+  is:inline
+  async
+  src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+></script>
+
+<script is:inline define:vars={{ GA_ID, pageContext }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    window.dataLayer.push(arguments);
+  }
+  window.gtag = gtag;
+  gtag("js", new Date());
+  gtag("config", GA_ID, {
+    send_page_view: false,
+  });
+
+  const pageViewParams = { ...(pageContext || {}) };
+  gtag("event", "page_view", pageViewParams);
+
+  document.addEventListener("click", (e) => {
+    const target = e.target instanceof Element ? e.target.closest("a") : null;
+    if (!target) return;
+
+    const label = target.dataset.gaLabel;
+    const event = target.dataset.gaEvent;
+    if (!event) return;
+
+    gtag("event", event, {
+      source: label || target.getAttribute("aria-label") || "unknown",
+      target_url: target.href,
+    });
+  });
+</script>
