@@ -15,18 +15,36 @@ status: experienced
 tags: [嵐山, 小火車, 京都交通]
 
 locations:
-  - id: arashiyama-kameoka
-    name: 嵯峨野觀光鐵道 龜岡站
-    gmaps: https://maps.app.goo.gl/example1
-    category: transport
   - id: arashiyama-saga
     name: 嵯峨野觀光鐵道 嵯峨站
-    gmaps: https://maps.app.goo.gl/example2
+    gmaps: https://maps.app.goo.gl/example-saga
     category: transport
+    lat: 35.0188
+    lng: 135.6797
+  - id: arashiyama-kameoka
+    name: 嵯峨野觀光鐵道 龜岡站
+    gmaps: https://maps.app.goo.gl/example-kameoka
+    category: transport
+    lat: 35.0168
+    lng: 135.5881
+  - id: tenryuji
+    name: 天龍寺
+    gmaps: https://maps.app.goo.gl/example-tenryuji
+    category: attraction
+    lat: 35.0157
+    lng: 135.6737
+  - id: bamboo-grove
+    name: 竹林之道
+    gmaps: https://maps.app.goo.gl/example-bamboo
+    category: attraction
+    lat: 35.0171
+    lng: 135.6719
   - id: kinseti-chaya
     name: 琴瀨茶屋
-    gmaps: https://maps.app.goo.gl/example3
+    gmaps: https://maps.app.goo.gl/example-kinseti
     category: food
+    lat: 35.0160
+    lng: 135.6730
 
 affiliates:
   - klook-sagano-romantic-train

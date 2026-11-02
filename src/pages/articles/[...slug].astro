@@ -3,6 +3,8 @@ import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import ArticleHero from "../../components/ArticleHero.astro";
 import ArticleCard from "../../components/ArticleCard.astro";
+import ArticleMap from "../../components/ArticleMap.astro";
+import Place from "../../components/Place.astro";
 import AuthorCard from "../../components/AuthorCard.astro";
 import AfterArticleCTA from "../../components/AfterArticleCTA.astro";
 
@@ -45,9 +47,32 @@ const related = all
           readingTime={readingTime}
         />
 
+        {data.locations.length > 0 && <ArticleMap locations={data.locations} />}
+
         <div class="prose max-w-none">
           <Content />
         </div>
+
+        {
+          data.locations.length > 0 && (
+            <section class="mt-12">
+              <h2 class="text-xl font-bold text-brand-brown md:text-2xl">
+                📍 此行景點
+              </h2>
+              <div class="mt-5 grid gap-4 md:grid-cols-2">
+                {data.locations.map((loc) => (
+                  <Place
+                    name={loc.name}
+                    gmaps={loc.gmaps}
+                    category={loc.category}
+                    lat={loc.lat}
+                    lng={loc.lng}
+                  />
+                ))}
+              </div>
+            </section>
+          )
+        }
 
         <AfterArticleCTA country={data.country} />
 
