@@ -47,7 +47,8 @@ const articles = defineCollection({
             rooms: z.string().optional(),
             priceRange: z.enum(["$", "$$", "$$$", "$$$$"]).optional(),
           })
-          .nullable(),
+          .nullable()
+          .optional(),
       })
       .optional(),
 
@@ -63,7 +64,8 @@ const articles = defineCollection({
             validUntil: z.coerce.date(),
             bookingUrl: z.string(),
           })
-          .nullable(),
+          .nullable()
+          .optional(),
       })
       .optional(),
 
