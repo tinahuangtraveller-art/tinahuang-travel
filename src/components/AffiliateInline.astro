@@ -1,20 +1,41 @@
 ---
+import { getAffiliate } from "../data/affiliates";
+
 interface Props {
   slug: string;
 }
 
 const { slug } = Astro.props;
+const entry = getAffiliate(slug);
+const title = entry?.title ?? slug;
+const platformLabel =
+  entry?.platform === "klook"
+    ? "Klook"
+    : entry?.platform === "kkday"
+      ? "KKday"
+      : "合作平台";
 ---
 
-<a
-  href="#"
-  data-affiliate={slug}
-  class="affiliate-stub"
-  rel="noopener noreferrer sponsored"
->
-  <span aria-hidden="true">📎</span><span>{slug}</span><span
-    class="affiliate-stub__note"
-  >
-    · 連結建置中</span
-  >
-</a>
+{
+  entry?.url ? (
+    <a
+      href={entry.url}
+      target="_blank"
+      rel="noopener noreferrer sponsored"
+      class="affiliate-cta"
+      data-affiliate={slug}
+      data-ga-event="affiliate_click"
+      data-ga-label={slug}
+    >
+      <span aria-hidden="true">🎟️</span>
+      <span class="affiliate-cta__title">{title}</span>
+      <span class="affiliate-cta__platform">{platformLabel} ↗</span>
+    </a>
+  ) : (
+    <span class="affiliate-pending" data-affiliate={slug}>
+      <span aria-hidden="true">🎟️</span>
+      <span class="affiliate-pending__title">{title}</span>
+      <span class="affiliate-pending__note">合作連結整理中</span>
+    </span>
+  )
+}
