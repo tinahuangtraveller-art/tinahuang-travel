@@ -1,6 +1,7 @@
 ---
 title: 京都美山茅葺之里｜黃踢那實訪完整攻略
 excerpt: 保存傳統茅草屋的京都山村。實吃美食、拍照點、2026/12/1 放水檢查與交通整理。
+cover: /images/covers/kyoto-miyama-kayabuki/cover.JPG
 date: 2026-11-01
 updated: 2026-11-01
 country: japan
