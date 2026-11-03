@@ -163,12 +163,6 @@ const pageContext = {
 
           <ArticleTOC variant="sidebar" />
 
-          <SidebarCTA
-            country={data.country}
-            city={data.city}
-            currentArticleSlug={slugOf(article)}
-          />
-
           {
             related.length > 0 && (
               <section class="rounded-2xl border border-border-soft bg-brand-cream p-5">
@@ -205,6 +199,12 @@ const pageContext = {
               </section>
             )
           }
+
+          <SidebarCTA
+            country={data.country}
+            city={data.city}
+            currentArticleSlug={slugOf(article)}
+          />
         </div>
       </aside>
     </div>
