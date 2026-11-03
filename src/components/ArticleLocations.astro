@@ -1,0 +1,264 @@
+---
+interface Location {
+  id: string;
+  name: string;
+  gmaps?: string;
+  category?: "attraction" | "food" | "stay" | "transport";
+  lat?: number;
+  lng?: number;
+}
+
+interface Props {
+  locations: Location[];
+}
+
+const { locations } = Astro.props;
+
+const categoryIcon: Record<string, string> = {
+  attraction: "📍",
+  food: "🍽",
+  stay: "🏨",
+  transport: "🚉",
+};
+
+const withCoords = locations.filter(
+  (l) => typeof l.lat === "number" && typeof l.lng === "number"
+);
+
+function isValidGmapsUrl(url?: string): boolean {
+  if (!url) return false;
+  if (url.includes("example-")) return false;
+  if (url.endsWith(".goo.gl/")) return false;
+  return true;
+}
+
+const openAllUrl =
+  withCoords.length >= 2
+    ? `https://www.google.com/maps/dir/${withCoords
+        .map((l) => `${l.lat},${l.lng}`)
+        .join("/")}`
+    : null;
+
+const showMap = withCoords.length >= 2;
+---
+
+<div class="overflow-hidden rounded-2xl border border-border-soft bg-brand-cream">
+  {
+    showMap && (
+      <div
+        class="article-map border-b border-border-soft"
+        data-locations={JSON.stringify(withCoords)}
+        style="height: 320px;"
+      />
+    )
+  }
+
+  <div class="flex flex-wrap items-center justify-between gap-3 bg-paper-soft px-4 py-3">
+    <p class="text-xs text-ink-500">
+      共 {locations.length} 個點
+      {withCoords.length < locations.length &&
+        ` · ${withCoords.length} 個有座標`}
+    </p>
+    {
+      openAllUrl && (
+        <a
+          href={openAllUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-ga-event="open_all_in_gmaps"
+          class="inline-flex items-center gap-1.5 rounded-full bg-brand-brown px-3.5 py-1.5 text-xs font-medium text-brand-cream transition hover:brightness-110"
+        >
+          🗺 在 Google Maps 開啟全部
+        </a>
+      )
+    }
+  </div>
+
+  <ol class="divide-y divide-border-soft">
+    {
+      locations.map((loc, i) => {
+        const icon = categoryIcon[loc.category ?? "attraction"] ?? "📍";
+        const hasCoords = loc.lat != null && loc.lng != null;
+        const validGmaps = isValidGmapsUrl(loc.gmaps);
+        const openUrl = validGmaps
+          ? loc.gmaps
+          : hasCoords
+            ? `https://www.google.com/maps/search/?api=1&query=${loc.lat},${loc.lng}`
+            : null;
+        const navUrl = hasCoords
+          ? `https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}`
+          : openUrl;
+
+        return (
+          <li class="flex items-center gap-3 px-4 py-3">
+            <span
+              aria-hidden="true"
+              class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-orange/15 text-xs font-bold text-brand-brown"
+            >
+              {i + 1}
+            </span>
+            <span class="min-w-0 flex-1 truncate text-sm text-brand-brown">
+              <span class="mr-1" aria-hidden="true">
+                {icon}
+              </span>
+              {loc.name}
+            </span>
+            <div class="flex shrink-0 gap-1.5">
+              {openUrl && (
+                <a
+                  href={openUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`在 Google Maps 開啟 ${loc.name}`}
+                  class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border-soft text-sm transition hover:border-brand-brown hover:bg-paper-soft"
+                  title="開啟 Google Maps"
+                >
+                  📱
+                </a>
+              )}
+              {navUrl && (
+                <a
+                  href={navUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`導航到 ${loc.name}`}
+                  class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border-soft text-sm transition hover:border-brand-brown hover:bg-paper-soft"
+                  title="導航"
+                >
+                  🧭
+                </a>
+              )}
+            </div>
+          </li>
+        );
+      })
+    }
+  </ol>
+</div>
+
+{
+  showMap && (
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+  )
+}
+
+{
+  showMap && (
+    <script>
+      import L from "leaflet";
+
+      const containers = document.querySelectorAll<HTMLElement>(".article-map");
+
+      containers.forEach((container) => {
+        const raw = container.dataset.locations;
+        if (!raw) return;
+
+        const locations = JSON.parse(raw) as {
+          id: string;
+          name: string;
+          gmaps?: string;
+          category?: string;
+          lat: number;
+          lng: number;
+        }[];
+
+        if (locations.length === 0) return;
+
+        const avgLat =
+          locations.reduce((s, l) => s + l.lat, 0) / locations.length;
+        const avgLng =
+          locations.reduce((s, l) => s + l.lng, 0) / locations.length;
+
+        const map = L.map(container, {
+          center: [avgLat, avgLng],
+          zoom: 13,
+          scrollWheelZoom: false,
+        });
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution:
+            '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          maxZoom: 19,
+        }).addTo(map);
+
+        const bounds = L.latLngBounds([]);
+        locations.forEach((loc, i) => {
+          const numberedIcon = L.divIcon({
+            className: "custom-pin",
+            html: `<div class="pin-wrap"><span class="pin-num">${i + 1}</span></div>`,
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -30],
+          });
+
+          const marker = L.marker([loc.lat, loc.lng], {
+            icon: numberedIcon,
+          }).addTo(map);
+          const popupHtml = `
+            <div class="map-popup">
+              <strong>${i + 1}. ${loc.name}</strong>
+            </div>
+          `;
+          marker.bindPopup(popupHtml);
+          bounds.extend([loc.lat, loc.lng]);
+        });
+
+        if (locations.length > 1) {
+          map.fitBounds(bounds, { padding: [40, 40], maxZoom: 15 });
+        }
+      });
+    </script>
+  )
+}
+
+<style is:global>
+  .leaflet-container {
+    font-family: var(--font-sans);
+    background: var(--color-paper-soft);
+  }
+
+  .custom-pin {
+    background: transparent;
+    border: none;
+  }
+
+  .custom-pin .pin-wrap {
+    width: 32px;
+    height: 32px;
+    background: var(--color-brand-orange);
+    border: 2px solid var(--color-brand-brown);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .custom-pin .pin-num {
+    transform: rotate(45deg);
+    color: var(--color-brand-brown);
+    font-weight: 700;
+    font-size: 12px;
+  }
+
+  .map-popup {
+    font-size: 13px;
+    color: var(--color-brand-brown);
+    line-height: 1.6;
+  }
+
+  .leaflet-popup-content-wrapper {
+    border-radius: 8px;
+    background: var(--color-brand-cream);
+  }
+
+  .leaflet-popup-tip {
+    background: var(--color-brand-cream);
+  }
+</style>

@@ -4,8 +4,7 @@ import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import ArticleHero from "../../components/ArticleHero.astro";
 import ArticleCard from "../../components/ArticleCard.astro";
-import ArticleMap from "../../components/ArticleMap.astro";
-import PlaceList from "../../components/PlaceList.astro";
+import ArticleLocations from "../../components/ArticleLocations.astro";
 import AuthorCard from "../../components/AuthorCard.astro";
 import AfterArticleCTA from "../../components/AfterArticleCTA.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
@@ -76,8 +75,6 @@ const pageContext = {
           readingTime={readingTime}
         />
 
-        {data.locations.length >= 2 && <ArticleMap locations={data.locations} />}
-
         <div class="lg:hidden">
           <ArticleTOC variant="inline" />
         </div>
@@ -112,7 +109,7 @@ const pageContext = {
                 📍 此行景點
               </h2>
               <div class="mt-5">
-                <PlaceList locations={data.locations} />
+                <ArticleLocations locations={data.locations} />
               </div>
             </section>
           )

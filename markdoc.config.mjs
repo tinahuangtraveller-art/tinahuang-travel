@@ -26,5 +26,13 @@ export default defineMarkdocConfig({
         slug: { type: String, required: true },
       },
     },
+    Reel: {
+      render: component("./src/components/IgReel.astro"),
+      attributes: {
+        url: { type: String, required: true },
+        cover: { type: String },
+        caption: { type: String },
+      },
+    },
   },
 });

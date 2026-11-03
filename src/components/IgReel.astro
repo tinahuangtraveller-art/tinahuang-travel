@@ -1,0 +1,142 @@
+---
+interface Props {
+  url: string;
+  cover?: string;
+  caption?: string;
+}
+
+const { url, cover, caption } = Astro.props;
+
+const match = url.match(/instagram\.com\/(?:reel|reels|p)\/([^/?]+)/);
+const reelId = match?.[1] ?? "";
+const canonicalUrl = reelId
+  ? `https://www.instagram.com/reel/${reelId}/`
+  : url;
+---
+
+<figure
+  class="ig-reel my-10 overflow-hidden rounded-2xl border border-border-soft bg-brand-cream"
+  data-reel-url={canonicalUrl}
+>
+  <button
+    type="button"
+    class="reel-facade group relative block aspect-[9/16] w-full max-w-sm mx-auto bg-paper-soft"
+    aria-label="播放 Instagram Reel"
+    data-ga-event="play_ig_reel"
+    data-ga-label={reelId}
+  >
+    {
+      cover ? (
+        <img
+          src={cover}
+          alt={caption ?? "Instagram Reel 封面"}
+          class="h-full w-full object-cover transition group-hover:scale-[1.01]"
+          loading="lazy"
+        />
+      ) : (
+        <div class="flex h-full items-center justify-center text-sm text-ink-500">
+          Instagram Reel
+        </div>
+      )
+    }
+
+    <span class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/50" aria-hidden="true"></span>
+
+    <span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-brand-cream/95 px-2.5 py-1 text-[11px] font-medium text-brand-brown shadow-sm">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.4.4.6.2 1 .5 1.5 1 .5.5.8.9 1 1.5.2.5.4 1.2.4 2.4.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.4-.2.6-.5 1-1 1.5-.5.5-.9.8-1.5 1-.5.2-1.2.4-2.4.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.4-.4-.6-.2-1-.5-1.5-1-.5-.5-.8-.9-1-1.5-.2-.5-.4-1.2-.4-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.4.2-.6.5-1 1-1.5.5-.5.9-.8 1.5-1 .5-.2 1.2-.4 2.4-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.7.1-1.1.1-1.7.2-2.1.4-.5.2-.9.4-1.3.8-.4.4-.6.8-.8 1.3-.2.4-.3 1-.4 2.1-.1 1.2-.1 1.6-.1 4.7s0 3.5.1 4.7c.1 1.1.2 1.7.4 2.1.2.5.4.9.8 1.3.4.4.8.6 1.3.8.4.2 1 .3 2.1.4 1.2.1 1.6.1 4.7.1s3.5 0 4.7-.1c1.1-.1 1.7-.2 2.1-.4.5-.2.9-.4 1.3-.8.4-.4.6-.8.8-1.3.2-.4.3-1 .4-2.1.1-1.2.1-1.6.1-4.7s0-3.5-.1-4.7c-.1-1.1-.2-1.7-.4-2.1-.2-.5-.4-.9-.8-1.3-.4-.4-.8-.6-1.3-.8-.4-.2-1-.3-2.1-.4C15.5 4 15.1 4 12 4zm0 3.1a4.9 4.9 0 110 9.8 4.9 4.9 0 010-9.8zm0 1.8a3.1 3.1 0 100 6.2 3.1 3.1 0 000-6.2zm5.1-2.3a1.1 1.1 0 110 2.2 1.1 1.1 0 010-2.2z"/>
+      </svg>
+      Instagram Reel
+    </span>
+
+    <span class="absolute left-1/2 top-1/2 inline-flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-brand-orange/95 text-brand-brown shadow-lg transition group-hover:scale-105 group-hover:bg-brand-orange">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+        class="translate-x-0.5"
+      >
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    </span>
+
+    {
+      caption && (
+        <span class="absolute bottom-3 left-3 right-3 text-xs leading-snug text-brand-cream drop-shadow">
+          {caption}
+        </span>
+      )
+    }
+  </button>
+
+  <div class="reel-embed hidden">
+    <blockquote
+      class="instagram-media"
+      data-instgrm-permalink={canonicalUrl}
+      data-instgrm-version="14"
+      style="background:#FFF8F0; border:0; margin:0; padding:0; width:100%;"
+    >
+      <a href={canonicalUrl} target="_blank" rel="noopener noreferrer">
+        在 Instagram 看
+      </a>
+    </blockquote>
+  </div>
+
+  <figcaption class="flex items-center justify-between gap-3 border-t border-border-soft px-4 py-3 text-xs text-ink-500">
+    <span>📹 影片版 · Instagram</span>
+    <a
+      href={canonicalUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="text-brand-brown underline-offset-4 hover:underline"
+    >
+      到 IG 看 →
+    </a>
+  </figcaption>
+</figure>
+
+<script>
+  const loadEmbedScript = () =>
+    new Promise<void>((resolve) => {
+      if ((window as any).instgrm) return resolve();
+      const existing = document.querySelector<HTMLScriptElement>(
+        'script[src*="instagram.com/embed.js"]'
+      );
+      if (existing) {
+        existing.addEventListener("load", () => resolve());
+        return;
+      }
+      const s = document.createElement("script");
+      s.async = true;
+      s.src = "https://www.instagram.com/embed.js";
+      s.onload = () => resolve();
+      document.body.appendChild(s);
+    });
+
+  document.querySelectorAll<HTMLElement>(".ig-reel").forEach((reel) => {
+    const facade = reel.querySelector<HTMLButtonElement>(".reel-facade");
+    const embed = reel.querySelector<HTMLElement>(".reel-embed");
+    if (!facade || !embed) return;
+
+    facade.addEventListener(
+      "click",
+      async () => {
+        facade.classList.add("hidden");
+        embed.classList.remove("hidden");
+        await loadEmbedScript();
+        (window as any).instgrm?.Embeds?.process();
+      },
+      { once: true }
+    );
+  });
+</script>
