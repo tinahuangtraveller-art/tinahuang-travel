@@ -3,17 +3,16 @@ title: 京都美山茅葺之里｜黃踢那實訪完整攻略
 excerpt: 保存傳統茅草屋的京都山村。實吃美食、拍照點、2026/12/1 放水檢查與交通整理。
 date: 2026-11-01
 updated: 2026-11-01
-
 country: japan
 region: kansai
 city: 京都
 area: miyama
-
 type: guide
 status: experienced
-
-tags: [美山, 京都近郊, 茅葺之里]
-
+tags:
+  - 美山
+  - 京都近郊
+  - 茅葺之里
 locations:
   - id: kitamura-restaurant
     name: お食事処 きたむら（手工蕎麥麵、地雞唐揚）
@@ -26,7 +25,7 @@ locations:
     gmaps: https://maps.app.goo.gl/R6fLyhCjUJaHMbmu6
     category: food
     lat: 35.2863
-    lng: 135.6240
+    lng: 135.624
   - id: miyama-folk-museum
     name: 美山民俗資料館
     gmaps: https://maps.app.goo.gl/BFqvbNTA31KZCtY97
@@ -37,22 +36,25 @@ locations:
     name: 美山郵筒（拍照點）
     gmaps: https://maps.app.goo.gl/y75H6uv2ckZJH4nT9
     category: attraction
-    lat: 35.2870
+    lat: 35.287
     lng: 135.6238
   - id: kamakura-shrine
     name: 鎌倉神社（我沒去過）
     gmaps: https://maps.app.goo.gl/ZaRFLXZa7nfaHgdcA
     category: attraction
-    lat: 35.2900
-    lng: 135.6300
-
+    lat: 35.29
+    lng: 135.63
 affiliates:
   - klook-miyama-amanohashidate-tour
   - klook-katsuoji-miyama-arashiyama-tour
+stay:
+  discriminant: false
+deal:
+  discriminant: false
+draft: false
 ---
-
 > 🏡 一座保有傳統茅草屋、現在也有居民生活的京都山村。這篇整理親自去過的景點、實吃美食、特色拍照點、2026 年放水檢查與交通方式。
->
+> 
 > **資料查核日期：2026/11/1**；活動和班次請以官方最新公告為準。
 
 ## 先認識美山：小房子居然是消防設備
@@ -68,14 +70,14 @@ affiliates:
 - **用途**：一年兩次的放水銃消防設備檢查，保護茅草屋聚落
 - **觀賞規定**：約 11:00 起至點檢結束，訪客須離開聚落內部，移往村落外圍適當區域觀賞
 - 雨天也會實施檢查；出發前仍請確認官方最新公告
-- 官方活動與預約：<https://miyamanavi.com/event/kayabuki-water-discharge>
+- 官方活動與預約：[https://miyamanavi.com/event/kayabuki-water-discharge](https://miyamanavi.com/event/kayabuki-water-discharge)
 
 ### 🚌 京都車站出發的官方放水專車
 
 - 專為一齊放水安排的京都站來回巴士旅遊，免自行轉乘 JR 與市營巴士
 - 行程資訊包含放水觀賞、當地導覽、**美山地雞鍋御膳午餐**及**常照皇寺**
 - **¥13,980／人；查詢時官方顯示額滿**，如有興趣可留意是否釋出名額
-- 官方專車：<https://miyamanavi.com/activity/kayabuki-water-discharge>
+- 官方專車：[https://miyamanavi.com/activity/kayabuki-water-discharge](https://miyamanavi.com/activity/kayabuki-water-discharge)
 
 ### 🚗 放水當日自行開車／騎車
 
@@ -116,20 +118,22 @@ affiliates:
 ## 🚆 從京都自由行到美山
 
 1. **JR 京都站**：搭嵯峨野線往園部方向
-2. **JR 園部站**：多數班次需在這裡換乘往日吉方向的列車；依實際班次確認
-3. **JR 日吉站**：轉搭**南丹市營巴士**
-4. **「北（かやぶきの里）」站**下車，到美山茅葺之里
+1. **JR 園部站**：多數班次需在這裡換乘往日吉方向的列車；依實際班次確認
+1. **JR 日吉站**：轉搭**南丹市營巴士**
+1. **「北（かやぶきの里）」站**下車，到美山茅葺之里
 
 - 全程可抓 **約 2 小時起**，依 JR 與公車接續時間而變
 - **公車班次不密集，一定先查回程**，別只看去程
 - 南丹市營巴士**不能使用 Suica／ICOCA**，請準備現金
-- **官方 2026 年轉乘表**：<https://miyamanavi.com/files/user/nantancitybus-timetable-en2026.pdf>
+- **官方 2026 年日文 JR＋巴士整合轉乘表（推薦）**：[https://miyamanavi.com/files/user/nantancitybus-timetable-jp2026.pdf](https://miyamanavi.com/files/user/nantancitybus-timetable-jp2026.pdf)
+  - 同時列出京都、園部、日吉與「北」站，去回程放同一頁，並有轉車、站牌實景照片。
+  - 第一頁平日，第二頁週六與週日／國定假日。
 - 若特地看 12/1 11:30 放水，請先確認公車能在活動前抵達觀賞區
 
 ## 🚌 不想換車？一般 Klook 一日遊
 
 > 📝 這些是**一般景點觀光團，不是 12/1 放水官方專車**，不保證可看到一齊放水。
-> 購買前務必依日期核對景點、上車地點、門票和停留時間。
+購買前務必依日期核對景點、上車地點、門票和停留時間。
 
 ### 方案 A｜美山 + 天橋立
 
