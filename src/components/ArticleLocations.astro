@@ -48,42 +48,40 @@ const showMap = withCoords.length >= 2;
       <div
         class="article-map border-b border-border-soft"
         data-locations={JSON.stringify(withCoords)}
-        style="height: 320px;"
+        style="height: 200px;"
       />
     )
   }
 
-  <div class="flex flex-wrap items-center justify-between gap-3 bg-paper-soft px-4 py-3">
-    <p class="text-xs text-ink-500">
-      共 {locations.length} 個點
-      {withCoords.length < locations.length &&
-        ` · ${withCoords.length} 個有座標`}
-    </p>
-    {
-      openAllUrl && (
-        <a
-          href={openAllUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-ga-event="open_all_in_gmaps"
-          class="inline-flex items-center gap-1.5 rounded-full bg-brand-brown px-3.5 py-1.5 text-xs font-medium text-brand-cream transition hover:brightness-110"
-        >
-          🗺 在 Google Maps 開啟全部
-        </a>
-      )
-    }
-  </div>
-
-  <details class="group border-t border-border-soft">
+  <details class="group bg-paper-soft">
     <summary
-      class="flex cursor-pointer items-center justify-between gap-2 px-4 py-3 text-sm text-brand-brown transition hover:bg-paper-soft"
+      class="flex cursor-pointer flex-wrap items-center justify-between gap-2 px-4 py-2 text-sm text-brand-brown transition hover:brightness-95"
     >
       <span class="flex items-center gap-2">
-        <span class="chevron transition-transform group-open:rotate-90" aria-hidden="true">▶</span>
-        查看 {locations.length} 個景點清單
+        <span
+          class="chevron text-xs text-ink-500 transition-transform group-open:rotate-90"
+          aria-hidden="true"
+        >
+          ▶
+        </span>
+        <span class="text-xs text-ink-500">
+          {locations.length} 個景點
+        </span>
       </span>
-      <span class="text-[11px] text-ink-500 group-open:hidden">展開</span>
-      <span class="hidden text-[11px] text-ink-500 group-open:inline">收合</span>
+      {
+        openAllUrl && (
+          <a
+            href={openAllUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onclick="event.stopPropagation()"
+            data-ga-event="open_all_in_gmaps"
+            class="inline-flex items-center gap-1.5 rounded-full bg-brand-brown px-3 py-1 text-[11px] font-medium text-brand-cream transition hover:brightness-110"
+          >
+            🗺 在 Google Maps 開啟全部
+          </a>
+        )
+      }
     </summary>
     <ol class="divide-y divide-border-soft border-t border-border-soft">
       {
