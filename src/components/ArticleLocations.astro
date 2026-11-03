@@ -74,9 +74,20 @@ const showMap = withCoords.length >= 2;
     }
   </div>
 
-  <ol class="divide-y divide-border-soft">
-    {
-      locations.map((loc, i) => {
+  <details class="group border-t border-border-soft">
+    <summary
+      class="flex cursor-pointer items-center justify-between gap-2 px-4 py-3 text-sm text-brand-brown transition hover:bg-paper-soft"
+    >
+      <span class="flex items-center gap-2">
+        <span class="chevron transition-transform group-open:rotate-90" aria-hidden="true">▶</span>
+        查看 {locations.length} 個景點清單
+      </span>
+      <span class="text-[11px] text-ink-500 group-open:hidden">展開</span>
+      <span class="hidden text-[11px] text-ink-500 group-open:inline">收合</span>
+    </summary>
+    <ol class="divide-y divide-border-soft border-t border-border-soft">
+      {
+        locations.map((loc, i) => {
         const icon = categoryIcon[loc.category ?? "attraction"] ?? "📍";
         const hasCoords = loc.lat != null && loc.lng != null;
         const validGmaps = isValidGmapsUrl(loc.gmaps);
@@ -132,9 +143,19 @@ const showMap = withCoords.length >= 2;
           </li>
         );
       })
-    }
-  </ol>
+      }
+    </ol>
+  </details>
 </div>
+
+<style>
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary {
+    list-style: none;
+  }
+</style>
 
 {
   showMap && (

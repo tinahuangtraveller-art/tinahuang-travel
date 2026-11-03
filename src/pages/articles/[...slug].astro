@@ -75,6 +75,14 @@ const pageContext = {
           readingTime={readingTime}
         />
 
+        {
+          data.locations.length > 0 && (
+            <div class="my-6">
+              <ArticleLocations locations={data.locations} />
+            </div>
+          )
+        }
+
         <div class="lg:hidden">
           <ArticleTOC variant="inline" />
         </div>
@@ -99,19 +107,6 @@ const pageContext = {
                 ))}
               </div>
             </div>
-          )
-        }
-
-        {
-          data.locations.length > 0 && (
-            <section class="mt-12">
-              <h2 class="text-xl font-bold text-brand-brown md:text-2xl">
-                📍 此行景點
-              </h2>
-              <div class="mt-5">
-                <ArticleLocations locations={data.locations} />
-              </div>
-            </section>
           )
         }
 
