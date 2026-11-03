@@ -1,0 +1,24 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  size?: "sm" | "md" | "lg" | "full";
+  align?: "left" | "right" | "center";
+  caption?: string;
+}
+
+const {
+  src,
+  alt,
+  size = "md",
+  align = "center",
+  caption,
+} = Astro.props;
+
+const classes = `img-${size} img-${align}`;
+---
+
+<figure class={classes}>
+  <img src={src} alt={alt} loading="lazy" />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

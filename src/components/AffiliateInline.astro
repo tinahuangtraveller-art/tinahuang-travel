@@ -1,0 +1,20 @@
+---
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<a
+  href="#"
+  data-affiliate={slug}
+  class="affiliate-stub"
+  rel="noopener noreferrer sponsored"
+>
+  <span aria-hidden="true">📎</span><span>{slug}</span><span
+    class="affiliate-stub__note"
+  >
+    · 連結建置中</span
+  >
+</a>

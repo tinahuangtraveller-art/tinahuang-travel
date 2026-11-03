@@ -1,4 +1,5 @@
 import { config, fields, collection } from "@keystatic/core";
+import { block, inline } from "@keystatic/core/content-components";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -170,7 +171,58 @@ export default config({
 
         content: fields.markdoc({
           label: "文章內文",
-          extension: "md",
+          extension: "mdoc",
+          components: {
+            Figure: block({
+              label: "圖片",
+              description: "可控制大小與對齊的圖片。小/中/靠左/靠右 時文字會自動環繞。",
+              schema: {
+                src: fields.image({
+                  label: "圖片",
+                  directory: "public/images/content",
+                  publicPath: "/images/content/",
+                  validation: { isRequired: true },
+                }),
+                alt: fields.text({
+                  label: "替代文字 (alt)",
+                  description: "描述圖片內容，SEO + 無障礙都需要",
+                  validation: { isRequired: true },
+                }),
+                size: fields.select({
+                  label: "大小",
+                  options: [
+                    { label: "小 (~40%)", value: "sm" },
+                    { label: "中 (~60%)", value: "md" },
+                    { label: "大 (~85%)", value: "lg" },
+                    { label: "滿版", value: "full" },
+                  ],
+                  defaultValue: "md",
+                }),
+                align: fields.select({
+                  label: "位置",
+                  options: [
+                    { label: "置中", value: "center" },
+                    { label: "靠左 (文繞圖右)", value: "left" },
+                    { label: "靠右 (文繞圖左)", value: "right" },
+                  ],
+                  defaultValue: "center",
+                }),
+                caption: fields.text({
+                  label: "圖說 (可選)",
+                }),
+              },
+            }),
+            Affiliate: inline({
+              label: "聯盟商品連結",
+              description: "插入聯盟商品 slug，會自動 render 成樣式化的連結",
+              schema: {
+                slug: fields.text({
+                  label: "商品 slug",
+                  validation: { isRequired: true },
+                }),
+              },
+            }),
+          },
         }),
       },
     }),
