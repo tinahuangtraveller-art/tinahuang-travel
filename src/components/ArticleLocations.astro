@@ -121,10 +121,10 @@ const showMap = withCoords.length >= 2;
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`在 Google Maps 開啟 ${loc.name}`}
-                  class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border-soft text-sm transition hover:border-brand-brown hover:bg-paper-soft"
-                  title="開啟 Google Maps"
+                  class="inline-flex items-center gap-1 rounded-full border border-border-soft px-2.5 py-1 text-[11px] text-brand-brown transition hover:border-brand-brown hover:bg-paper-soft"
                 >
-                  📱
+                  <span aria-hidden="true">📍</span>
+                  <span>地圖</span>
                 </a>
               )}
               {navUrl && (
@@ -133,10 +133,10 @@ const showMap = withCoords.length >= 2;
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`導航到 ${loc.name}`}
-                  class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border-soft text-sm transition hover:border-brand-brown hover:bg-paper-soft"
-                  title="導航"
+                  class="inline-flex items-center gap-1 rounded-full border border-border-soft px-2.5 py-1 text-[11px] text-brand-brown transition hover:border-brand-brown hover:bg-paper-soft"
                 >
-                  🧭
+                  <span aria-hidden="true">🧭</span>
+                  <span>導航</span>
                 </a>
               )}
             </div>
