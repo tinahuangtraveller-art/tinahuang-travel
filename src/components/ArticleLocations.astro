@@ -120,11 +120,12 @@ const showMap = withCoords.length >= 2;
                   href={openUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`在 Google Maps 開啟 ${loc.name}`}
+                  aria-label={`在 Google Maps 開啟 ${loc.name}，可加入我的最愛`}
+                  title="開啟 Google Maps，按 ⭐ 加入我的最愛"
                   class="inline-flex items-center gap-1 rounded-full border border-border-soft px-2.5 py-1 text-[11px] text-brand-brown transition hover:border-brand-brown hover:bg-paper-soft"
                 >
-                  <span aria-hidden="true">📍</span>
-                  <span>地圖</span>
+                  <span aria-hidden="true">⭐</span>
+                  <span>加入最愛</span>
                 </a>
               )}
               {navUrl && (
