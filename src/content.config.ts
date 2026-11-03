@@ -70,6 +70,7 @@ const articles = defineCollection({
       .optional(),
 
     draft: z.boolean().default(false),
+    isFeatured: z.boolean().default(false),
   }),
 });
 

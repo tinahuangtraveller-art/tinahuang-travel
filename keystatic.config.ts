@@ -164,6 +164,10 @@ export default config({
 
         draft: fields.checkbox({ label: "草稿（不會顯示在網站）" }),
 
+        isFeatured: fields.checkbox({
+          label: "首頁本月精選（整個網站只會顯示最新一篇勾選的）",
+        }),
+
         content: fields.markdoc({
           label: "文章內文",
           extension: "md",

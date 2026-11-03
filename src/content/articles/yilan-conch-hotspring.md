@@ -12,6 +12,7 @@ area: 羅東
 
 type: stay
 status: sponsored
+isFeatured: true
 
 tags: [宜蘭住宿, 溫泉, 村卻, 粉絲優惠]
 
