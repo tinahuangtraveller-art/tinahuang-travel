@@ -18,21 +18,22 @@ const categoryIcon: Record<string, string> = {
 
 const icon = categoryIcon[category ?? "attraction"] ?? "📍";
 
-const embedSrc =
-  lat != null && lng != null
-    ? `https://maps.google.com/maps?q=${lat},${lng}&hl=zh-TW&z=15&output=embed`
-    : null;
+const hasCoords = lat != null && lng != null;
+
+const bboxDelta = 0.01;
+const osmEmbedSrc = hasCoords
+  ? `https://www.openstreetmap.org/export/embed.html?bbox=${lng - bboxDelta},${lat - bboxDelta},${lng + bboxDelta},${lat + bboxDelta}&layer=mapnik&marker=${lat},${lng}`
+  : null;
 
 const openUrl =
   gmaps ??
-  (lat != null && lng != null
+  (hasCoords
     ? `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
     : null);
 
-const navUrl =
-  lat != null && lng != null
-    ? `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
-    : openUrl;
+const navUrl = hasCoords
+  ? `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
+  : openUrl;
 ---
 
 <figure
@@ -46,21 +47,15 @@ const navUrl =
   </figcaption>
 
   {
-    embedSrc && (
-      <div
-        class="place-map"
-        data-embed-src={embedSrc}
-        data-name={name}
-      >
-        <button
-          type="button"
-          class="place-map__trigger"
-          aria-label={`開啟 ${name} 的互動地圖`}
-        >
-          <span class="place-map__hint">
-            <span aria-hidden="true">🗺</span> 點擊載入地圖
-          </span>
-        </button>
+    osmEmbedSrc && (
+      <div class="place-map">
+        <iframe
+          src={osmEmbedSrc}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title={`${name} 位置預覽`}
+          aria-label={`${name} 在 OpenStreetMap 上的位置`}
+        />
       </div>
     )
   }
@@ -101,72 +96,10 @@ const navUrl =
     overflow: hidden;
   }
 
-  .place-map__trigger {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-    background: var(--color-paper-soft);
-    background-image: linear-gradient(
-        135deg,
-        transparent 48%,
-        rgba(242, 171, 71, 0.1) 50%,
-        transparent 52%
-      ),
-      linear-gradient(45deg, transparent 48%, rgba(44, 99, 120, 0.08) 50%, transparent 52%);
-    background-size: 20px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    transition: background 0.2s;
-  }
-
-  .place-map__trigger:hover {
-    background-color: var(--color-brand-cream);
-  }
-
-  .place-map__hint {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 1rem;
-    background: var(--color-brand-cream);
-    border-radius: 999px;
-    font-size: 0.85rem;
-    color: var(--color-brand-brown);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
   .place-map iframe {
     width: 100%;
     height: 100%;
     border: 0;
+    display: block;
   }
 </style>
-
-<script>
-  const places = document.querySelectorAll<HTMLElement>(".place-map");
-
-  places.forEach((place) => {
-    const trigger = place.querySelector<HTMLButtonElement>(
-      ".place-map__trigger"
-    );
-    const embedSrc = place.dataset.embedSrc;
-    const name = place.dataset.name;
-
-    if (!trigger || !embedSrc) return;
-
-    trigger.addEventListener("click", () => {
-      const iframe = document.createElement("iframe");
-      iframe.src = embedSrc;
-      iframe.loading = "lazy";
-      iframe.referrerPolicy = "no-referrer-when-downgrade";
-      iframe.title = name || "Google Maps";
-      iframe.allowFullscreen = true;
-      place.innerHTML = "";
-      place.appendChild(iframe);
-    });
-  });
-</script>

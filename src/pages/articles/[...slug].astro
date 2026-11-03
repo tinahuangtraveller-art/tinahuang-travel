@@ -76,7 +76,7 @@ const pageContext = {
           readingTime={readingTime}
         />
 
-        {data.locations.length > 0 && <ArticleMap locations={data.locations} />}
+        {data.locations.length >= 2 && <ArticleMap locations={data.locations} />}
 
         <div class="lg:hidden">
           <ArticleTOC variant="inline" />
