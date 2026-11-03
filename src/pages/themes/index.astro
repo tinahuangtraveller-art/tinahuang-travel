@@ -1,0 +1,44 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/Layout.astro";
+import { getAllArticles } from "../../lib/articles";
+import { getThemesWithCounts } from "../../lib/themes";
+
+const articles = await getAllArticles();
+const themesWithCounts = getThemesWithCounts(articles);
+---
+
+<Layout title="依主題逛" description="從溫泉、親子、美食、自駕等主題，挑出黃踢那寫過的台日旅遊攻略。">
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-16 md:pt-14">
+    <p class="text-xs tracking-widest text-ink-500 uppercase">Themes</p>
+    <h1 class="mt-2 text-3xl font-bold text-brand-brown md:text-4xl">
+      ✨ 依主題逛
+    </h1>
+    <p class="mt-4 max-w-2xl text-sm text-ink-700">
+      從想怎麼玩開始找。每一篇都是黃踢那實際走過、泡過、吃過的紀錄。
+    </p>
+
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        themesWithCounts.map((t) => (
+          <a
+            href={`/themes/${t.slug}`}
+            class="group flex flex-col gap-3 rounded-2xl border border-border-soft bg-brand-cream p-6 transition hover:border-brand-brown/30 hover:shadow-sm"
+          >
+            <div class="flex items-center gap-3">
+              <span class="text-2xl" aria-hidden="true">
+                {t.emoji}
+              </span>
+              <h2 class="text-lg font-bold text-brand-brown">{t.label}</h2>
+              <span class="ml-auto text-xs text-ink-500">{t.count} 篇</span>
+            </div>
+            <p class="text-sm leading-relaxed text-ink-700">{t.description}</p>
+            <p class="mt-auto text-sm text-brand-brown underline-offset-4 group-hover:underline">
+              {t.count > 0 ? `看 ${t.label} 文章 →` : "準備中"}
+            </p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Layout>

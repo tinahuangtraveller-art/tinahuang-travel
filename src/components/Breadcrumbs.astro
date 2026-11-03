@@ -1,0 +1,38 @@
+---
+export type Crumb = {
+  label: string;
+  href?: string;
+};
+
+interface Props {
+  items: Crumb[];
+  className?: string;
+}
+
+const { items, className = "" } = Astro.props;
+---
+
+<nav
+  aria-label="麵包屑"
+  class={`flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-ink-500 ${className}`}
+>
+  {
+    items.map((item, i) => (
+      <span class="inline-flex items-center gap-1.5">
+        {item.href && i < items.length - 1 ? (
+          <a
+            href={item.href}
+            class="transition hover:text-brand-orange hover:underline"
+          >
+            {item.label}
+          </a>
+        ) : (
+          <span class="text-ink-700" aria-current={i === items.length - 1 ? "page" : undefined}>
+            {item.label}
+          </span>
+        )}
+        {i < items.length - 1 && <span aria-hidden="true">›</span>}
+      </span>
+    ))
+  }
+</nav>

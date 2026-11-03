@@ -8,6 +8,11 @@ import ArticleMap from "../../components/ArticleMap.astro";
 import Place from "../../components/Place.astro";
 import AuthorCard from "../../components/AuthorCard.astro";
 import AfterArticleCTA from "../../components/AfterArticleCTA.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import ArticleTOC from "../../components/ArticleTOC.astro";
+import SidebarCTA from "../../components/SidebarCTA.astro";
+import { getRelatedArticles, slugOf } from "../../lib/articles";
+import { getThemesForArticle } from "../../lib/themes";
 
 export async function getStaticPaths() {
   const articles = await getCollection("articles", ({ data }) => !data.draft);
@@ -24,12 +29,21 @@ const { Content } = await render(article);
 const wordCount = article.body?.length ?? 0;
 const readingTime = Math.max(1, Math.round(wordCount / 400));
 
-const all = await getCollection("articles", ({ data }) => !data.draft);
-const related = all
-  .filter((a) => a.id !== article.id)
-  .filter((a) => a.data.city === data.city || a.data.country === data.country)
-  .sort((a, b) => +b.data.date - +a.data.date)
-  .slice(0, 4);
+const related = await getRelatedArticles(article, 4);
+const articleThemes = getThemesForArticle(article);
+
+const countryLabel = data.country === "japan" ? "日本" : "台灣";
+const countryHref = data.country === "japan" ? "/japan" : "/taiwan";
+const cityHref = data.city
+  ? `${countryHref}/${encodeURIComponent(data.city)}`
+  : undefined;
+
+const crumbs = [
+  { label: "首頁", href: "/" },
+  { label: countryLabel, href: countryHref },
+  ...(data.city ? [{ label: data.city, href: cityHref }] : []),
+  { label: data.title },
+];
 
 const pageContext = {
   content_type: data.type,
@@ -45,7 +59,9 @@ const pageContext = {
   description={data.excerpt}
   pageContext={pageContext}
 >
-  <article class="mx-auto max-w-6xl px-4 pt-8 pb-16 md:pt-12">
+  <article class="mx-auto max-w-6xl px-4 pt-6 pb-16 md:pt-8">
+    <Breadcrumbs items={crumbs} className="mb-5 md:mb-6" />
+
     <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12">
       <div class="min-w-0">
         <ArticleHero
@@ -62,9 +78,32 @@ const pageContext = {
 
         {data.locations.length > 0 && <ArticleMap locations={data.locations} />}
 
+        <div class="lg:hidden">
+          <ArticleTOC variant="inline" />
+        </div>
+
         <div class="prose max-w-none">
           <Content />
         </div>
+
+        {
+          articleThemes.length > 0 && (
+            <div class="mt-10 border-t border-border-soft pt-6">
+              <p class="text-xs text-ink-500">相關主題</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                {articleThemes.map((t) => (
+                  <a
+                    href={`/themes/${t.slug}`}
+                    class="inline-flex items-center gap-1.5 rounded-full border border-border-soft bg-brand-cream px-3 py-1.5 text-xs text-brand-brown transition hover:border-brand-brown"
+                  >
+                    <span aria-hidden="true">{t.emoji}</span>
+                    {t.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
+        }
 
         {
           data.locations.length > 0 && (
@@ -93,13 +132,13 @@ const pageContext = {
           related.length > 0 && (
             <section class="mt-16">
               <h2 class="text-xl font-bold text-brand-brown md:text-2xl">
-                📖 繼續看{data.city || (data.country === "japan" ? "日本" : "台灣")}
+                📖 繼續看{data.city || countryLabel}
               </h2>
               <div class="mt-5 grid gap-5 sm:grid-cols-2">
                 {related.map((a) => (
                   <ArticleCard
                     title={a.data.title}
-                    slug={a.id.replace(/\.md$/, "")}
+                    slug={slugOf(a)}
                     cover={a.data.cover}
                     excerpt={a.data.excerpt}
                     city={a.data.city}
@@ -119,35 +158,38 @@ const pageContext = {
       </div>
 
       <aside class="hidden lg:block">
-        <div class="sticky top-6 space-y-5">
+        <div class="sidebar-sticky sticky top-24 flex max-h-[calc(100vh-7rem)] flex-col gap-5 overflow-y-auto pr-1">
           <AuthorCard variant="compact" />
 
-          {
-            related.length > 0 && (
-              <section class="rounded-2xl border border-border-soft bg-brand-cream p-5">
-                <h3 class="text-sm font-medium text-ink-500">📖 延伸閱讀</h3>
-                <ul class="mt-3 space-y-3">
-                  {related.slice(0, 3).map((a) => (
-                    <li>
-                      <a
-                        href={`/articles/${a.id.replace(/\.md$/, "")}`}
-                        class="group block"
-                      >
-                        <p class="line-clamp-2 text-sm leading-snug text-brand-brown group-hover:text-brand-orange">
-                          {a.data.title}
-                        </p>
-                        <p class="mt-0.5 text-[11px] text-ink-500">
-                          {a.data.city && `📍 ${a.data.city}`}
-                        </p>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )
-          }
+          <ArticleTOC variant="sidebar" />
+
+          <SidebarCTA
+            country={data.country}
+            city={data.city}
+            currentArticleSlug={slugOf(article)}
+          />
         </div>
       </aside>
     </div>
   </article>
 </Layout>
+
+<style>
+  .sidebar-sticky {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(61, 33, 15, 0.15) transparent;
+  }
+  .sidebar-sticky::-webkit-scrollbar {
+    width: 6px;
+  }
+  .sidebar-sticky::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .sidebar-sticky::-webkit-scrollbar-thumb {
+    background: rgba(61, 33, 15, 0.15);
+    border-radius: 3px;
+  }
+  .sidebar-sticky::-webkit-scrollbar-thumb:hover {
+    background: rgba(61, 33, 15, 0.3);
+  }
+</style>

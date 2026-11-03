@@ -24,7 +24,8 @@ export const site = {
   nav: [
     { label: "日本", href: "/japan" },
     { label: "台灣", href: "/taiwan" },
+    { label: "主題", href: "/themes" },
+    { label: "住宿", href: "/stays" },
     { label: "行前準備", href: "/prepare" },
-    { label: "關於", href: "/about" },
   ],
 } as const;

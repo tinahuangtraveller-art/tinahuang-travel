@@ -1,0 +1,156 @@
+---
+export const prerender = true;
+import Layout from "../layouts/Layout.astro";
+import Icons from "../components/icons/Icons.astro";
+import BrushUnderline from "../components/decorations/BrushUnderline.astro";
+import { site } from "../data/site";
+import { getAllArticles } from "../lib/articles";
+import { stays } from "../data/stays";
+
+const articles = await getAllArticles();
+const articleCount = articles.length;
+const stayCount = stays.length;
+---
+
+<Layout
+  title="關於黃踢那"
+  description="工程師主管裸辭、給自己一年，用旅行與攝影寫下第二人生的紀錄。"
+>
+  <section class="mx-auto max-w-3xl px-4 pt-10 pb-16 md:pt-14">
+    <p class="text-xs tracking-widest text-ink-500 uppercase">About</p>
+    <h1 class="mt-2 text-3xl font-bold text-brand-brown md:text-4xl">
+      關於黃踢那
+    </h1>
+
+    <div class="mt-10 flex flex-col items-center gap-6 rounded-3xl border border-border-soft bg-brand-cream p-8 md:flex-row md:p-10">
+      <img
+        src="/avatar.jpg"
+        alt="黃踢那的照片"
+        width="140"
+        height="140"
+        class="h-28 w-28 shrink-0 rounded-full object-cover ring-4 ring-brand-orange md:h-36 md:w-36"
+        loading="eager"
+        decoding="async"
+      />
+      <div class="min-w-0 text-center md:text-left">
+        <p class="font-display text-3xl leading-none text-brand-brown">
+          {site.author.name}
+        </p>
+        <span class="mt-2 inline-block">
+          <BrushUnderline class="h-2 w-32" />
+        </span>
+        <p class="mt-4 text-sm leading-relaxed text-ink-700">
+          <span class="font-medium text-brand-brown">2026 裸辭中</span>
+          ，給自己一年，挑戰靠旅行與攝影養活自己。<br />
+          現在：帶媽京都 30 天。
+        </p>
+      </div>
+    </div>
+
+    <section class="mt-14 space-y-4 text-sm leading-7 text-ink-700 md:text-base md:leading-8">
+      <h2 class="font-display text-2xl text-brand-brown md:text-3xl">
+        為什麼有這個網站
+      </h2>
+      <p>
+        做了 7 年前端工程師，爬到工程主管，然後在 2026 年做了一個決定：
+        離職。給自己一年，看看能不能用旅行與攝影過生活。
+      </p>
+      <p>
+        這個網站不是旅遊部落格——是我跟媽媽、跟自己的旅行筆記。
+        把真的走過、住過、吃過、搞砸過的事情，寫成之後想出門的人可以直接抄的攻略。
+      </p>
+      <p>
+        所以你會看到：
+      </p>
+      <ul class="list-inside list-disc space-y-2 pl-2">
+        <li>
+          每一篇都有我實際去的時間、動線、花費
+        </li>
+        <li>
+          住過的旅宿有獨立
+          <a href="/stays" class="underline underline-offset-4 hover:text-brand-orange">
+            /stays
+          </a>
+          專區，有合作的會老實標示
+        </li>
+        <li>
+          所有景點都有 Google Maps 連結，不用自己再找
+        </li>
+        <li>
+          商業合作一律標示，寫的仍然是我自己的體驗
+        </li>
+      </ul>
+    </section>
+
+    <section class="mt-14 grid gap-4 sm:grid-cols-3">
+      <div class="rounded-2xl border border-border-soft bg-paper-soft p-5 text-center">
+        <p class="font-display text-3xl text-brand-brown">{articleCount}</p>
+        <p class="mt-1 text-xs text-ink-500">篇攻略</p>
+      </div>
+      <div class="rounded-2xl border border-border-soft bg-paper-soft p-5 text-center">
+        <p class="font-display text-3xl text-brand-brown">{stayCount}</p>
+        <p class="mt-1 text-xs text-ink-500">間實住旅宿</p>
+      </div>
+      <div class="rounded-2xl border border-border-soft bg-paper-soft p-5 text-center">
+        <p class="font-display text-3xl text-brand-brown">1</p>
+        <p class="mt-1 text-xs text-ink-500">年 gap year 進行中</p>
+      </div>
+    </section>
+
+    <section class="mt-14">
+      <h2 class="font-display text-2xl text-brand-brown md:text-3xl">
+        在哪裡找到我
+      </h2>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a
+          href={site.social.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-ga-event="follow_ig"
+          data-ga-label="about_page"
+          class="inline-flex items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-medium text-brand-brown transition hover:brightness-95"
+        >
+          <Icons name="instagram" size={18} />
+          IG @tinahuang.traveller
+        </a>
+        <a
+          href={site.social.lineCommunity}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-ga-event="join_line"
+          data-ga-label="about_page"
+          class="inline-flex items-center gap-2 rounded-full bg-brand-teal px-5 py-2.5 text-sm font-medium text-brand-cream transition hover:brightness-95"
+        >
+          <Icons name="line" size={18} />
+          LINE 社群
+        </a>
+        <a
+          href={site.social.threads}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full border border-border-soft bg-brand-cream px-5 py-2.5 text-sm font-medium text-brand-brown transition hover:border-brand-brown"
+        >
+          <Icons name="threads" size={18} />
+          Threads
+        </a>
+      </div>
+    </section>
+
+    <section class="mt-14 rounded-2xl border border-border-soft bg-paper-soft p-6 md:p-8">
+      <h2 class="font-display text-xl text-brand-brown md:text-2xl">
+        合作邀約
+      </h2>
+      <p class="mt-3 text-sm leading-relaxed text-ink-700">
+        旅宿體驗、觀光局合作、品牌業配都歡迎聊聊。<br />
+        寫出去的東西我自己要負責，所以會先去住過、用過才答應寫。
+      </p>
+      <a
+        href={`mailto:${site.social.email}`}
+        class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-brand-brown underline underline-offset-4 hover:text-brand-orange"
+      >
+        <Icons name="mail" size={16} />
+        {site.social.email}
+      </a>
+    </section>
+  </section>
+</Layout>

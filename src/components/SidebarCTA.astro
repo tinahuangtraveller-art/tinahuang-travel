@@ -1,0 +1,112 @@
+---
+import { site } from "../data/site";
+import { stays, getActiveDeals } from "../data/stays";
+import Icons from "./icons/Icons.astro";
+import FanDealBadge from "./FanDealBadge.astro";
+
+interface Props {
+  country?: "japan" | "taiwan";
+  city?: string;
+  currentArticleSlug?: string;
+}
+
+const { country, city, currentArticleSlug } = Astro.props;
+
+const relatedStay = stays.find((s) => {
+  if (currentArticleSlug && s.articleUrl.endsWith(`/${currentArticleSlug}`)) {
+    return false;
+  }
+  if (city && s.city === city) return true;
+  if (!city && country && s.country === country) return true;
+  return false;
+});
+
+const activeDealCount = getActiveDeals().length;
+---
+
+{
+  relatedStay ? (
+    <section
+      class="rounded-2xl border border-border-soft bg-brand-cream overflow-hidden"
+      aria-label="住宿推薦"
+    >
+      <a
+        href={relatedStay.articleUrl}
+        class="group block"
+        data-ga-event="sidebar_stay_click"
+        data-ga-label={relatedStay.slug}
+      >
+        {relatedStay.cover && (
+          <div class="relative aspect-[4/3] bg-paper-soft overflow-hidden">
+            <img
+              src={relatedStay.cover}
+              alt={relatedStay.name}
+              class="h-full w-full object-cover transition group-hover:scale-[1.02]"
+              loading="lazy"
+            />
+            <span class="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-brand-cream/95 px-2.5 py-1 text-[11px] font-medium text-brand-brown shadow-sm">
+              🧳 實住
+            </span>
+          </div>
+        )}
+        <div class="p-4">
+          <p class="text-[11px] text-ink-500">在 {relatedStay.location} 住過</p>
+          <h3 class="mt-1 font-bold text-brand-brown group-hover:text-brand-orange">
+            {relatedStay.name}
+          </h3>
+          <p class="mt-2 line-clamp-2 text-xs leading-relaxed text-ink-700">
+            {relatedStay.summary}
+          </p>
+          {relatedStay.deal?.active && (
+            <div class="mt-3">
+              <FanDealBadge deal={relatedStay.deal} />
+            </div>
+          )}
+          <p class="mt-3 text-xs text-brand-brown underline-offset-4 group-hover:underline">
+            看完整心得 →
+          </p>
+        </div>
+      </a>
+    </section>
+  ) : (
+    <section
+      class="rounded-2xl border border-border-soft bg-brand-brown text-brand-cream p-5"
+      aria-label="LINE 社群"
+    >
+      <p class="text-[11px] tracking-widest text-brand-orange uppercase">
+        Join
+      </p>
+      <h3 class="mt-2 font-display text-xl leading-tight">
+        下一趟旅行<br />不要漏掉
+      </h3>
+      <p class="mt-3 text-xs leading-relaxed text-brand-cream/80">
+        LINE 社群會分享最新旅宿優惠、行程情報。
+        {activeDealCount > 0 && `目前有 ${activeDealCount} 個粉絲優惠進行中。`}
+      </p>
+      <div class="mt-4 grid grid-cols-2 gap-2">
+        <a
+          href={site.social.lineCommunity}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-ga-event="join_line"
+          data-ga-label="sidebar_cta"
+          class="inline-flex items-center justify-center gap-1.5 rounded-full bg-brand-teal px-3 py-2 text-xs font-medium text-brand-cream transition hover:brightness-110"
+        >
+          <Icons name="line" size={14} />
+          LINE 社群
+        </a>
+        <a
+          href={site.social.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-ga-event="follow_ig"
+          data-ga-label="sidebar_cta"
+          class="inline-flex items-center justify-center gap-1.5 rounded-full bg-brand-orange px-3 py-2 text-xs font-medium text-brand-brown transition hover:brightness-95"
+        >
+          <Icons name="instagram" size={14} />
+          追蹤 IG
+        </a>
+      </div>
+    </section>
+  )
+}

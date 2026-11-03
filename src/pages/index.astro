@@ -4,13 +4,12 @@ import Layout from "../layouts/Layout.astro";
 import AuthorCard from "../components/AuthorCard.astro";
 import ArticleCard from "../components/ArticleCard.astro";
 import StayCard from "../components/StayCard.astro";
-import BrushUnderline from "../components/decorations/BrushUnderline.astro";
-import DashedDivider from "../components/decorations/DashedDivider.astro";
+import IntentCards from "../components/IntentCards.astro";
+import FeaturedArticle from "../components/FeaturedArticle.astro";
 import Icons from "../components/icons/Icons.astro";
 import {
   getAllArticles,
   slugOf,
-  countryLabel,
 } from "../lib/articles";
 import { stays, getActiveDeals } from "../data/stays";
 import { site } from "../data/site";
@@ -23,40 +22,48 @@ const activeDeals = getActiveDeals();
 
 const japanCount = articles.filter((a) => a.data.country === "japan").length;
 const taiwanCount = articles.filter((a) => a.data.country === "taiwan").length;
+
+const featured = articles.find((a) => a.data.isFeatured === true);
 ---
 
 <Layout>
-  <section class="mx-auto max-w-6xl px-4 pt-10 pb-14 md:pt-16 md:pb-20">
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-10 md:pt-16 md:pb-14">
     <div class="grid gap-10 md:grid-cols-[1fr_320px] md:gap-12">
       <div>
         <p class="text-sm tracking-widest text-brand-teal uppercase">
           Tina's Travel &amp; Living
         </p>
 
-        <h1 class="mt-4 font-display text-5xl leading-tight md:text-7xl">
-          跟著黃踢那出發吧！
-        </h1>
-        <BrushUnderline class="mt-2 max-w-md" />
+        <h1 class="sr-only">跟著黃踢那出發吧！</h1>
 
-        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-ink-700">
-          每次更新，都可能是你的下一趟旅行。日本、台灣的真實旅行體驗、
-          自由行攻略、住宿心得與行前準備。
+        <p class="mt-4 max-w-2xl text-xl leading-relaxed text-ink-700 md:text-2xl">
+          每次更新，都可能是你的下一趟旅行。
+          <span class="mt-1 block text-base text-ink-500 md:text-lg">
+            日本、台灣的真實旅行體驗、自由行攻略、住宿心得與行前準備。
+          </span>
         </p>
 
-        <div class="mt-10 flex flex-wrap gap-3">
-          <a
-            href="/articles"
-            class="rounded-full bg-brand-orange px-5 py-2.5 text-sm font-medium text-brand-brown shadow-sm transition hover:brightness-95"
-          >
-            看最新攻略
-          </a>
-          <a
-            href="/stays"
-            class="rounded-full border border-brand-brown px-5 py-2.5 text-sm font-medium text-brand-brown transition hover:bg-brand-brown hover:text-brand-cream"
-          >
-            看住過的旅宿
-          </a>
+        <div class="mt-8">
+          <IntentCards japanCount={japanCount} taiwanCount={taiwanCount} />
         </div>
+
+        {
+          featured && (
+            <div class="mt-8">
+              <p class="mb-3 text-xs tracking-widest text-ink-500 uppercase">
+                Featured
+              </p>
+              <FeaturedArticle
+                title={featured.data.title}
+                slug={slugOf(featured)}
+                cover={featured.data.cover}
+                excerpt={featured.data.excerpt}
+                city={featured.data.city}
+                country={featured.data.country}
+              />
+            </div>
+          )
+        }
       </div>
 
       <aside class="hidden md:block">
@@ -117,17 +124,17 @@ const taiwanCount = articles.filter((a) => a.data.country === "taiwan").length;
               <h2 class="mt-1 text-2xl font-bold text-brand-brown md:text-3xl">
                 黃踢那住過的地方
               </h2>
-              {activeDeals.length > 0 && (
-                <p class="mt-2 text-xs text-ink-500">
-                  目前有 {activeDeals.length} 個粉絲專屬優惠進行中
-                </p>
-              )}
+              <p class="mt-2 text-xs text-ink-500">
+                {stays.length} 間實住
+                {activeDeals.length > 0 &&
+                  ` · ${activeDeals.length} 個粉絲優惠進行中`}
+              </p>
             </div>
             <a
               href="/stays"
               class="shrink-0 text-sm text-brand-brown underline-offset-4 hover:underline"
             >
-              看全部 →
+              看全部住宿 →
             </a>
           </div>
 

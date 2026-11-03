@@ -1,0 +1,101 @@
+---
+import { getAllArticles } from "../lib/articles";
+import { getThemesWithCounts } from "../lib/themes";
+
+interface Props {
+  japanCount: number;
+  taiwanCount: number;
+}
+
+const { japanCount, taiwanCount } = Astro.props;
+
+const allArticles = await getAllArticles();
+const themesWithCounts = getThemesWithCounts(allArticles);
+const topThemes = themesWithCounts
+  .filter((t) => t.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 4);
+
+const themeTags =
+  topThemes.length >= 2
+    ? topThemes.map((t) => ({
+        text: `${t.emoji} ${t.label}`,
+        href: `/themes/${t.slug}`,
+      }))
+    : [
+        { text: "♨️ 溫泉", href: "/themes/hotspring" },
+        { text: "👨‍👩‍👧 親子", href: "/themes/family" },
+        { text: "🍜 美食", href: "/themes/food" },
+        { text: "🚗 自駕", href: "/themes/roadtrip" },
+      ];
+
+const cards = [
+  {
+    emoji: "🗾",
+    label: "想去哪裡？",
+    hint: "從國家切入",
+    tags: [
+      { text: `🇯🇵 日本 ${japanCount}`, href: "/japan" },
+      { text: `🇹🇼 台灣 ${taiwanCount}`, href: "/taiwan" },
+    ],
+    href: "/articles",
+    cta: "逛全部地區",
+  },
+  {
+    emoji: "✨",
+    label: "想怎麼玩？",
+    hint: "從主題切入",
+    tags: themeTags,
+    href: "/themes",
+    cta: "逛全部主題",
+  },
+  {
+    emoji: "🧳",
+    label: "想先準備什麼？",
+    hint: "行前清單",
+    tags: [
+      { text: "📶 網路", href: "/prepare" },
+      { text: "🚆 交通", href: "/prepare" },
+      { text: "🎫 票券", href: "/prepare" },
+    ],
+    href: "/prepare",
+    cta: "看行前準備",
+  },
+];
+---
+
+<div class="grid gap-4 md:grid-cols-3">
+  {
+    cards.map((card) => (
+      <div class="flex flex-col gap-3 rounded-2xl border border-border-soft bg-brand-cream p-5 transition hover:border-brand-brown/30 hover:shadow-sm">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl" aria-hidden="true">
+            {card.emoji}
+          </span>
+          <div>
+            <h3 class="text-lg font-medium text-brand-brown">{card.label}</h3>
+            <p class="text-xs text-ink-500">{card.hint}</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-1.5">
+          {card.tags.map((tag) => (
+            <a
+              href={tag.href}
+              class="inline-flex items-center rounded-full bg-paper-soft px-2.5 py-1 text-xs text-ink-700 transition hover:bg-brand-orange/20 hover:text-brand-brown"
+            >
+              {tag.text}
+            </a>
+          ))}
+        </div>
+
+        <a
+          href={card.href}
+          class="group mt-auto pt-1 text-sm text-brand-brown underline-offset-4 hover:underline"
+        >
+          {card.cta} →
+        </a>
+      </div>
+    ))
+  }
+</div>

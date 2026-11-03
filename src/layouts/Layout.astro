@@ -3,6 +3,9 @@ import "../styles/global.css";
 import { site } from "../data/site";
 import Icons from "../components/icons/Icons.astro";
 import Analytics from "../components/Analytics.astro";
+import BrushUnderline from "../components/decorations/BrushUnderline.astro";
+import { getAllArticles, slugOf } from "../lib/articles";
+import { getThemesWithCounts } from "../lib/themes";
 
 interface Props {
   title?: string;
@@ -17,6 +20,12 @@ const {
 } = Astro.props;
 
 const siteTitle = title === site.name ? title : `${title}｜${site.name}`;
+
+const allArticles = await getAllArticles();
+const recentArticles = allArticles.slice(0, 5);
+const footerThemes = getThemesWithCounts(allArticles)
+  .filter((t) => t.count > 0)
+  .slice(0, 5);
 ---
 
 <!doctype html>
@@ -62,20 +71,26 @@ const siteTitle = title === site.name ? title : `${title}｜${site.name}`;
       跳到主要內容
     </a>
 
-    <header class="relative border-b border-border-soft">
-      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:py-4">
+    <header class="sticky top-0 z-40 border-b border-border-soft bg-brand-cream/95 backdrop-blur">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 md:py-2.5">
         <a
           href="/"
-          class="flex items-center gap-2 transition-opacity hover:opacity-80"
+          class="flex items-center gap-2 transition-opacity hover:opacity-80 md:gap-3"
           aria-label="回首頁"
         >
           <img
             src="/logo.png"
             alt={site.name}
-            class="h-10 w-auto md:h-12"
+            class="h-10 w-auto shrink-0 md:h-12"
             width="200"
             height="100"
           />
+          <span class="hidden flex-col items-start leading-none md:flex">
+            <span class="font-display text-2xl text-brand-brown">
+              跟著黃踢那出發吧！
+            </span>
+            <BrushUnderline class="mt-1 h-1.5 w-full" />
+          </span>
         </a>
 
         <nav class="hidden items-center gap-6 text-sm md:flex" aria-label="主選單">
@@ -101,7 +116,7 @@ const siteTitle = title === site.name ? title : `${title}｜${site.name}`;
 
       <div
         id="mobile-menu"
-        class="hidden border-t border-border-soft bg-brand-cream md:hidden"
+        class="absolute left-0 right-0 top-full z-50 hidden border-t border-border-soft bg-brand-cream shadow-lg md:hidden"
         hidden
       >
         <nav class="mx-auto max-w-6xl px-4 py-4" aria-label="手機選單">
@@ -179,7 +194,7 @@ const siteTitle = title === site.name ? title : `${title}｜${site.name}`;
 
     <footer class="mt-24 border-t border-border-soft bg-paper-soft">
       <div class="mx-auto max-w-6xl px-4 py-10 text-sm text-ink-700">
-        <div class="grid gap-8 md:grid-cols-[1fr_auto] md:gap-16">
+        <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
             <p class="font-display text-xl text-brand-brown">{site.name}</p>
             <p class="mt-1 text-xs text-ink-500">{site.tagline}</p>
@@ -232,19 +247,90 @@ const siteTitle = title === site.name ? title : `${title}｜${site.name}`;
             </div>
           </div>
 
-          <nav class="flex flex-wrap gap-x-6 gap-y-2 text-xs" aria-label="頁尾選單">
+          <div>
+            <p class="text-[11px] tracking-widest text-ink-500 uppercase">
+              逛內容
+            </p>
+            <ul class="mt-3 space-y-2 text-xs">
+              <li><a href="/japan" class="hover:text-brand-orange">🇯🇵 日本</a></li>
+              <li><a href="/taiwan" class="hover:text-brand-orange">🇹🇼 台灣</a></li>
+              <li><a href="/stays" class="hover:text-brand-orange">🏨 住過的地方</a></li>
+              <li><a href="/prepare" class="hover:text-brand-orange">🧳 行前準備</a></li>
+              <li><a href="/articles" class="hover:text-brand-orange">📖 所有攻略</a></li>
+            </ul>
+          </div>
+
+          {
+            footerThemes.length > 0 && (
+              <div>
+                <p class="text-[11px] tracking-widest text-ink-500 uppercase">
+                  依主題
+                </p>
+                <ul class="mt-3 space-y-2 text-xs">
+                  {footerThemes.map((t) => (
+                    <li>
+                      <a
+                        href={`/themes/${t.slug}`}
+                        class="hover:text-brand-orange"
+                      >
+                        {t.emoji} {t.label}
+                      </a>
+                    </li>
+                  ))}
+                  <li>
+                    <a
+                      href="/themes"
+                      class="text-ink-500 hover:text-brand-orange"
+                    >
+                      看全部主題 →
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            )
+          }
+
+          {
+            recentArticles.length > 0 && (
+              <div>
+                <p class="text-[11px] tracking-widest text-ink-500 uppercase">
+                  最新攻略
+                </p>
+                <ul class="mt-3 space-y-2 text-xs">
+                  {recentArticles.map((a) => (
+                    <li>
+                      <a
+                        href={`/articles/${slugOf(a)}`}
+                        class="line-clamp-2 hover:text-brand-orange"
+                      >
+                        {a.data.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+        </div>
+
+        <div class="mt-10 flex flex-wrap items-center justify-between gap-y-3 border-t border-border-soft pt-6">
+          <nav
+            class="flex flex-wrap gap-x-6 gap-y-2 text-xs"
+            aria-label="頁尾選單"
+          >
             <a href="/about" class="hover:text-brand-orange">關於黃踢那</a>
             <a href="/disclosure" class="hover:text-brand-orange">聯盟揭露</a>
-            <a href={`mailto:${site.social.email}`} class="hover:text-brand-orange">
+            <a
+              href={`mailto:${site.social.email}`}
+              class="hover:text-brand-orange"
+            >
               合作邀約
             </a>
           </nav>
+          <p class="text-[11px] text-ink-500">
+            © {new Date().getFullYear()} {site.name} · 本站部分連結為聯盟連結，不影響你的購買價格
+          </p>
         </div>
-
-        <p class="mt-8 text-[11px] text-ink-500">
-          © {new Date().getFullYear()} {site.name} Tina's Travel &amp; Living.
-          本站部分連結為聯盟連結，不影響你的購買價格。
-        </p>
       </div>
     </footer>
 
