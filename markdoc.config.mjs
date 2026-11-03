@@ -32,6 +32,11 @@ export default defineMarkdocConfig({
         url: { type: String, required: true },
         cover: { type: String },
         caption: { type: String },
+        variant: {
+          type: String,
+          matches: ["card", "mini"],
+          default: "card",
+        },
       },
     },
   },
