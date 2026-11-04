@@ -66,8 +66,8 @@ const COMPRESS_SCRIPT = `
 
   const MAX_WIDTH = 1600;
   const QUALITY = 0.78;
-  const RAW_RE = /^image\\\\/(jpe?g|png)$/i;
-  const RAW_EXT_RE = /\\\\.(jpe?g|png)$/i;
+  const RAW_RE = /^image\\/(jpe?g|png)$/i;
+  const RAW_EXT_RE = /\\.(jpe?g|png)$/i;
 
   function showToast(text) {
     let el = document.getElementById("__keystaticToast");
