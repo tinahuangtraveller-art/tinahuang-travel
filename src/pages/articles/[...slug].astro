@@ -50,6 +50,7 @@ const pageContext = {
   content_country: data.country,
   content_city: data.city ?? "",
   content_region: data.region ?? "",
+  article_slug: slugOf(article),
 };
 ---
 
@@ -129,6 +130,7 @@ const pageContext = {
                     country={a.data.country}
                     status={a.data.status}
                     date={a.data.date.toISOString()}
+                    position="article_related_bottom"
                   />
                 ))}
               </div>

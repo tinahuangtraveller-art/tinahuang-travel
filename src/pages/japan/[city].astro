@@ -75,6 +75,7 @@ const cityThemes = getThemesWithCounts(articles).filter((t) => t.count > 0);
           country={a.data.country}
           status={a.data.status}
           date={a.data.date.toISOString()}
+          position="japan_city"
         />
       ))}
     </div>

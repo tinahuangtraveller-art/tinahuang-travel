@@ -47,6 +47,7 @@ const latest = (await getAllArticles()).slice(0, 3);
                 country={a.data.country}
                 status={a.data.status}
                 date={a.data.date.toISOString()}
+                position="404_page"
               />
             ))}
           </div>

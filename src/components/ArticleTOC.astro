@@ -78,6 +78,9 @@ const { selector = ".prose", variant = "sidebar" } = Astro.props;
       a.className =
         "block text-ink-700 hover:text-brand-orange transition line-clamp-2";
       a.dataset.tocLink = id;
+      a.dataset.gaEvent = "toc_click";
+      a.dataset.gaLabel = id;
+      a.dataset.gaPosition = root.id === "article-toc" ? "sidebar" : "inline";
 
       li.appendChild(a);
       list.appendChild(li);

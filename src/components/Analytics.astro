@@ -20,24 +20,66 @@ const GA_ID = "G-QFXNTWMX06";
   }
   window.gtag = gtag;
   gtag("js", new Date());
+
+  const ctx = pageContext || {};
   gtag("config", GA_ID, {
     send_page_view: false,
+    ...ctx,
   });
 
-  const pageViewParams = { ...(pageContext || {}) };
-  gtag("event", "page_view", pageViewParams);
+  gtag("event", "page_view", { ...ctx });
 
   document.addEventListener("click", (e) => {
     const target = e.target instanceof Element ? e.target.closest("a") : null;
     if (!target) return;
 
-    const label = target.dataset.gaLabel;
     const event = target.dataset.gaEvent;
     if (!event) return;
 
+    const label = target.dataset.gaLabel;
+    const position = target.dataset.gaPosition;
+
     gtag("event", event, {
+      ...ctx,
       source: label || target.getAttribute("aria-label") || "unknown",
+      position: position || "unknown",
       target_url: target.href,
     });
   });
+
+  // Scroll depth: fire once per threshold per page.
+  const thresholds = [20, 50, 75, 100];
+  const fired = new Set();
+  function checkScroll() {
+    const doc = document.documentElement;
+    const scrollTop = window.scrollY || doc.scrollTop;
+    const viewport = window.innerHeight || doc.clientHeight;
+    const full = doc.scrollHeight;
+    const scrollable = Math.max(1, full - viewport);
+    const pct = Math.min(100, Math.round((scrollTop / scrollable) * 100));
+    for (const t of thresholds) {
+      if (pct >= t && !fired.has(t)) {
+        fired.add(t);
+        gtag("event", "scroll_depth", {
+          ...ctx,
+          percent: t,
+        });
+      }
+    }
+  }
+  let ticking = false;
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        checkScroll();
+        ticking = false;
+      });
+    },
+    { passive: true }
+  );
+  // Initial check in case page is short enough to already be "fully viewed".
+  checkScroll();
 </script>

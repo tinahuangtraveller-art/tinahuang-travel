@@ -22,6 +22,9 @@ const { items, className = "" } = Astro.props;
         {item.href && i < items.length - 1 ? (
           <a
             href={item.href}
+            data-ga-event="breadcrumb_click"
+            data-ga-label={item.href}
+            data-ga-position={`level_${i}`}
             class="transition hover:text-brand-orange hover:underline"
           >
             {item.label}

@@ -12,6 +12,7 @@ interface Props {
   date: string;
   readingTime?: number;
   layout?: "card" | "row";
+  position?: string;
 }
 
 const {
@@ -25,6 +26,7 @@ const {
   date,
   readingTime,
   layout = "card",
+  position = "unknown",
 } = Astro.props;
 
 const href = `/articles/${slug}`;
@@ -45,6 +47,9 @@ const locationLabel = [countryLabel, city].filter(Boolean).join(" · ");
         href={href}
         class="relative block aspect-[16/10] bg-paper-soft"
         aria-label={`閱讀：${title}`}
+        data-ga-event="article_card_click"
+        data-ga-label={slug}
+        data-ga-position={position}
       >
         {cover ? (
           <img
@@ -67,7 +72,14 @@ const locationLabel = [countryLabel, city].filter(Boolean).join(" · ");
         </div>
 
         <h3 class="text-base font-medium leading-snug text-brand-brown group-hover:text-brand-orange">
-          <a href={href}>{title}</a>
+          <a
+            href={href}
+            data-ga-event="article_card_click"
+            data-ga-label={slug}
+            data-ga-position={position}
+          >
+            {title}
+          </a>
         </h3>
 
         <p class="line-clamp-2 text-sm leading-relaxed text-ink-700">{excerpt}</p>
@@ -92,6 +104,10 @@ const locationLabel = [countryLabel, city].filter(Boolean).join(" · ");
       <a
         href={href}
         class="relative aspect-video w-28 flex-none overflow-hidden rounded-lg bg-paper-soft sm:w-32"
+        aria-label={`閱讀：${title}`}
+        data-ga-event="article_card_click"
+        data-ga-label={slug}
+        data-ga-position={position}
       >
         {cover ? (
           <img
@@ -112,7 +128,13 @@ const locationLabel = [countryLabel, city].filter(Boolean).join(" · ");
           <ContentTypeBadge status={status} size="sm" />
         </div>
         <h3 class="mt-1 line-clamp-2 text-sm font-medium leading-snug text-brand-brown">
-          <a href={href} class="hover:text-brand-orange">
+          <a
+            href={href}
+            class="hover:text-brand-orange"
+            data-ga-event="article_card_click"
+            data-ga-label={slug}
+            data-ga-position={position}
+          >
             {title}
           </a>
         </h3>
