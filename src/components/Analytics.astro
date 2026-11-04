@@ -1,9 +1,12 @@
 ---
+import { affiliatePlatforms } from "../data/linkClassification";
+
 interface Props {
   pageContext?: Record<string, string | number | boolean>;
+  bookingUrl?: string;
 }
 
-const { pageContext } = Astro.props;
+const { pageContext, bookingUrl } = Astro.props;
 const GA_ID = "G-QFXNTWMX06";
 ---
 
@@ -13,7 +16,7 @@ const GA_ID = "G-QFXNTWMX06";
   src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
 ></script>
 
-<script is:inline define:vars={{ GA_ID, pageContext }}>
+<script is:inline define:vars={{ GA_ID, pageContext, bookingUrl, affiliatePlatforms }}>
   window.dataLayer = window.dataLayer || [];
   function gtag() {
     window.dataLayer.push(arguments);
@@ -47,7 +50,8 @@ const GA_ID = "G-QFXNTWMX06";
 
     // Auto-track outbound links inside article prose so links authored in
     // Keystatic (plain markdown) still show up in GA4. Internal and same-host
-    // anchors are skipped.
+    // anchors are skipped. Host is classified so booking/affiliate clicks fire
+    // distinct event names and show up separately in GA4 reports.
     const insideProse = target.closest(".prose");
     if (!insideProse) return;
     let url;
@@ -59,7 +63,24 @@ const GA_ID = "G-QFXNTWMX06";
     if (url.origin === window.location.origin) return;
     if (url.protocol !== "http:" && url.protocol !== "https:") return;
 
-    gtag("event", "outbound_click", {
+    const host = url.hostname.toLowerCase();
+    const inAffiliateList = affiliatePlatforms.some(
+      (p) => host === p || host.endsWith("." + p)
+    );
+
+    // Classification order matters:
+    // 1. URL 剛好等於文章 frontmatter.deal.bookingUrl → booking_click
+    //    （比對整個 URL，避免同一 host 的官方資訊頁被誤判）
+    // 2. hostname 命中聯盟平台白名單 → affiliate_click
+    // 3. 其他 → outbound_click
+    const eventName =
+      bookingUrl && target.href === bookingUrl
+        ? "booking_click"
+        : inAffiliateList
+          ? "affiliate_click"
+          : "outbound_click";
+
+    gtag("event", eventName, {
       ...ctx,
       source: url.hostname,
       position: "article_body",

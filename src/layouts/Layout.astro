@@ -11,12 +11,14 @@ interface Props {
   title?: string;
   description?: string;
   pageContext?: Record<string, string | number | boolean>;
+  bookingUrl?: string;
 }
 
 const {
   title = site.name,
   description = site.description,
   pageContext,
+  bookingUrl,
 } = Astro.props;
 
 const siteTitle = title === site.name ? title : `${title}｜${site.name}`;
@@ -60,7 +62,7 @@ const footerThemes = getThemesWithCounts(allArticles)
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#F2AB47" />
 
-    <Analytics pageContext={pageContext} />
+    <Analytics pageContext={pageContext} bookingUrl={bookingUrl} />
   </head>
 
   <body class="bg-brand-cream text-brand-brown">
