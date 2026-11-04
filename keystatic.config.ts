@@ -64,6 +64,8 @@ export default config({
       format: { contentField: "content" },
       entryLayout: "content",
       columns: ["title", "city", "status"],
+      previewUrl:
+        "https://tinahuang-travel.tinahuang-traveller.workers.dev/articles/{slug}",
       schema: {
         title: fields.slug({
           name: {
@@ -212,6 +214,12 @@ export default config({
         ),
 
         draft: fields.checkbox({ label: "草稿（不會顯示在網站）" }),
+
+        unpublishAt: fields.date({
+          label: "下架日期（可留空）",
+          description:
+            "團購／活動截止日之類。到期後文章自動從列表消失、網址回 404。不填 = 永久上架。",
+        }),
 
         isFeatured: fields.checkbox({
           label: "首頁本月精選（整個網站只會顯示最新一篇勾選的）",

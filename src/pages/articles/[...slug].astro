@@ -10,11 +10,11 @@ import AfterArticleCTA from "../../components/AfterArticleCTA.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import ArticleTOC from "../../components/ArticleTOC.astro";
 import SidebarCTA from "../../components/SidebarCTA.astro";
-import { getRelatedArticles, slugOf } from "../../lib/articles";
+import { getRelatedArticles, isPublished, slugOf } from "../../lib/articles";
 import { getThemesForArticle } from "../../lib/themes";
 
 export async function getStaticPaths() {
-  const articles = await getCollection("articles", ({ data }) => !data.draft);
+  const articles = await getCollection("articles", isPublished);
   return articles.map((article) => ({
     params: { slug: article.id.replace(/\.md$/, "") },
     props: { article },

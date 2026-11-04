@@ -70,6 +70,7 @@ const articles = defineCollection({
       .optional(),
 
     draft: z.boolean().default(false),
+    unpublishAt: z.coerce.date().optional(),
     isFeatured: z.boolean().default(false),
   }),
 });

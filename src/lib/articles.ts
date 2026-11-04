@@ -3,10 +3,14 @@ import { getThemesForArticle } from "./themes";
 
 export type ArticleEntry = CollectionEntry<"articles">;
 
-const notDraft = ({ data }: ArticleEntry) => !data.draft;
+export const isPublished = ({ data }: ArticleEntry) => {
+  if (data.draft) return false;
+  if (data.unpublishAt && +data.unpublishAt < Date.now()) return false;
+  return true;
+};
 
 export const getAllArticles = async () => {
-  const list = await getCollection("articles", notDraft);
+  const list = await getCollection("articles", isPublished);
   return list.sort((a, b) => +b.data.date - +a.data.date);
 };
 
