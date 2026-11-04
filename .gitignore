@@ -24,4 +24,4 @@ pnpm-debug.log*
 .idea/
 .gstack/
 .wrangler/
-/Users/huangxiaoting/Documents/跟著黃踢那出發吧！/blog/.tmp-test
+.tmp-test/
