@@ -13,6 +13,8 @@
     "astro": "astro",
     "subset-fonts": "node scripts/subset-fonts.mjs",
     "images": "node scripts/process-notion-images.mjs",
+    "resolve-coords": "node scripts/resolve-location-coords.mjs",
+    "resolve-coords:check": "node scripts/resolve-location-coords.mjs --check",
     "migrate": "node scripts/migrate-notion-article.mjs",
     "favicons": "node scripts/generate-favicons.mjs"
   },
