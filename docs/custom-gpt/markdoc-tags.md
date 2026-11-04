@@ -7,7 +7,7 @@ Instructions 已有「何時用」的摘要，這裡是「怎麼寫」的樣板�
 
 ## 1. `{% Affiliate %}` — 聯盟商品 inline tag
 
-**用途**：引用 Klook / Agoda / KKday 等聯盟商品，網站自動 render 成樣式化卡片。
+**用途**：引用**已註冊**的聯盟商品 slug（主要是 Klook 票券），網站 render 成樣式化卡片（含商品標題 + 平台 badge），點擊會送 GA4 `affiliate_click` 事件。
 
 **語法**：
 
@@ -17,12 +17,27 @@ Instructions 已有「何時用」的摘要，這裡是「怎麼寫」的樣板�
 買 {% Affiliate slug="klook-jr-kansai-wide-pass" /%} 可以涵蓋這段。
 ```
 
-**規則**：
+### 🔒 現有 slug 清單（封閉集合，別亂編）
+
+這些是 `src/data/affiliates.ts` 已註冊的 slug，GPT 只能用這些：
+
+| slug | 商品 |
+|---|---|
+| `klook-sagano-romantic-train` | 嵯峨野觀光小火車預約 |
+| `klook-haruka-ticket` | 關西機場 Haruka 特急票 |
+| `klook-jr-kansai-wide-pass` | JR 關西廣域鐵路周遊券 |
+| `klook-amanohashidate-ine-tour` | 天橋立＋伊根舟屋一日遊 |
+| `klook-miyama-amanohashidate-tour` | 美山＋天橋立一日遊 |
+| `klook-katsuoji-miyama-arashiyama-tour` | 勝尾寺＋美山＋嵐山一日遊 |
+
+**如果需要的商品不在清單裡**：
+- **不要亂創新 slug**（會 render 成「合作連結整理中」灰色佔位）
+- 在輸出後的「聯盟 slug 檢查清單」備註裡標「待新增：建議 slug 名稱 / 商品名 / 平台 / URL（如有）」
+- 讓創作者人工補到 `affiliates.ts` 再上線
+
+### 規則
 - 大寫 `A`，自閉合用 `/%}` 結尾（不是 `%}`）
-- slug 命名：`<平台>-<商品描述>`，全小寫、連字號分隔
-- 範例：`klook-haruka-ticket`、`agoda-kyoto-hotel-xxx`、`kkday-kansai-airport-express`
 - inline tag，可以塞在句子中間，也可以獨占一行
-- **絕對不要**在內文寫死 Klook / Agoda 的真實 URL
 - **絕對不要**用舊語法 `{{AFFILIATE:slug}}`（已廢除）
 - 創作者後台用 Keystatic 的「聯盟商品連結」組件也會產同樣語法
 
@@ -113,7 +128,67 @@ Instructions 已有「何時用」的摘要，這裡是「怎麼寫」的樣板�
 
 ---
 
-## 4. Google Maps locations（**不是 Markdoc tag**，放 frontmatter）
+## 4. 住宿訂房連結 + 內文手寫聯盟連結（**不包 Affiliate tag**）
+
+**除了 `{% Affiliate %}` tag 之外**，網站的 Analytics 會自動識別兩類外部連結並送不同的 GA4 事件。寫作時要用對寫法：
+
+### 4a. 住宿文章的訂房 CTA → `booking_click`
+
+當文章類型是 `type: stay` 且 frontmatter 有 `deal.value.bookingUrl` 時，**內文裡用普通 markdown 連結到同一個 URL**，網站會自動偵測並送 `booking_click`：
+
+```markdown
+---
+type: stay
+deal:
+  discriminant: true
+  value:
+    bookingUrl: https://tlathena.ec-hotel.net/webhotel-v4/0761/rmProjects/0245/lucky
+---
+
+...
+
+透過 **[專屬連結](https://tlathena.ec-hotel.net/webhotel-v4/0761/rmProjects/0245/lucky)** 預訂享粉絲優惠。
+```
+
+- **不要包 `{% Affiliate %}`**（訂房 URL 不是聯盟商品 slug，這樣做會 render 成「合作連結整理中」）
+- URL 要**完全等於** `deal.value.bookingUrl`（含參數），比對是精準比對
+- 可以在同一篇文章出現多次（例如首屏 CTA + 文末 CTA），每次點都會送 `booking_click`
+
+### 4b. 內文直接寫 Klook / Agoda / 其他聯盟平台連結 → `affiliate_click`
+
+如果創作者有自己的 Klook / KKday / Agoda / Booking / Trip / Expedia / Hotels 短連結，不在 slug 清單裡也懶得註冊，**可以直接寫 markdown 連結**，網站會依 hostname 自動分類：
+
+```markdown
+查房價：[Agoda 房價查詢](https://www.agoda.com/zh-tw/xxx-hotel/hotel/all/xxx.html)
+```
+
+- 自動分類為 `affiliate_click`（因為 hostname 在白名單）
+- **缺點**：GA4 看不到商品標題，只有 hostname；UI 上也沒有樣式化卡片
+- **什麼時候用**：臨時推一個沒要長期維護的商品；或創作者還沒決定要不要正式註冊
+- **什麼時候不要用**：會重複出現的主打商品 → 註冊 slug 用 `{% Affiliate %}` 比較好
+
+### 4c. 其他外部連結 → `outbound_click`
+
+連結到飯店官網、新聞、政府網站等**非聯盟平台**，自動分類為 `outbound_click`：
+
+```markdown
+詳見[飯店官方網站](https://www.cuncyue.com/)。
+```
+
+不用做任何特殊標記。
+
+### 一張決策表
+
+| 情境 | 寫法 |
+|---|---|
+| 住宿訂房 CTA（有合作，URL 已填 `deal.bookingUrl`） | `[按此訂房](URL)` markdown 連結，不包 Affiliate |
+| 已註冊的聯盟商品 slug | `{% Affiliate slug="..." /%}` |
+| 聯盟平台連結但沒 slug | `[文字](https://klook.com/...)` markdown 連結 |
+| 飯店官網、政府網站、新聞 | `[文字](URL)` markdown 連結 |
+
+---
+
+## 5. Google Maps locations（**不是 Markdoc tag**，放 frontmatter）
 
 **不要在內文**嵌入 Google Maps 連結。改放 frontmatter 的 `locations` 陣列：
 
