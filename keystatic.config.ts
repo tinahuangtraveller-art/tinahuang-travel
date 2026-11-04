@@ -213,12 +213,10 @@ export default config({
           }
         ),
 
-        draft: fields.checkbox({ label: "草稿（不會顯示在網站）" }),
-
-        unpublishAt: fields.date({
-          label: "下架日期（可留空）",
+        draft: fields.checkbox({
+          label: "下架／草稿（不在網站顯示）",
           description:
-            "團購／活動截止日之類。到期後文章自動從列表消失、網址回 404。不填 = 永久上架。",
+            "勾起來 = 文章從列表消失、網址回 404。不管是還沒寫完的草稿，或是團購到期要下架，都勾這個。",
         }),
 
         isFeatured: fields.checkbox({
