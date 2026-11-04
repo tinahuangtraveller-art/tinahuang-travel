@@ -1,4 +1,4 @@
-name: Optimize uploaded images
+name: Post-process content
 
 on:
   push:
@@ -10,10 +10,11 @@ on:
       - "public/images/**/*.JPG"
       - "public/images/**/*.JPEG"
       - "public/images/**/*.PNG"
+      - "src/content/articles/**/*.mdoc"
   workflow_dispatch:
 
 jobs:
-  optimize:
+  post-process:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -21,7 +22,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          # Use a token with write access so the bot can push back
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node
@@ -35,13 +35,16 @@ jobs:
       - name: Optimize images + update markdown refs
         run: node scripts/optimize-images-ci.mjs
 
-      - name: Commit optimized files
+      - name: Resolve missing location coordinates from gmaps URLs
+        run: node scripts/resolve-location-coords.mjs
+
+      - name: Commit processed files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if [ -n "$(git status --porcelain)" ]; then
             git add .
-            git commit -m "chore(images): auto-optimize uploaded images [skip ci]"
+            git commit -m "chore(content): auto-process (images + coords) [skip ci]"
             git push
           else
             echo "No changes to commit"

@@ -139,7 +139,11 @@ export default config({
           fields.object({
             id: fields.text({ label: "ID (kebab-case)" }),
             name: fields.text({ label: "地點名稱" }),
-            gmaps: fields.url({ label: "Google Maps 連結" }),
+            gmaps: fields.url({
+              label: "Google Maps 連結",
+              description:
+                "從 Google Maps app 點「分享」複製 maps.app.goo.gl/... 短網址貼進來。存檔後 CI 會自動解析座標補到 lat/lng。",
+            }),
             category: fields.select({
               label: "類型",
               options: [
@@ -150,8 +154,14 @@ export default config({
               ],
               defaultValue: "attraction",
             }),
-            lat: fields.number({ label: "lat" }),
-            lng: fields.number({ label: "lng" }),
+            lat: fields.number({
+              label: "lat（可留空，CI 自動填）",
+              description: "填了 Google Maps 連結就不用自己填這個",
+            }),
+            lng: fields.number({
+              label: "lng（可留空，CI 自動填）",
+              description: "填了 Google Maps 連結就不用自己填這個",
+            }),
           }),
           {
             label: "景點清單",
