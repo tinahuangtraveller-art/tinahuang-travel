@@ -1,6 +1,6 @@
 # Frontmatter Schema｜文章前置資料欄位完整定義
 
-每篇文章的 .md 檔案開頭必須有 frontmatter（YAML 格式，用 `---` 包起來）。
+每篇文章的 `.mdoc` 檔案開頭必須有 frontmatter（YAML 格式，用 `---` 包起來）。
 
 ## 完整範例
 
@@ -159,7 +159,9 @@ affiliates:
 
 命名規則：`<平台>-<商品描述>`，全小寫、連字號分隔。
 
-這些 slug 會在內文的 `{{AFFILIATE:slug}}` placeholder 被對應渲染。
+這些 slug 會在內文的 `{% Affiliate slug="..." /%}` Markdoc tag 被對應渲染（新版用 Markdoc，不再用舊的 `{{AFFILIATE:slug}}` placeholder）。
+
+frontmatter 的 `affiliates: []` 陣列是「這篇用到哪些聯盟商品」的 index，網站之後會用來查文章關聯。內文裡的 `{% Affiliate ... /%}` 才是實際 render 卡片的地方。
 
 ## 可選欄位（type 為 stay 時用）
 
@@ -199,7 +201,7 @@ deal:
 
 ## 檔名規則
 
-`src/content/articles/<slug>.md`
+`src/content/articles/<slug>.mdoc`（注意副檔名是 `.mdoc`，不是 `.md`）
 
 **slug 命名**：
 - 英文 kebab-case

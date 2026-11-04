@@ -1,13 +1,15 @@
 # 範本文章｜天橋立 10 個玩法
 
 > 這是「標準格式」範本，產出新文章時可以當作結構和語氣的參考。
-> 這篇是真實的「experienced」類型多景點景點攻略，涵蓋 frontmatter 大多數常用欄位、locations 多 pin、聯盟 placeholder、交通建議等常見元素。
+> 這篇是真實的「experienced」類型多景點景點攻略，涵蓋 frontmatter 大多數常用欄位、locations 多 pin、Markdoc Affiliate/Figure tag、交通建議等常見元素。
+>
+> 注意副檔名是 `.mdoc`，不是 `.md`。
 
 ---
 
-## 完整檔案內容
+## 完整檔案內容（`src/content/articles/amanohashidate-10-ways.mdoc`）
 
-```markdown
+```mdoc
 ---
 title: 天橋立 10 個吃喝玩法｜原來京都可以這樣玩 EP3
 excerpt: 實際走訪天橋立整理的 10 個玩法：吊椅、飛龍觀、海邊踩水、蟹肉飯、咖啡廳與交通。
@@ -61,11 +63,24 @@ affiliates:
 
 導航山下乘車處，可搭吊椅或單軌列車上下山；依當天天氣與現場公告選擇。
 
+{% Figure
+  src="/images/content/IMAGE:chairlift-up.webp"
+  alt="天橋立登山吊椅視角，兩旁是松林"
+  size="md"
+  align="center"
+  caption="搭吊椅上山時可以用腳體感高度，建議穿長褲" /%}
+
 ### ③ 空中腳踏車｜從高處看風景
 
 找「サイクルカー」。參考費用：單人 ¥400、雙人 ¥800。
 
 > 📝 這個我有拍到體驗畫面，但**不是我親自搭乘**，價格請以現場為準。
+
+{% Figure
+  src="/images/content/IMAGE:cycle-car.webp"
+  alt="空中腳踏車架設在軌道上，背景是天橋立風景"
+  size="md"
+  align="right" /%}
 
 [... 其餘 section 省略 ...]
 
@@ -73,15 +88,13 @@ affiliates:
 
 ### 🚆 自由行：JR 特急 + 京都丹後鐵道
 
-京都出發可搭特急 HASHIDATE 前往天橋立。
-
-{{AFFILIATE:klook-jr-kansai-wide-pass}}
+京都出發可搭特急 HASHIDATE 前往天橋立。買 {% Affiliate slug="klook-jr-kansai-wide-pass" /%} 可以涵蓋這段。
 
 **如果只去天橋立一天，先比較單買來回車票是否更省錢**。
 
 ### 🧳 不想研究交通：天橋立 + 伊根舟屋一日遊
 
-{{AFFILIATE:klook-amanohashidate-ine-tour}}
+從大阪/京都直接參加 {% Affiliate slug="klook-amanohashidate-ine-tour" /%} 一日團，不用自己研究時刻表。
 
 > ⚠️ 各團停留時間、集合地點及包含項目可能不同。
 > 一日團僅供比較，**不代表我親自參加過這個團**。
@@ -97,13 +110,14 @@ affiliates:
 
 | 段落 | 作用 |
 |---|---|
-| frontmatter | 所有結構化資料。網站會根據這個產生：OG image、相關文章、城市 chip、景點地圖、聯盟連結、badge |
+| frontmatter | 所有結構化資料。網站會根據這個產生：OG image、相關文章、城市 chip、景點地圖、badge |
 | 開頭 blockquote | 引言、情境設定 + 事實說明（哪些親身哪些拍攝） |
 | H2 分區 | 內容的大主題。每個 H2 下方會有橘色短線 |
 | H3 子題 | 細節點 |
 | 內文 blockquote `📝` | 誠信揭露、不確定資訊 |
 | 內文 blockquote `⚠️` | 給讀者的警告或提醒 |
-| `{{AFFILIATE:xxx}}` | 聯盟商品 placeholder，網站會渲染成卡片 |
+| `{% Figure src="..." alt="..." size="..." align="..." /%}` | 圖片 Markdoc tag，可控大小/對齊/圖說 |
+| `{% Affiliate slug="..." /%}` | 聯盟商品 inline tag，網站會渲染成卡片 |
 | 文末資訊核對日期 | 讓讀者知道這篇是什麼時候整理的 |
 
 ## 其他常見類型快速參考
