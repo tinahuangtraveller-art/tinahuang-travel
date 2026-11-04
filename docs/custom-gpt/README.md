@@ -8,11 +8,12 @@
 
 | 檔案 | 用途 |
 |---|---|
-| `instructions.md` | **主要指令**。設定 Custom GPT 時貼到 Instructions 欄位 |
-| `brand-guidelines.md` | 品牌手冊（上傳成 knowledge file） |
-| `frontmatter-schema.md` | Frontmatter 完整欄位定義（上傳成 knowledge file） |
-| `banned-words.md` | 禁用與可用字詞清單（上傳成 knowledge file） |
-| `example-article.md` | 範本文章（上傳成 knowledge file） |
+| `instructions.md` | **主要指令**（<8000 字元，塞得進 ChatGPT Instructions 欄位） |
+| `brand-guidelines.md` | 品牌手冊（knowledge file） |
+| `frontmatter-schema.md` | Frontmatter 完整欄位定義（knowledge file） |
+| `markdoc-tags.md` | Markdoc 自訂 tag 詳細語法（knowledge file） |
+| `banned-words.md` | 禁用與可用字詞清單（knowledge file） |
+| `example-article.md` | 範本文章（knowledge file） |
 | `starters.md` | 5 個 conversation starters |
 | `fallback-prompt.md` | 沒 ChatGPT Plus 時的純 prompt 版 |
 
@@ -32,10 +33,11 @@
 - **Instructions**: 整個 `instructions.md` 的內容複製貼上
 - **Conversation starters**: 看 `starters.md`
 
-### Step 3：Knowledge → Upload 這 4 個檔案
+### Step 3：Knowledge → Upload 這 5 個檔案
 
 - `brand-guidelines.md`
 - `frontmatter-schema.md`
+- `markdoc-tags.md`
 - `banned-words.md`
 - `example-article.md`
 
