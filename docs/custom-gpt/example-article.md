@@ -116,7 +116,8 @@ affiliates:
 | H3 子題 | 細節點 |
 | 內文 blockquote `📝` | 誠信揭露、不確定資訊 |
 | 內文 blockquote `⚠️` | 給讀者的警告或提醒 |
-| `{% Figure src="..." alt="..." size="..." align="..." /%}` | 圖片 Markdoc tag，可控大小/對齊/圖說 |
+| `{% Figure src="..." alt="..." size="..." align="..." /%}` | 單張圖片 block tag，可控大小/對齊/圖說 |
+| `{% PhotoGrid cols="2" %}...{% /PhotoGrid %}` | 2-3 張同主題圖並排 wrapper，內部用 `![alt](src)` |
 | `{% Affiliate slug="..." /%}` | 聯盟商品 inline tag，網站會渲染成卡片 |
 | 文末資訊核對日期 | 讓讀者知道這篇是什麼時候整理的 |
 

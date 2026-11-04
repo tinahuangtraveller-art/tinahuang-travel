@@ -1,10 +1,11 @@
 ---
 interface Props {
-  cols?: 2 | 3;
+  cols?: "2" | "3" | 2 | 3;
 }
-const { cols = 2 } = Astro.props;
+const { cols = "2" } = Astro.props;
+const colsNum = String(cols) === "3" ? 3 : 2;
 ---
 
-<div class={`photo-grid photo-grid--cols-${cols}`}>
+<div class={`photo-grid photo-grid--cols-${colsNum}`}>
   <slot />
 </div>

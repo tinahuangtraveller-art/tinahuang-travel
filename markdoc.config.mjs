@@ -29,7 +29,7 @@ export default defineMarkdocConfig({
     PhotoGrid: {
       render: component("./src/components/PhotoGrid.astro"),
       attributes: {
-        cols: { type: Number, matches: [2, 3], default: 2 },
+        cols: { type: String, matches: ["2", "3"], default: "2" },
       },
     },
   },

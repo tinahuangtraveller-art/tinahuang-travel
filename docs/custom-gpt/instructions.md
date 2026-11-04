@@ -104,6 +104,39 @@ Notion 裡用 `<aside>` 的區塊，轉成 markdown 用 `>` blockquote。常見�
 - 預設幾乎都用 `size="md" align="center"`，有需要文繞圖再改 left/right
 - 封面照通常用 `size="full"`
 
+## 多張圖並排（Markdoc wrapper tag）
+
+當**同一個情境有 2-6 張相關照片**（例如：家庭客房三個角度、戶外泳池與休憩室、不同菜色），用 `{% PhotoGrid %}` 包住**標準 markdown 圖片**（不是 Figure）：
+
+```markdown
+{% PhotoGrid cols="2" %}
+
+![家庭客房](/images/content/IMAGE:family-room-1.webp)
+
+![家庭房內部](/images/content/IMAGE:family-room-2.webp)
+
+{% /PhotoGrid %}
+
+{% PhotoGrid cols="3" %}
+
+![星隅客房 1](/images/content/IMAGE:suite-1.webp)
+
+![星隅客房 2](/images/content/IMAGE:suite-2.webp)
+
+![星隅客房 3](/images/content/IMAGE:suite-3.webp)
+
+{% /PhotoGrid %}
+```
+
+- **語法**：block wrapper tag，有開頭 `{% PhotoGrid cols="2" %}` 和結尾 `{% /PhotoGrid %}`
+- **cols**：`"2"` 或 `"3"`（字串、要雙引號），手機自動 fallback 單欄
+- **內部圖片一律用標準 markdown `![alt](src)`**，不要用 `{% Figure %}`（Figure 已經有自己的 width，會跟 grid 打架）
+- **什麼時候用**：
+  - ✅ 住宿文章：同一房型多角度、同一設施多畫面
+  - ✅ 美食文章：多道菜合拼
+  - ❌ 單張主圖、需要獨立圖說的照片 → 用 `Figure`
+  - ❌ 7 張以上 → 太擠，分段或改用 `Figure`
+
 ## Google Maps 連結
 
 **不要在內文嵌入 Google Maps 連結**。改放到 frontmatter 的 locations 陣列：

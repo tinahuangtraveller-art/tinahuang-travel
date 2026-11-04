@@ -62,16 +62,17 @@
 9. 在 Keystatic 後台檢查一次（圖片 size/align 想微調就在後台直接改）
 10. `git push` → 上線
 
-## ✍️ 兩種 Markdoc tag
+## ✍️ 三種 Markdoc tag
 
-GPT 產出的 `.mdoc` 會用到兩種 Markdoc 自訂 tag，知道這兩個就夠了：
+GPT 產出的 `.mdoc` 會用到三種 Markdoc 自訂 tag，知道這三個就夠了：
 
 | Tag | 用法 | 什麼時候出現 |
 |---|---|---|
-| `{% Figure src="..." alt="..." size="md" align="center" caption="..." /%}` | 圖片 block tag | 任何插圖 |
+| `{% Figure src="..." alt="..." size="md" align="center" caption="..." /%}` | 單張圖片 block tag，可控大小/對齊/圖說 | 封面、重點單圖、文繞圖 |
+| `{% PhotoGrid cols="2" %}...{% /PhotoGrid %}` | 2-3 張同主題照片並排 wrapper（內部用標準 markdown `![alt](src)`） | 住宿多角度、美食拼盤 |
 | `{% Affiliate slug="..." /%}` | 聯盟商品 inline tag | 票券、訂房等連結 |
 
-兩者都已在 Keystatic 後台有對應的視覺化組件（「圖片」「聯盟商品連結」），事後想改也可以直接在後台點。
+三者都已在 Keystatic 後台有對應的視覺化組件（「圖片」「照片網格」「聯盟商品連結」），事後想改也可以直接在後台點。
 
 ---
 
