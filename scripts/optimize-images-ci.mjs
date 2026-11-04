@@ -67,16 +67,33 @@ if (converted > 0) {
 }
 
 // Update markdown references: /images/.../photo.jpg → /images/.../photo.webp
-const mdFiles = await walk(articlesDir).catch(() => []);
+// Covers both markdown image syntax (...) and YAML frontmatter values (cover: /images/...)
+const MD_EXT = /\.(md|mdoc|markdown)$/i;
+
+async function walkAll(dir) {
+  const out = [];
+  const entries = await readdir(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      out.push(...(await walkAll(full)));
+    } else if (MD_EXT.test(entry.name)) {
+      out.push(full);
+    }
+  }
+  return out;
+}
+
+const mdFiles = await walkAll(articlesDir).catch(() => []);
 let mdUpdated = 0;
 
 for (const md of mdFiles) {
-  if (!md.endsWith(".md")) continue;
   const content = await readFile(md, "utf-8");
-  const updated = content.replace(
-    /(\(\/images\/[^)]+?)\.(jpe?g|png)(\))/gi,
-    "$1.webp$3"
-  );
+  const updated = content
+    // Markdown image: ![alt](/images/foo.jpg) → .webp
+    .replace(/(\(\/images\/[^)]+?)\.(jpe?g|png)(\))/gi, "$1.webp$3")
+    // YAML frontmatter / inline attribute: cover: /images/foo.jpg → .webp
+    .replace(/(\/images\/[^\s"')]+?)\.(jpe?g|png)\b/gi, "$1.webp");
   if (updated !== content) {
     await writeFile(md, updated, "utf-8");
     console.log(`  updated refs in ${parse(md).base}`);
