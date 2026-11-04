@@ -74,4 +74,14 @@ const articles = defineCollection({
   }),
 });
 
-export const collections = { articles };
+const affiliates = defineCollection({
+  loader: glob({ pattern: "**/*.yaml", base: "./src/content/affiliates" }),
+  schema: z.object({
+    title: z.string(),
+    platform: z.enum(["klook", "kkday", "other"]),
+    url: z.string().url().optional(),
+    note: z.string().optional(),
+  }),
+});
+
+export const collections = { articles, affiliates };

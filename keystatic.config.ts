@@ -19,6 +19,44 @@ export default config({
     brand: { name: "黃踢那後台" },
   },
   collections: {
+    affiliates: collection({
+      label: "聯盟商品",
+      slugField: "title",
+      path: "src/content/affiliates/*",
+      format: { data: "yaml" },
+      columns: ["title", "platform"],
+      schema: {
+        title: fields.slug({
+          name: {
+            label: "商品名稱",
+            description: "顯示在文章 CTA 上，例如：嵯峨野觀光小火車預約",
+          },
+          slug: {
+            label: "slug（英文 kebab-case）",
+            description:
+              "文章 affiliates 欄位用這個 slug 引用，例如：klook-sagano-romantic-train",
+          },
+        }),
+        platform: fields.select({
+          label: "平台",
+          options: [
+            { label: "Klook", value: "klook" },
+            { label: "KKday", value: "kkday" },
+            { label: "其他", value: "other" },
+          ],
+          defaultValue: "klook",
+        }),
+        url: fields.url({
+          label: "聯盟連結",
+          description: "空白時前端會顯示「合作連結整理中」",
+        }),
+        note: fields.text({
+          label: "內部備註（不會顯示）",
+          multiline: true,
+        }),
+      },
+    }),
+
     articles: collection({
       label: "攻略文章",
       slugField: "title",

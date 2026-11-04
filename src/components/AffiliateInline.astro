@@ -1,25 +1,26 @@
 ---
-import { getAffiliate } from "../data/affiliates";
+import { getEntry } from "astro:content";
 
 interface Props {
   slug: string;
 }
 
 const { slug } = Astro.props;
-const entry = getAffiliate(slug);
-const title = entry?.title ?? slug;
+const entry = await getEntry("affiliates", slug);
+const data = entry?.data;
+const title = data?.title ?? slug;
 const platformLabel =
-  entry?.platform === "klook"
+  data?.platform === "klook"
     ? "Klook"
-    : entry?.platform === "kkday"
+    : data?.platform === "kkday"
       ? "KKday"
       : "合作平台";
 ---
 
 {
-  entry?.url ? (
+  data?.url ? (
     <a
-      href={entry.url}
+      href={data.url}
       target="_blank"
       rel="noopener noreferrer sponsored"
       class="affiliate-cta"
