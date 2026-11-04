@@ -1,5 +1,5 @@
 import { config, fields, collection } from "@keystatic/core";
-import { block, inline } from "@keystatic/core/content-components";
+import { block, inline, wrapper } from "@keystatic/core/content-components";
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -219,6 +219,20 @@ export default config({
                 slug: fields.text({
                   label: "商品 slug",
                   validation: { isRequired: true },
+                }),
+              },
+            }),
+            PhotoGrid: wrapper({
+              label: "照片網格",
+              description: "包住 2 或 3 張並排的圖片。內容區塊放多個標準 markdown 圖片即可。",
+              schema: {
+                cols: fields.select({
+                  label: "欄數",
+                  options: [
+                    { label: "2 欄", value: "2" },
+                    { label: "3 欄", value: "3" },
+                  ],
+                  defaultValue: "2",
                 }),
               },
             }),
