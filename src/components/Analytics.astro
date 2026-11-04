@@ -31,18 +31,38 @@ const GA_ID = "G-QFXNTWMX06";
 
   document.addEventListener("click", (e) => {
     const target = e.target instanceof Element ? e.target.closest("a") : null;
-    if (!target) return;
+    if (!target || !target.href) return;
 
-    const event = target.dataset.gaEvent;
-    if (!event) return;
+    const explicitEvent = target.dataset.gaEvent;
 
-    const label = target.dataset.gaLabel;
-    const position = target.dataset.gaPosition;
+    if (explicitEvent) {
+      gtag("event", explicitEvent, {
+        ...ctx,
+        source: target.dataset.gaLabel || target.getAttribute("aria-label") || "unknown",
+        position: target.dataset.gaPosition || "unknown",
+        target_url: target.href,
+      });
+      return;
+    }
 
-    gtag("event", event, {
+    // Auto-track outbound links inside article prose so links authored in
+    // Keystatic (plain markdown) still show up in GA4. Internal and same-host
+    // anchors are skipped.
+    const insideProse = target.closest(".prose");
+    if (!insideProse) return;
+    let url;
+    try {
+      url = new URL(target.href);
+    } catch {
+      return;
+    }
+    if (url.origin === window.location.origin) return;
+    if (url.protocol !== "http:" && url.protocol !== "https:") return;
+
+    gtag("event", "outbound_click", {
       ...ctx,
-      source: label || target.getAttribute("aria-label") || "unknown",
-      position: position || "unknown",
+      source: url.hostname,
+      position: "article_body",
       target_url: target.href,
     });
   });
