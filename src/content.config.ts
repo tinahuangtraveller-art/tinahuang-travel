@@ -5,7 +5,7 @@ const articles = defineCollection({
   loader: glob({ pattern: "**/*.mdoc", base: "./src/content/articles" }),
   schema: z.object({
     title: z.string(),
-    excerpt: z.string().max(80),
+    excerpt: z.string().max(100).optional().default(""),
     cover: z.string().optional(),
     date: z.coerce.date(),
     updated: z.coerce.date().optional(),
@@ -70,6 +70,7 @@ const articles = defineCollection({
       .optional(),
 
     draft: z.boolean().default(false),
+    unpublished: z.boolean().default(false),
     isFeatured: z.boolean().default(false),
   }),
 });

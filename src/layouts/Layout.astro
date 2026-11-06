@@ -12,6 +12,7 @@ interface Props {
   description?: string;
   pageContext?: Record<string, string | number | boolean>;
   bookingUrl?: string;
+  isDraft?: boolean;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
   description = site.description,
   pageContext,
   bookingUrl,
+  isDraft = false,
 } = Astro.props;
 
 const siteTitle = title === site.name ? title : `${title}｜${site.name}`;
@@ -61,11 +63,19 @@ const footerThemes = getThemesWithCounts(allArticles)
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#F2AB47" />
+    {isDraft && <meta name="robots" content="noindex,nofollow" />}
 
     <Analytics pageContext={pageContext} bookingUrl={bookingUrl} />
   </head>
 
   <body class="bg-brand-cream text-brand-brown">
+    {
+      isDraft && (
+        <div class="sticky top-0 z-[1200] bg-brand-orange px-4 py-2 text-center text-sm font-medium text-brand-brown shadow">
+          📝 這是草稿預覽 · 公開網站上還看不到這篇 · 搜尋引擎也不會收錄
+        </div>
+      )
+    }
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-brand-brown focus:px-3 focus:py-2 focus:text-brand-cream"

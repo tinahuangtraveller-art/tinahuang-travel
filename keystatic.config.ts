@@ -214,9 +214,15 @@ export default config({
         ),
 
         draft: fields.checkbox({
-          label: "下架／草稿（不在網站顯示）",
+          label: "草稿",
           description:
-            "勾起來 = 文章從列表消失、網址回 404。不管是還沒寫完的草稿，或是團購到期要下架，都勾這個。",
+            "寫作中。列表隱藏，但 preview 按鈕還能打開預覽頁（noindex，Google 不會收錄）。發布時取消勾選。",
+        }),
+
+        unpublished: fields.checkbox({
+          label: "下架",
+          description:
+            "團購／活動結束要關掉文章。列表隱藏，網址直接 404。已發布過的文章要下架用這個。",
         }),
 
         isFeatured: fields.checkbox({
@@ -235,12 +241,11 @@ export default config({
                   label: "圖片",
                   directory: "public/images/content",
                   publicPath: "/images/content/",
-                  validation: { isRequired: true },
+                  description: "沒傳的話會顯示「圖片待補」佔位框，不會擋 build",
                 }),
                 alt: fields.text({
                   label: "替代文字 (alt)",
                   description: "描述圖片內容，SEO + 無障礙都需要",
-                  validation: { isRequired: true },
                 }),
                 size: fields.select({
                   label: "大小",

@@ -1,7 +1,7 @@
 ---
 interface Props {
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
   size?: "sm" | "md" | "lg" | "full";
   align?: "left" | "right" | "center";
   caption?: string;
@@ -9,7 +9,7 @@ interface Props {
 
 const {
   src,
-  alt,
+  alt = "",
   size = "md",
   align = "center",
   caption,
@@ -19,6 +19,14 @@ const classes = `img-${size} img-${align}`;
 ---
 
 <figure class={classes}>
-  <img src={src} alt={alt} loading="lazy" />
+  {
+    src ? (
+      <img src={src} alt={alt} loading="lazy" />
+    ) : (
+      <div class="flex min-h-[180px] items-center justify-center rounded-lg border-2 border-dashed border-border-soft bg-paper-soft text-sm text-ink-500">
+        🖼 圖片待補
+      </div>
+    )
+  }
   {caption && <figcaption>{caption}</figcaption>}
 </figure>

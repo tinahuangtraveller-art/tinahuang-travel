@@ -5,8 +5,8 @@ export default defineMarkdocConfig({
     Figure: {
       render: component("./src/components/Figure.astro"),
       attributes: {
-        src: { type: String, required: true },
-        alt: { type: String, required: true },
+        src: { type: String },
+        alt: { type: String },
         size: {
           type: String,
           matches: ["sm", "md", "lg", "full"],

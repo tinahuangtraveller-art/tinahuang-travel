@@ -3,10 +3,19 @@ import { getThemesForArticle } from "./themes";
 
 export type ArticleEntry = CollectionEntry<"articles">;
 
-export const isPublished = ({ data }: ArticleEntry) => !data.draft;
+// For listings: hide both drafts (未完成) and unpublished (已下架)
+export const isListed = ({ data }: ArticleEntry) =>
+  !data.draft && !data.unpublished;
+
+// For direct URL access: allow drafts (so preview works) but 404 the unpublished
+export const isPubliclyAccessible = ({ data }: ArticleEntry) =>
+  !data.unpublished;
+
+// Back-compat alias used by older callers
+export const isPublished = isListed;
 
 export const getAllArticles = async () => {
-  const list = await getCollection("articles", isPublished);
+  const list = await getCollection("articles", isListed);
   return list.sort((a, b) => +b.data.date - +a.data.date);
 };
 

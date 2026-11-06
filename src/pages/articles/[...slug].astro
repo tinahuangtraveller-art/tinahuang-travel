@@ -10,11 +10,15 @@ import AfterArticleCTA from "../../components/AfterArticleCTA.astro";
 import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import ArticleTOC from "../../components/ArticleTOC.astro";
 import SidebarCTA from "../../components/SidebarCTA.astro";
-import { getRelatedArticles, isPublished, slugOf } from "../../lib/articles";
+import {
+  getRelatedArticles,
+  isPubliclyAccessible,
+  slugOf,
+} from "../../lib/articles";
 import { getThemesForArticle } from "../../lib/themes";
 
 export async function getStaticPaths() {
-  const articles = await getCollection("articles", isPublished);
+  const articles = await getCollection("articles", isPubliclyAccessible);
   return articles.map((article) => ({
     params: { slug: article.id.replace(/\.md$/, "") },
     props: { article },
@@ -59,6 +63,7 @@ const pageContext = {
   description={data.excerpt}
   pageContext={pageContext}
   bookingUrl={data.deal?.value?.bookingUrl}
+  isDraft={data.draft}
 >
   <article class="mx-auto max-w-6xl px-4 pt-6 pb-16 md:pt-8">
     <Breadcrumbs items={crumbs} className="mb-5 md:mb-6" />
