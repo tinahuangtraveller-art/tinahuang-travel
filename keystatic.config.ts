@@ -250,6 +250,9 @@ export default config({
         content: fields.markdoc({
           label: "文章內文",
           extension: "mdoc",
+          options: {
+            image: false,
+          },
           components: {
             Figure: block({
               label: "圖片",
