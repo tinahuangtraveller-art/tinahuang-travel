@@ -29,7 +29,12 @@ async function walk(dir) {
   return out;
 }
 
-const files = await walk(imagesDir).catch(() => []);
+// Scan both public/images/ (Figure component, covers) and the per-article
+// content/ folders Keystatic uses for inline markdown images.
+const files = [
+  ...(await walk(imagesDir).catch(() => [])),
+  ...(await walk(articlesDir).catch(() => [])),
+].filter((f) => RAW_EXT.test(f));
 console.log(`Found ${files.length} raw image(s)`);
 
 let converted = 0;
@@ -89,11 +94,23 @@ let mdUpdated = 0;
 
 for (const md of mdFiles) {
   const content = await readFile(md, "utf-8");
-  const updated = content
-    // Markdown image: ![alt](/images/foo.jpg) → .webp
-    .replace(/(\(\/images\/[^)]+?)\.(jpe?g|png)(\))/gi, "$1.webp$3")
-    // YAML frontmatter / inline attribute: cover: /images/foo.jpg → .webp
-    .replace(/(\/images\/[^\s"')]+?)\.(jpe?g|png)\b/gi, "$1.webp");
+  const slug = parse(md).name;
+  // Keystatic drops inline images as `![](IMG_XYZ.jpg)` but stores the file
+  // under <slug>/content/IMG_XYZ.jpg. Astro markdoc needs `./<slug>/content/…`
+  // to resolve. Rewrite bare filenames to the explicit relative path.
+  const prefixBareInline = (text) =>
+    text.replace(
+      /(!\[[^\]]*\]\()([^)/.][^)/]*\.(?:webp|jpe?g|png|gif|svg))(\))/gi,
+      `$1./${slug}/content/$2$3`
+    );
+  const updated = prefixBareInline(
+    content
+      // Markdown image: ![alt](anything.jpg) → .webp — covers both absolute
+      // (/images/foo.jpg) and relative (IMG_4849.JPG) paths
+      .replace(/(\([^)]+?)\.(jpe?g|png)(\))/gi, "$1.webp$3")
+      // YAML frontmatter / inline attribute: cover: /images/foo.jpg → .webp
+      .replace(/(\/images\/[^\s"')]+?)\.(jpe?g|png)\b/gi, "$1.webp")
+  );
   if (updated !== content) {
     await writeFile(md, updated, "utf-8");
     console.log(`  updated refs in ${parse(md).base}`);
