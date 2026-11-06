@@ -2,9 +2,33 @@
 import ContentTypeBadge from "./ContentTypeBadge.astro";
 import BrushUnderline from "./decorations/BrushUnderline.astro";
 
+type Focal =
+  | "center"
+  | "top"
+  | "bottom"
+  | "left"
+  | "right"
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
+
+const FOCAL_MAP: Record<Focal, string> = {
+  center: "center",
+  top: "top",
+  bottom: "bottom",
+  left: "left",
+  right: "right",
+  "top-left": "left top",
+  "top-right": "right top",
+  "bottom-left": "left bottom",
+  "bottom-right": "right bottom",
+};
+
 interface Props {
   title: string;
   cover?: string;
+  coverFocal?: Focal;
   date: Date;
   updated?: Date;
   city?: string;
@@ -17,6 +41,7 @@ interface Props {
 const {
   title,
   cover,
+  coverFocal = "center",
   date,
   updated,
   city,
@@ -25,6 +50,8 @@ const {
   status,
   readingTime,
 } = Astro.props;
+
+const objectPosition = FOCAL_MAP[coverFocal] ?? "center";
 
 const countryLabel = country === "japan" ? "日本" : "台灣";
 const locationParts = [countryLabel, city, area].filter(Boolean);
@@ -45,6 +72,7 @@ const fmt = (d: Date) =>
           src={cover}
           alt={title}
           class="h-full w-full object-cover"
+          style={`object-position: ${objectPosition};`}
           loading="eager"
           fetchpriority="high"
           decoding="async"

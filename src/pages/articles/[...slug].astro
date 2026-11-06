@@ -73,6 +73,7 @@ const pageContext = {
         <ArticleHero
           title={data.title}
           cover={data.cover}
+          coverFocal={data.coverFocal}
           date={data.date}
           updated={data.updated}
           city={data.city}
@@ -131,6 +132,7 @@ const pageContext = {
                     title={a.data.title}
                     slug={slugOf(a)}
                     cover={a.data.cover}
+              coverFocal={a.data.coverFocal}
                     excerpt={a.data.excerpt}
                     city={a.data.city}
                     country={a.data.country}

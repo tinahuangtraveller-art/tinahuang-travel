@@ -90,6 +90,24 @@ export default config({
           publicPath: "/images/covers/",
         }),
 
+        coverFocal: fields.select({
+          label: "封面重點位置",
+          description:
+            "封面會被裁成寬扁的比例（手機 16:9、桌機 21:9）。選主體所在位置，就不會被切掉。",
+          options: [
+            { label: "置中（預設）", value: "center" },
+            { label: "上", value: "top" },
+            { label: "下", value: "bottom" },
+            { label: "左", value: "left" },
+            { label: "右", value: "right" },
+            { label: "左上", value: "top-left" },
+            { label: "右上", value: "top-right" },
+            { label: "左下", value: "bottom-left" },
+            { label: "右下", value: "bottom-right" },
+          ],
+          defaultValue: "center",
+        }),
+
         date: fields.date({
           label: "發布日期",
           defaultValue: { kind: "today" },

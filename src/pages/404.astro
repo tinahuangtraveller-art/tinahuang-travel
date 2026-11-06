@@ -42,6 +42,7 @@ const latest = (await getAllArticles()).slice(0, 3);
                 title={a.data.title}
                 slug={slugOf(a)}
                 cover={a.data.cover}
+              coverFocal={a.data.coverFocal}
                 excerpt={a.data.excerpt}
                 city={a.data.city}
                 country={a.data.country}

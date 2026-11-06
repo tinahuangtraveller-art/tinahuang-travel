@@ -7,6 +7,20 @@ const articles = defineCollection({
     title: z.string(),
     excerpt: z.string().max(100).optional().default(""),
     cover: z.string().optional(),
+    coverFocal: z
+      .enum([
+        "center",
+        "top",
+        "bottom",
+        "left",
+        "right",
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right",
+      ])
+      .optional()
+      .default("center"),
     date: z.coerce.date(),
     updated: z.coerce.date().optional(),
 
