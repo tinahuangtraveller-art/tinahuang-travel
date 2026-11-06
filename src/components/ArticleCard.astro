@@ -82,7 +82,7 @@ const locationLabel = [countryLabel, city].filter(Boolean).join(" · ");
           <img
             src={cover}
             alt={title}
-            class="h-full w-full object-cover transition group-hover:scale-[1.02]"
+            class="absolute inset-0 h-full w-full object-cover transition group-hover:scale-[1.02]"
             style={`object-position: ${objectPosition};`}
             loading="lazy"
           />
@@ -141,7 +141,7 @@ const locationLabel = [countryLabel, city].filter(Boolean).join(" · ");
           <img
             src={cover}
             alt={title}
-            class="h-full w-full object-cover"
+            class="absolute inset-0 h-full w-full object-cover"
             loading="lazy"
           />
         ) : (
