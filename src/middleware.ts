@@ -358,6 +358,25 @@ const COMPRESS_SCRIPT = `
 })();
 `;
 
-// EMERGENCY: all injected scripts disabled while investigating why Save
-// button triggers no network request. Will re-enable after diagnosis.
-export const onRequest = defineMiddleware(async (_context, next) => next());
+export const onRequest = defineMiddleware(async (context, next) => {
+  const response = await next();
+  const url = new URL(context.request.url);
+
+  if (!url.pathname.startsWith("/keystatic")) return response;
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("text/html")) return response;
+
+  const html = await response.text();
+  const scripts = `<script>${STALE_DETECT_SCRIPT}</script><script>${AUTO_RELOAD_SCRIPT}</script><script>${COMPRESS_SCRIPT}</script>`;
+  const injected = html.includes("</body>")
+    ? html.replace("</body>", scripts + "</body>")
+    : html + scripts;
+
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");
+  return new Response(injected, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+});
