@@ -12,6 +12,7 @@ const STALE_DETECT_SCRIPT = `
   window.__keystaticStaleDetectInstalled = true;
 
   const POLL_INTERVAL_MS = 15000;
+  const HARD_BLOCK_AFTER_MS = 60000; // 60s stale → force full-screen block
   const REPO_OWNER = "tinahuangtraveller-art";
   const REPO_NAME = "tinahuang-travel";
   const BRANCH = "main";
@@ -19,7 +20,9 @@ const STALE_DETECT_SCRIPT = `
   let sessionSha = null;
   let authHeader = null;
   let banner = null;
+  let blocker = null;
   let polling = false;
+  let staleSince = 0;
 
   function hasUnsavedIndicator() {
     const text = document.body.innerText || "";
@@ -40,6 +43,40 @@ const STALE_DETECT_SCRIPT = `
     document.body.appendChild(banner);
   }
 
+  function showHardBlock() {
+    if (blocker) return;
+    blocker = document.createElement("div");
+    blocker.style.cssText =
+      "position:fixed;inset:0;z-index:999999;" +
+      "background:rgba(61,33,15,0.92);color:#FFF8F0;" +
+      "display:flex;align-items:center;justify-content:center;" +
+      "font:400 15px/1.6 system-ui;padding:20px;backdrop-filter:blur(4px);";
+    blocker.innerHTML =
+      '<div style="max-width:440px;background:#3D210F;border:2px solid #F2AB47;' +
+      'border-radius:16px;padding:28px;text-align:center;">' +
+      '<div style="font-size:40px;margin-bottom:12px;">⚠️</div>' +
+      '<div style="font-size:18px;font-weight:600;margin-bottom:12px;">Session 已過期超過 1 分鐘</div>' +
+      '<div style="opacity:.85;margin-bottom:24px;">' +
+      '遠端 main 已有新 commit，你現在存檔一定會失敗（跳 deletion path 錯誤）。<br><br>' +
+      '繼續編輯沒意義，要存就必須先刷新。' +
+      '</div>' +
+      '<div style="display:flex;gap:10px;flex-direction:column;">' +
+      '<button id="__kreload" style="background:#F2AB47;color:#3D210F;border:none;' +
+      'padding:12px 20px;border-radius:999px;font-weight:600;cursor:pointer;font-size:14px;">' +
+      '✅ 丟掉未存改動，直接刷新（推薦）</button>' +
+      '<button id="__kkeep" style="background:transparent;color:#FFF8F0;border:1px solid #FFF8F0;' +
+      'padding:10px 20px;border-radius:999px;cursor:pointer;font-size:13px;opacity:.8;">' +
+      '我手動把內容複製下來，之後自己刷新</button>' +
+      '</div></div>';
+    document.body.appendChild(blocker);
+    document.getElementById("__kreload").addEventListener("click", () => window.location.reload());
+    document.getElementById("__kkeep").addEventListener("click", () => {
+      blocker.remove();
+      blocker = null;
+      showStaleBanner();
+    });
+  }
+
   async function checkSha() {
     if (polling) return;
     if (!sessionSha || !authHeader) return;
@@ -57,18 +94,31 @@ const STALE_DETECT_SCRIPT = `
       if (!r.ok) return;
       const data = await r.json();
       const remoteSha = data.sha;
-      if (!remoteSha || remoteSha === sessionSha) return;
+      if (!remoteSha) return;
+      if (remoteSha === sessionSha) {
+        staleSince = 0;
+        return;
+      }
+      if (staleSince === 0) staleSince = Date.now();
+      const staleFor = Date.now() - staleSince;
       console.log(
         "[keystatic-stale] drift detected: session=" +
           sessionSha.slice(0, 7) +
           " remote=" +
-          remoteSha.slice(0, 7)
+          remoteSha.slice(0, 7) +
+          " stale for " +
+          Math.round(staleFor / 1000) +
+          "s"
       );
-      if (hasUnsavedIndicator()) {
-        showStaleBanner();
-      } else {
+      if (!hasUnsavedIndicator()) {
         console.log("[keystatic-stale] clean form, auto-reloading");
         window.location.reload();
+        return;
+      }
+      if (staleFor >= HARD_BLOCK_AFTER_MS) {
+        showHardBlock();
+      } else {
+        showStaleBanner();
       }
     } catch (_e) {
       /* network blip, try again next tick */
