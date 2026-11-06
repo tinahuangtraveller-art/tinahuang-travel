@@ -1,5 +1,143 @@
 import { defineMiddleware } from "astro:middleware";
 
+// Poll GitHub for main's latest SHA. When it drifts from the SHA Keystatic
+// loaded, auto-reload if the form is clean, or show a banner if it isn't.
+// This covers the case where someone else (or a GitHub Action) pushes to
+// main while the user has Keystatic open — Keystatic's internal cache
+// becomes stale and the next save fails with "path does not exist for
+// deletion" errors.
+const STALE_DETECT_SCRIPT = `
+(function () {
+  if (window.__keystaticStaleDetectInstalled) return;
+  window.__keystaticStaleDetectInstalled = true;
+
+  const POLL_INTERVAL_MS = 15000;
+  const REPO_OWNER = "tinahuangtraveller-art";
+  const REPO_NAME = "tinahuang-travel";
+  const BRANCH = "main";
+
+  let sessionSha = null;
+  let authHeader = null;
+  let banner = null;
+  let polling = false;
+
+  function hasUnsavedIndicator() {
+    const text = document.body.innerText || "";
+    return /\\bUnsaved\\b/.test(text) || text.includes("未儲存");
+  }
+
+  function showStaleBanner() {
+    if (banner) return;
+    banner = document.createElement("div");
+    banner.style.cssText =
+      "position:fixed;top:0;left:0;right:0;z-index:9999;" +
+      "background:#F2AB47;color:#3D210F;padding:10px 20px;" +
+      "font:500 13px/1.4 system-ui;text-align:center;" +
+      "box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:pointer;";
+    banner.innerHTML =
+      "⚠️ 遠端 main 已更新，現在存檔會失敗。點此刷新（你未存的改動會不見）";
+    banner.addEventListener("click", () => window.location.reload());
+    document.body.appendChild(banner);
+  }
+
+  async function checkSha() {
+    if (polling) return;
+    if (!sessionSha || !authHeader) return;
+    polling = true;
+    try {
+      const r = await fetch(
+        "https://api.github.com/repos/" +
+          REPO_OWNER +
+          "/" +
+          REPO_NAME +
+          "/commits/" +
+          BRANCH,
+        { headers: { Authorization: authHeader, Accept: "application/vnd.github+json" } }
+      );
+      if (!r.ok) return;
+      const data = await r.json();
+      const remoteSha = data.sha;
+      if (!remoteSha || remoteSha === sessionSha) return;
+      console.log(
+        "[keystatic-stale] drift detected: session=" +
+          sessionSha.slice(0, 7) +
+          " remote=" +
+          remoteSha.slice(0, 7)
+      );
+      if (hasUnsavedIndicator()) {
+        showStaleBanner();
+      } else {
+        console.log("[keystatic-stale] clean form, auto-reloading");
+        window.location.reload();
+      }
+    } catch (_e) {
+      /* network blip, try again next tick */
+    } finally {
+      polling = false;
+    }
+  }
+
+  // Capture Keystatic's auth + session SHA by watching every GitHub GraphQL
+  // call. The GraphQL responses carry the oid of main, and the request
+  // carries the Authorization header. We cache both and start polling.
+  const origFetch = window.fetch;
+  window.fetch = async function patchedFetch(...args) {
+    const req = args[0];
+    const init = args[1] || {};
+    const url =
+      typeof req === "string"
+        ? req
+        : req && typeof req === "object" && "url" in req
+          ? req.url
+          : "";
+
+    // Capture auth header (Keystatic sends Bearer <token> to GitHub API)
+    if (url && url.includes("api.github.com")) {
+      const h = init.headers;
+      let auth = null;
+      if (h instanceof Headers) auth = h.get("authorization") || h.get("Authorization");
+      else if (h && typeof h === "object") auth = h.authorization || h.Authorization;
+      if (auth && !authHeader) {
+        authHeader = auth;
+        if (sessionSha) {
+          setInterval(checkSha, POLL_INTERVAL_MS);
+          setTimeout(checkSha, 2000);
+        }
+      }
+    }
+
+    const response = await origFetch.apply(this, args);
+
+    // Peek for main SHA in GraphQL responses
+    try {
+      if (url && url.includes("api.github.com/graphql")) {
+        const cloned = response.clone();
+        const text = await cloned.text();
+        // Grab the first commit.oid pointing to main that we see
+        const m = text.match(/"oid"\\s*:\\s*"([a-f0-9]{40})"/);
+        if (m && !sessionSha) {
+          sessionSha = m[1];
+          console.log("[keystatic-stale] session SHA captured: " + sessionSha.slice(0, 7));
+          if (authHeader) {
+            setInterval(checkSha, POLL_INTERVAL_MS);
+            setTimeout(checkSha, 2000);
+          }
+        }
+        // After a successful save, remember the new SHA so we don't treat
+        // our own write as drift
+        if (text.includes("createCommitOnBranch") && !text.includes('"errors"')) {
+          const newOid = text.match(/"commit"\\s*:\\s*{\\s*"oid"\\s*:\\s*"([a-f0-9]{40})"/);
+          if (newOid) sessionSha = newOid[1];
+        }
+      }
+    } catch (_e) {
+      /* noop */
+    }
+    return response;
+  };
+})();
+`;
+
 // Reload the Keystatic UI after a successful save mutation, but bail out if
 // the user is still typing (Unsaved indicator present).
 const AUTO_RELOAD_SCRIPT = `
@@ -179,7 +317,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (!contentType.includes("text/html")) return response;
 
   const html = await response.text();
-  const scripts = `<script>${AUTO_RELOAD_SCRIPT}</script><script>${COMPRESS_SCRIPT}</script>`;
+  const scripts = `<script>${STALE_DETECT_SCRIPT}</script><script>${AUTO_RELOAD_SCRIPT}</script><script>${COMPRESS_SCRIPT}</script>`;
   const injected = html.includes("</body>")
     ? html.replace("</body>", scripts + "</body>")
     : html + scripts;
