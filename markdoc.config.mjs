@@ -32,5 +32,16 @@ export default defineMarkdocConfig({
         cols: { type: String, matches: ["2", "3"], default: "2" },
       },
     },
+    PhotoRow: {
+      render: component("./src/components/PhotoRow.astro"),
+      attributes: {
+        img1Src: { type: String },
+        img1Alt: { type: String },
+        img2Src: { type: String },
+        img2Alt: { type: String },
+        img3Src: { type: String },
+        img3Alt: { type: String },
+      },
+    },
   },
 });

@@ -1,0 +1,49 @@
+---
+// Block version of PhotoGrid — images are declared as component attributes
+// rather than wrapped children. Lets Keystatic render a one-shot form with
+// 2–3 image pickers instead of "insert wrapper + insert child images".
+
+interface Img {
+  src?: string;
+  alt?: string;
+}
+
+interface Props {
+  img1Src?: string;
+  img1Alt?: string;
+  img2Src?: string;
+  img2Alt?: string;
+  img3Src?: string;
+  img3Alt?: string;
+}
+
+const {
+  img1Src,
+  img1Alt = "",
+  img2Src,
+  img2Alt = "",
+  img3Src,
+  img3Alt = "",
+} = Astro.props;
+
+const imgs: Img[] = [
+  { src: img1Src, alt: img1Alt },
+  { src: img2Src, alt: img2Alt },
+  ...(img3Src ? [{ src: img3Src, alt: img3Alt }] : []),
+];
+const colsNum = imgs.length === 3 ? 3 : 2;
+---
+
+<div class={`photo-grid photo-grid--cols-${colsNum}`}>
+  {
+    imgs.map((img) =>
+      img.src ? (
+        <img src={img.src} alt={img.alt} loading="lazy" />
+      ) : (
+        <div class="flex min-h-[140px] items-center justify-center rounded-lg border-2 border-dashed border-border-soft bg-paper-soft text-xs text-ink-500">
+          🖼 待補
+        </div>
+      )
+    )
+  }
+</div>

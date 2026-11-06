@@ -282,8 +282,9 @@ export default config({
               },
             }),
             PhotoGrid: wrapper({
-              label: "照片網格",
-              description: "包住 2 或 3 張並排的圖片。內容區塊放多個標準 markdown 圖片即可。",
+              label: "照片網格（進階：wrapper 模式）",
+              description:
+                "舊版用法：包住 2 或 3 張並排的圖片。要插入 Figure 或 markdown 圖片當子元素。新文章建議改用「照片並排」更快。",
               schema: {
                 cols: fields.select({
                   label: "欄數",
@@ -292,6 +293,38 @@ export default config({
                     { label: "3 欄", value: "3" },
                   ],
                   defaultValue: "2",
+                }),
+              },
+            }),
+            PhotoRow: block({
+              label: "照片並排（2–3 張）",
+              description:
+                "一鍵選 2–3 張圖直接並排。第 3 張留空就是 2 欄；填了就變 3 欄。",
+              schema: {
+                img1Src: fields.image({
+                  label: "第 1 張",
+                  directory: "public/images/content",
+                  publicPath: "/images/content/",
+                }),
+                img1Alt: fields.text({
+                  label: "第 1 張 alt",
+                  description: "描述這張圖（SEO + 無障礙）",
+                }),
+                img2Src: fields.image({
+                  label: "第 2 張",
+                  directory: "public/images/content",
+                  publicPath: "/images/content/",
+                }),
+                img2Alt: fields.text({
+                  label: "第 2 張 alt",
+                }),
+                img3Src: fields.image({
+                  label: "第 3 張（留空就是 2 欄）",
+                  directory: "public/images/content",
+                  publicPath: "/images/content/",
+                }),
+                img3Alt: fields.text({
+                  label: "第 3 張 alt",
                 }),
               },
             }),
