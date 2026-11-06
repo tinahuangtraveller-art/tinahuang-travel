@@ -251,7 +251,10 @@ export default config({
           label: "文章內文",
           extension: "mdoc",
           options: {
-            image: false,
+            image: {
+              directory: "public/images",
+              publicPath: "/images/",
+            },
           },
           components: {
             Figure: block({
