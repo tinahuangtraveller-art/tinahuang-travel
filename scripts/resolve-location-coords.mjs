@@ -22,7 +22,8 @@ const __dirname = resolve(fileURLToPath(import.meta.url), "..");
 const articlesDir = resolve(__dirname, "../src/content/articles");
 const checkOnly = process.argv.includes("--check");
 
-const RESOLVABLE = /^https:\/\/(maps\.app\.goo\.gl\/|(www\.)?google\.(com|co\.jp)\/maps\/place\/)/;
+const RESOLVABLE =
+  /^https:\/\/(maps\.app\.goo\.gl\/|goo\.gl\/maps\/|(www\.)?google\.(com|co\.jp)\/maps\/place\/)/;
 
 async function resolveCoords(url) {
   // Format 1: google.com/maps/place/.../@lat,lng/... or /!3d!4d - coords inline
@@ -31,10 +32,13 @@ async function resolveCoords(url) {
     url.match(/\/@([\d.-]+),([\d.-]+)/);
   if (inline) return { lat: inline[1], lng: inline[2] };
 
-  // Format 2: maps.app.goo.gl/* - follow redirect to get canonical URL
-  if (/^https:\/\/maps\.app\.goo\.gl\//.test(url)) {
+  // Format 2: shortened URLs — follow redirect to get canonical place URL
+  if (/^https:\/\/(maps\.app\.goo\.gl\/|goo\.gl\/maps\/)/.test(url)) {
     const res = await fetch(url, { method: "HEAD", redirect: "follow" });
-    const m = res.url.match(/!3d([\d.]+)!4d([\d.]+)/);
+    // Prefer !3d!4d (exact pin), fall back to @lat,lng (viewport center)
+    const m =
+      res.url.match(/!3d([\d.]+)!4d([\d.]+)/) ||
+      res.url.match(/\/@([\d.-]+),([\d.-]+)/);
     return m ? { lat: m[1], lng: m[2] } : null;
   }
   return null;
