@@ -115,8 +115,8 @@ const { author, social } = site;
     variant === "compact" && (
       <>
         <p class="mt-4 text-sm leading-relaxed text-ink-700">
-          <span class="font-medium text-brand-brown">2026 裸辭中</span>
-          ，給自己一年挑戰靠旅行與攝影養活自己。現在：{author.bio.now}。
+          <span class="font-medium text-brand-brown">{author.bio.compactHook}</span>
+          ，{author.bio.compactBody}
         </p>
         <div class="mt-4 grid grid-cols-2 gap-2">
           <a

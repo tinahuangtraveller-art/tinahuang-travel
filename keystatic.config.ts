@@ -1,4 +1,4 @@
-import { config, fields, collection } from "@keystatic/core";
+import { config, fields, collection, singleton } from "@keystatic/core";
 import { block, inline, wrapper } from "@keystatic/core/content-components";
 
 const isProd = process.env.NODE_ENV === "production";
@@ -18,6 +18,76 @@ export default config({
   ui: {
     brand: { name: "黃踢那後台" },
   },
+  singletons: {
+    author: singleton({
+      label: "作者資訊（側欄 / AuthorCard）",
+      path: "src/data/author",
+      format: { data: "json" },
+      schema: {
+        bio: fields.object(
+          {
+            hook: fields.text({
+              label: "Hook（首頁側欄的強調標題）",
+              description: "例：2026 裸辭了 👀",
+              validation: { length: { min: 1 } },
+            }),
+            body: fields.text({
+              label: "Body（首頁側欄的完整介紹）",
+              description: "一到兩句話的自我介紹",
+              multiline: true,
+              validation: { length: { min: 1 } },
+            }),
+            now: fields.text({
+              label: "現在",
+              description: "顯示在首頁側欄的「🇯🇵 現在：」後面。例：帶媽京都 30 天",
+              validation: { length: { min: 1 } },
+            }),
+            content: fields.text({
+              label: "內容關鍵字",
+              description: "顯示在首頁側欄的「🏨 內容：」後面。例：台日旅行・在地故事・實住旅宿",
+              validation: { length: { min: 1 } },
+            }),
+            compactHook: fields.text({
+              label: "Hook（文章頁側欄的強調標題）",
+              description: "一句話版本的開頭，用粗體顯示。例：2026 裸辭中",
+              validation: { length: { min: 1 } },
+            }),
+            compactBody: fields.text({
+              label: "Body（文章頁側欄的完整內文）",
+              description: "一句話版本，寫完整句包含現在在做什麼。例：給自己一年挑戰靠旅行與攝影養活自己。現在：帶媽京都 30 天。",
+              multiline: true,
+              validation: { length: { min: 1 } },
+            }),
+          },
+          { label: "自我介紹（Bio）" }
+        ),
+        social: fields.object(
+          {
+            instagram: fields.url({
+              label: "Instagram",
+              description: "完整網址，例：https://www.instagram.com/tinahuang.traveller/",
+            }),
+            instagramDM: fields.url({
+              label: "Instagram DM 快速連結",
+              description: "ig.me/m/... 之類可以直開私訊的連結",
+            }),
+            threads: fields.url({ label: "Threads" }),
+            facebook: fields.url({ label: "Facebook" }),
+            lineCommunity: fields.url({
+              label: "LINE 社群邀請連結",
+              description: "reurl 或官方邀請網址",
+            }),
+            email: fields.text({
+              label: "合作邀約 Email",
+              description: "不是網址，就填 email 本身",
+            }),
+          },
+          { label: "社群與聯絡" }
+        ),
+      },
+    }),
+  },
+
   collections: {
     affiliates: collection({
       label: "聯盟商品",
