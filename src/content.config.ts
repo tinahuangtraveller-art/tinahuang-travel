@@ -56,8 +56,8 @@ const articles = defineCollection({
         discriminant: z.boolean(),
         value: z
           .object({
-            shortName: z.string(),
-            checkInDate: z.string(),
+            shortName: z.string().optional(),
+            checkInDate: z.string().optional(),
             rooms: z.string().optional(),
             priceRange: z.enum(["$", "$$", "$$$", "$$$$"]).optional(),
           })
@@ -71,12 +71,12 @@ const articles = defineCollection({
         discriminant: z.boolean(),
         value: z
           .object({
-            active: z.boolean(),
-            label: z.string(),
-            discount: z.string(),
+            active: z.boolean().optional(),
+            label: z.string().optional(),
+            discount: z.string().optional(),
             code: z.string().optional(),
-            validUntil: z.coerce.date(),
-            bookingUrl: z.string(),
+            validUntil: z.coerce.date().optional(),
+            bookingUrl: z.string().optional(),
           })
           .nullable()
           .optional(),
