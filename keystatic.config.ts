@@ -21,7 +21,7 @@ export default config({
   singletons: {
     author: singleton({
       label: "作者資訊（側欄 / AuthorCard）",
-      path: "src/data/author",
+      path: "src/data/author/",
       format: { data: "json" },
       schema: {
         bio: fields.object(
