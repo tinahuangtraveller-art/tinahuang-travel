@@ -35,6 +35,9 @@ jobs:
       - name: Optimize images + update markdown refs
         run: node scripts/optimize-images-ci.mjs
 
+      - name: Expand bulk-pasted location lists (locationsImport → locations)
+        run: node scripts/expand-locations-bulk.mjs
+
       - name: Resolve missing location coordinates from gmaps URLs
         run: node scripts/resolve-location-coords.mjs
 

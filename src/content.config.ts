@@ -34,6 +34,8 @@ const articles = defineCollection({
 
     tags: z.array(z.string()).default([]),
 
+    locationsImport: z.string().optional(),
+
     locations: z
       .array(
         z.object({

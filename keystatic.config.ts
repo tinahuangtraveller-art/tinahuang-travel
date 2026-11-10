@@ -225,6 +225,13 @@ export default config({
           itemLabel: (p) => p.value,
         }),
 
+        locationsImport: fields.text({
+          label: "📥 批次匯入景點（貼完存檔，30 秒後自動展開到下方景點清單）",
+          description:
+            "請 ChatGPT 輸出以下格式（YAML items，一個景點一個區塊，縮排用 2 空格）：\n\n- id: shirahige-shrine\n  name: 白鬚神社\n  gmaps: https://maps.app.goo.gl/XpmsSS61xbzmdm8H7\n  category: attraction\n\ncategory 可選：attraction / food / stay / transport。存檔後 CI 會自動把 items append 到景點清單、補 lat/lng、並清空本欄位。要單筆手動補的話用下方「新增景點」按鈕。",
+          multiline: true,
+        }),
+
         locations: fields.array(
           fields.object({
             id: fields.text({ label: "ID (kebab-case)" }),
