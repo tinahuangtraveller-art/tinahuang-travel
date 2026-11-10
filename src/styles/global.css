@@ -176,6 +176,39 @@ body {
   display: block;
 }
 
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.95em;
+}
+
+.prose thead {
+  background: var(--color-paper-soft);
+}
+
+.prose th,
+.prose td {
+  border: 1px solid var(--color-border-soft);
+  padding: 0.6em 0.9em;
+  text-align: left;
+  vertical-align: top;
+  color: var(--color-ink-700);
+}
+
+.prose th {
+  font-weight: 600;
+  color: var(--color-brand-brown);
+}
+
+@media (max-width: 640px) {
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 /* ---------- Image size / alignment utilities (used inside .prose) ---------- */
 /* 用法：在 CMS 寫 <img src="..." class="img-md img-right" alt="..." /> */
 /* 或包 figure：<figure class="img-md img-right"><img .../><figcaption>...</figcaption></figure> */
