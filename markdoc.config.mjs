@@ -1,6 +1,25 @@
-import { defineMarkdocConfig, component } from "@astrojs/markdoc/config";
+import { defineMarkdocConfig, component, nodes, Markdoc } from "@astrojs/markdoc/config";
 
 export default defineMarkdocConfig({
+  nodes: {
+    link: {
+      ...nodes.link,
+      attributes: {
+        ...nodes.link.attributes,
+        target: { type: String },
+        rel: { type: String },
+      },
+      transform(node, config) {
+        const attributes = node.transformAttributes(config);
+        const children = node.transformChildren(config);
+        return new Markdoc.Tag("a", {
+          ...attributes,
+          target: "_blank",
+          rel: "noopener noreferrer",
+        }, children);
+      },
+    },
+  },
   tags: {
     Figure: {
       render: component("./src/components/Figure.astro"),
